@@ -1,0 +1,12 @@
+/* Classes para o CKEditor 5 */
+.destaqueamarelo {
+    background-color: #fff176;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* Ajustes de layout para o editor não quebrar o Bootstrap */
+.ck-editor__editable_inline {
+    min-height: 300px; /* Altura mínima para o campo de texto */
+}
