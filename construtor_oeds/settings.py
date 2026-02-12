@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'core',
+    'usuarios',
     'django_bootstrap5',
     'django_ckeditor_5',
 ]
@@ -62,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'crum.CurrentRequestUserMiddleware',
 ]
 
 ROOT_URLCONF = 'construtor_oeds.urls'
@@ -97,7 +100,10 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+AUTH_USER_MODEL = 'usuarios.Usuario'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -170,3 +176,5 @@ CKEDITOR_5_CONFIGS = {
 }
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

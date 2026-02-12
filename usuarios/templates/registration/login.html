@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Login - Construtor OED{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow-sm mt-5">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Acesso ao sistema</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                    </div>
+                </form>
+                <div class="mt-3 text-center">
+                    <a href="{% url 'password_reset' %}" class="text-decoration-none">Esqueceu sua senha?</a>
+                </div>
+                <div class="mt-3 text-center">
+                    <small>Não tem conta? <a href="{% url 'registrar' %}">Solicite acesso</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

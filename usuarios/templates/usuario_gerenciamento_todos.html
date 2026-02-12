@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciamento de Usuários{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="fas fa-users-cog me-2 text-primary"></i> Gerenciar usuários</h2>
+        <a href="{% url 'configuracoes' %}" class="btn btn-outline-secondary shadow-sm">
+            <i class="fas fa-chevron-left me-1"></i> Voltar
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-warning bg-opacity-25 border-bottom-0">
+            <h5 class="mb-0 text-dark fw-bold"><i class="fas fa-user-clock me-2"></i>Aguardando aprovação</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Usuário</th>
+                        <th>E-mail</th>
+                        <th>Data de cadastro</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios_pendentes %}
+                    <tr>
+                        <td><strong>{{ usuario.username }}</strong></td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'aprovar_usuario' usuario.pk %}" class="btn btn-sm btn-success px-3">
+                                <i class="fas fa-check me-1"></i> Analisar e aprovar
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted italic">Nenhuma solicitação pendente no momento.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary bg-opacity-10 border-bottom-0">
+            <h5 class="mb-0 text-primary fw-bold"><i class="fas fa-user-check me-2"></i>Usuários ativos</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nome / Usuário</th>
+                        <th>E-mail</th>
+                        <th>Último login</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios_ativos %}
+                    <tr>
+                        <td>
+                            <div>{{ usuario.get_full_name|default:usuario.username }}</div>
+                            <small class="text-muted">@{{ usuario.username }}</small>
+                        </td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.last_login|date:"d/m/Y H:i"|default:"---" }}</td>
+                        <td class="text-end">
+                            <span class="badge rounded-pill bg-success px-3">Ativo</span>
+                            <a href="{% url 'aprovar_usuario' usuario.pk %}" class="btn btn-sm btn-outline-secondary ms-2" title="Editar Status">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

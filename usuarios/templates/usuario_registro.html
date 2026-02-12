@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Criar Conta - Construtor OED{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 mt-5">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4 fw-bold text-primary">Cadastre-se</h2>
+                <p class="text-muted text-center mb-4">Crie sua conta para começar a construir OEDs.</p>
+                
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    {# Renderiza os campos usando o Bootstrap 5 #}
+                    {% bootstrap_form form %}
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Solicitar Acesso
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="small mb-0">Já tem uma conta? <a href="{% url 'login' %}" class="text-decoration-none">Faça login</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3 text-muted">
+            <small>Seu acesso precisará ser aprovado por um coordenador.</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

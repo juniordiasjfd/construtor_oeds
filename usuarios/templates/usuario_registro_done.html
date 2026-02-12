@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro Realizado{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center mt-5">
+        <div class="display-1 text-success mb-4">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1 class="fw-bold">Solicitação Enviada!</h1>
+        <p class="lead text-muted">
+            Obrigado por se cadastrar. Por questões de segurança, sua conta foi criada como <strong>inativa</strong>.
+        </p>
+        <div class="alert alert-info d-inline-block">
+            <i class="fas fa-info-circle me-2"></i>
+            Um <strong>Coordenador</strong> precisa aprovar seu acesso antes que você possa fazer login.
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'login' %}" class="btn btn-outline-primary">Voltar para o Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

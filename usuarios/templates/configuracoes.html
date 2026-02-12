@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2 class="fw-bold"><i class="fas fa-cogs me-2 text-secondary"></i> Configurações</h2>
+        <p class="text-muted">Acesse as ferramentas disponíveis para o seu perfil.</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        
+        {# Lógica Restrita: Somente Coordenador vê este card #}
+        {% if request.user.groups.all.0.name == 'Coordenador' or request.user.is_superuser %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 transition-hover">
+                <div class="card-body text-center p-4">
+                    <div class="icon-shape bg-primary bg-opacity-10 text-primary rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-users-cog fa-2x"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Gerenciar usuários</h5>
+                    <p class="card-text text-muted small">Aprovar novos membros e gerenciar acessos.</p>
+                    <a href="{% url 'gerenciar_usuarios_todos' %}" class="btn btn-primary w-100 mt-2">
+                        Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Espaço para configurações futuras de outros grupos (ex: Professor) #}
+        {% if request.user.groups.all.0.name == 'Professor' %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 border-start border-info border-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold">Minhas Preferências</h5>
+                    <p class="small text-muted">Configurações específicas para professores.</p>
+                    <button class="btn btn-sm btn-outline-secondary" disabled>Em breve</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
