@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     'core',
     'usuarios',
+    'projetos',
     'django_bootstrap5',
     'django_ckeditor_5',
 ]

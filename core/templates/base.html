@@ -34,26 +34,35 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-book-open me-1"></i> OEDs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-project-diagram me-1"></i> Projetos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-cubes me-1"></i> Componentes</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="{% url 'configuracoes' %}">
-                            <i class="fas fa-cog me-1"></i> Configurações
-                        </a>
-                    </li> -->
-                    <!-- </ul>
 
-                <ul class="navbar-nav ms-auto"> -->
+
+                <ul class="navbar-nav ms-auto">
+
                     {% if request.user.is_authenticated %}
-                    {# Itens visíveis apenas para quem está LOGADO #}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjetos" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-folder-open me-1"></i> Projetos e recursos
+                        </a>
+                        <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdownProjetos">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'listar_projetos' %}">
+                                    <i class="fas fa-folder me-2 text-primary"></i> Listar Projetos
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'listar_componentes' %}">
+                                    <i class="fas fa-layer-group me-2 text-success"></i> Listar Componentes
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'listar_creditos' %}">
+                                    <i class="fas fa-copyright me-2 text-warning"></i> Listar Créditos
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">

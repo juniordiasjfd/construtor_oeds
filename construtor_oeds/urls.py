@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('accounts/', include('usuarios.urls')),
+    path('projetos/', include('projetos.urls')),
 
     # Rota necessária para o upload de imagens do CKEditor 5
     path("ckeditor5/", include('django_ckeditor_5.urls')),
