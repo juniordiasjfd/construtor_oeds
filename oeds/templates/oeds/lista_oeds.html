@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gerenciar {{ verbose_name_plural }}</h2>
+        <a href="{{ view.get_create_url }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Novo OED
+        </a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>OEDs</th>
+                    <th>Tipo</th>
+                    <th>Projeto/Componente</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for oed in object_list %}
+                <tr>
+                    <td>
+                        <strong>{{ oed.titulo|striptags }}</strong><br>
+                        <small class="text-muted">{{ oed.slug }}</small>
+                    </td>
+                    <td>{{ oed.get_tipo_display }}</td>
+                    <td>
+                        <span class="badge bg-primary">{{ oed.projeto|default:"-" }}</span>
+                        <span class="badge bg-secondary">{{ oed.componente|default:"-" }}</span>
+                    </td>
+                    <td class="text-center">
+                        <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted">Nenhum OED encontrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

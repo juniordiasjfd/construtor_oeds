@@ -5,6 +5,22 @@
     padding: 2px 4px;
     border-radius: 3px;
 }
+.c3idioma {
+    background-color: lightblue;
+}
+.c3idiomabold{
+    background-color: lightblue;
+    font-weight: bold !important;
+}
+.c3idiomaitalico{
+    background-color: lightblue;
+    font-style: italic !important;
+}
+.c3idiomabolditalico{
+    background-color: lightblue;
+    font-weight: bold !important;
+    font-style: italic !important;
+}
 
 /* Ajustes de layout para o editor não quebrar o Bootstrap */
 .ck-editor__editable_inline {

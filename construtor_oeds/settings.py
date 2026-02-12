@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'core',
     'usuarios',
     'projetos',
+    'oeds',
     'django_bootstrap5',
     'django_ckeditor_5',
 ]
@@ -156,23 +157,38 @@ CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 CKEDITOR_5_CONFIGS = {
     'default': {
+        'plugins': [
+            'SourceEditing', 'HtmlEmbed', 'GeneralHtmlSupport',
+            'Essentials', 'Paragraph', 'Bold', 'Italic', 'Heading', 'List',
+            'Style', 'RemoveFormat',
+        ],
         'toolbar': [
-            'style', '|', 'heading', '|', 'bold', 'italic', 'link', 
-            'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'
+            'style', 'removeFormat', '|', 
+            'htmlEmbed', 'sourceEditing', '|', 
+            'bold', 'italic', 'bulletedList', 'numberedList', '|', 
+            'undo', 'redo'
         ],
         'style': {
             'definitions': [
+                {'name': 'c3idioma', 'element': 'span', 'classes': ['c3idioma']},
+                {'name': 'c3idiomabold', 'element': 'span', 'classes': ['c3idiomabold']},
+                {'name': 'c3idiomaitalico', 'element': 'span', 'classes': ['c3idiomaitalico']},
+                {'name': 'c3idiomabolditalico', 'element': 'span', 'classes': ['c3idiomabolditalico']},
+            ]
+        },
+        'htmlEmbed': {
+            'showPreviews': True,
+        },
+        'htmlSupport': {
+            'allow': [
                 {
-                    'name': 'Destaque Amarelo',
-                    'element': 'span',
-                    'classes': ['destaqueamarelo']
+                    'name': '\w+',
+                    'attributes': True,
+                    'classes': True,
+                    'styles': True
                 }
             ]
         },
-        'image': {
-            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
-            'styles': ['full', 'alignLeft', 'alignCenter', 'alignRight']
-        }
     }
 }
 

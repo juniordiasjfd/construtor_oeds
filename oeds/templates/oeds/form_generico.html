@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+
+
+{% block content %}
+
+<style>
+    /* 1. Ajusta o container do grid para permitir colunas mais largas */
+    .ck.ck-style-panel .ck-style-grid {
+        /* Define que cada coluna deve ter no mínimo 140px */
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+        width: 100% !important;
+    }
+
+    /* 2. Força o botão individual a respeitar os 140px */
+    .ck.ck-style-grid__button {
+        min-width: 140px !important;
+        padding: 8px !important;
+    }
+
+    /* 3. Ajusta o painel geral para não ficar apertado com os novos botões largos */
+    .ck.ck-style-panel {
+        min-width: 320px !important;
+        /* Largura mínima para caber pelo menos 2 colunas de 140px */
+        max-width: 500px !important;
+    }
+
+    /* 4. Garante que o texto (label) não sofra corte */
+    .ck.ck-style-grid__button .ck-button__label {
+        font-size: 11px !important;
+        /* Reduzir levemente a fonte ajuda nomes longos */
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+
+
+
+
+
+    /* Ajusta a largura da DIV pai do dropdown de estilos */
+    .ck.ck-dropdown.ck-style-dropdown {
+        width: 180px !important;
+        /* Largura total do componente na toolbar */
+    }
+
+    /* Ajusta o botão que contém o texto e a seta */
+    .ck.ck-dropdown.ck-style-dropdown .ck-dropdown__button {
+        width: 100% !important;
+    }
+
+    /* Ajusta especificamente a label (o span que você enviou) */
+    .ck.ck-dropdown.ck-style-dropdown .ck-button__label {
+        width: 130px !important;
+        /* Aumenta de 85px para 160px */
+        max-width: 130px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        text-align: left !important;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">
+                {% if object %} <i class="fas fa-edit me-2"></i>Editar {% else %} <i class="fas fa-plus me-2"></i>Novo
+                {% endif %}
+                {{ verbose_name|default:"OED" }}
+            </h3>
+        </div>
+        <div class="card-body">
+            {# 1. CSS Customizado para o HTML Embed não quebrar a linha (opcional) #}
+            <style>
+                .ck-content .raw-html-embed {
+                    display: inline-block !important;
+                    margin: 0 5px !important;
+                    vertical-align: middle;
+                }
+            </style>
+
+            {# 2. Carrega a Media do CKEditor (Scripts e Styles definidos no settings.py) #}
+            {{ form.media }}
+
+            <form method="post" class="form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <a href="{{ view.success_url }}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Salvar {{ verbose_name|default:"OED" }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Renderização de Matemática #}
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let timeout;
+        const observer = new MutationObserver(() => {
+            // Debounce: espera 1 segundo sem mudanças antes de renderizar
+            // Isso evita o loop infinito e o erro de Stack Overflow
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    console.log("Renderizando fórmulas...");
+                    window.MathJax.typesetPromise().catch((err) => console.log(err.message));
+                }
+            }, 1000);
+        });
+
+        // Observa apenas o container do editor, não o body inteiro
+        const editorContainer = document.querySelector('form');
+        if (editorContainer) {
+            observer.observe(editorContainer, { childList: true, subtree: true });
+        }
+    });
+</script>
+
+{% endblock %}
