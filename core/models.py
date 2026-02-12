@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from crum import get_current_user
+from django.core.exceptions import ValidationError
+
 
 class AuditoriaBase(models.Model):
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
@@ -34,3 +36,25 @@ class AuditoriaBase(models.Model):
 
     class Meta:
         abstract = True
+
+class ConfiguracaoOED(models.Model):
+    max_pontos_clicaveis = models.PositiveIntegerField(
+        "Máximo de pontos clicáveis", 
+        default=5,
+        help_text="Define o máximo de pontos para cadastro de um OED."
+    )
+    min_pontos_clicaveis = models.PositiveIntegerField(
+        "Mínimo de pontos clicáveis", 
+        default=1,
+        help_text="Define o mínimo de pontos para cadastro de um OED."
+    )
+    class Meta:
+        verbose_name = "Configuração de OED"
+        verbose_name_plural = "Configurações de OED"
+    def save(self, *args, **kwargs):
+        # Impede a criação de mais de um registro de configuração
+        if not self.pk and ConfiguracaoOED.objects.exists():
+            raise ValidationError("Já existe uma configuração cadastrada. Edite a existente.")
+        return super().save(*args, **kwargs)
+    def __str__(self):
+        return "Configuração Global de OED"

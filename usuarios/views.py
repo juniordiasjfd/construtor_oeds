@@ -64,7 +64,7 @@ class UsuarioListarTodosView(GroupRequiredMixin, TemplateView):
         return context
 
 class ConfiguracoesView(LoginRequiredMixin, TemplateView):
-    template_name = 'configuracoes.html'
+    template_name = 'core/configuracoes.html'
 
 
 

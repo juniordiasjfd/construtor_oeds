@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from core import views
+from usuarios.views import ConfiguracoesView
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('configuracoes/', ConfiguracoesView.as_view(), name='configuracoes'),
+    path('configuracoes/oed/', views.ConfiguracaoOEDUpdateView.as_view(), name='editar_config_oed'),
 ]
