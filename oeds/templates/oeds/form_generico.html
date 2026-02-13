@@ -83,7 +83,7 @@
             {# 2. Carrega a Media do CKEditor (Scripts e Styles definidos no settings.py) #}
             {{ form.media }}
 
-            <form method="post" class="form" enctype="multipart/form-data">
+            <!-- <form method="post" class="form" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}
 
@@ -93,7 +93,55 @@
                         <i class="fas fa-save me-1"></i> Salvar {{ verbose_name|default:"OED" }}
                     </button>
                 </div>
+            </form> -->
+
+
+            <form method="post" enctype="multipart/form-data" id="oed-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <h4 class="mt-4">Pontos Clicáveis</h4>
+                {{ pontos.management_form }}
+
+                <div class="accordion" id="accordionPontos">
+                    {% for ponto_form in pontos %}
+                    <div class="accordion-item ponto-item">
+                        <h2 class="accordion-header" id="heading-{{ forloop.counter0 }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-{{ forloop.counter0 }}">
+                                Ponto Clicável <span class="ponto-numero ms-1">{{ forloop.counter }}</span>
+                            </button>
+                        </h2>
+                        <div id="collapse-{{ forloop.counter0 }}" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionPontos">
+                            <div class="accordion-body">
+                                {{ ponto_form.as_p }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div id="empty-form" style="display:none;">
+                    <div class="accordion-item ponto-item">
+                        <h2 class="accordion-header" id="heading-__prefix__">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-__prefix__">
+                                Ponto Clicável <span class="ponto-numero ms-1">__numero__</span>
+                            </button>
+                        </h2>
+                        <div id="collapse-__prefix__" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionPontos">
+                            <div class="accordion-body">
+                                {{ pontos.empty_form.as_p }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Guardar OED e Pontos</button>
             </form>
+
         </div>
     </div>
 </div>
@@ -123,6 +171,42 @@
             observer.observe(editorContainer, { childList: true, subtree: true });
         }
     });
+
+
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const inputQuantidade = document.getElementById('id_quantidade_pontos_prevista');
+    const container = document.getElementById('accordionPontos');
+    const totalForms = document.getElementById('id_pontos-TOTAL_FORMS');
+    const emptyFormHtml = document.getElementById('empty-form').innerHTML;
+
+    function atualizarFormularios() {
+        const quantidadeDesejada = parseInt(inputQuantidade.value) || 0;
+        let formsAtuais = container.getElementsByClassName('ponto-item').length;
+
+        // Adicionar novos
+        while (formsAtuais < quantidadeDesejada) {
+            let newForm = emptyFormHtml.replace(/__prefix__/g, formsAtuais);
+            newForm = newForm.replace(/__numero__/g, formsAtuais + 1);
+            container.insertAdjacentHTML('beforeend', newForm);
+            formsAtuais++;
+        }
+
+        // Remover excesso
+        while (formsAtuais > quantidadeDesejada) {
+            container.lastElementChild.remove();
+            formsAtuais--;
+        }
+
+        totalForms.value = formsAtuais;
+    }
+
+    inputQuantidade.addEventListener('change', atualizarFormularios);
+    atualizarFormularios(); 
+});
 </script>
 
 {% endblock %}

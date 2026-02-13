@@ -40,6 +40,24 @@
 
                     {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOeds" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-folder-open me-1"></i> OEDs
+                        </a>
+                        <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdownOeds">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'listar_oeds' %}">
+                                    <i class="fas fa-cubes me-1"></i> Listar OEDs
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+
+
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjetos" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-folder-open me-1"></i> Projetos e recursos

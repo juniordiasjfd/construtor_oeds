@@ -3,7 +3,8 @@ from django.views.generic import CreateView, ListView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Oed
-from .forms import OedModelForm # Certifique-se de criar este form
+from django.db import transaction
+from .forms import OedModelForm, PontoClicavelFormSet
 
 # Mixin para compatibilidade com templates genéricos
 class VerboseNameMixin:
@@ -32,9 +33,24 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
     template_name = 'oeds/form_generico.html'
     success_url = reverse_lazy('listar_oeds')
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['pontos'] = PontoClicavelFormSet(self.request.POST, self.request.FILES)
+        else:
+            data['pontos'] = PontoClicavelFormSet()
+        return data
+    
     def form_valid(self, form):
-        form.instance.criado_por = self.request.user # Define o autor automaticamente
-        messages.success(self.request, "OED criado com sucesso.")
+        context = self.get_context_data()
+        pontos = context['pontos']
+        with transaction.atomic():
+            form.instance.criado_por = self.request.user #
+            self.object = form.save()
+            if pontos.is_valid():
+                pontos.instance = self.object
+                pontos.save()
+        messages.success(self.request, "OED e pontos criados com sucesso.")
         return super().form_valid(form)
 
 class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
@@ -43,6 +59,21 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     template_name = 'oeds/form_generico.html'
     success_url = reverse_lazy('listar_oeds')
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['pontos'] = PontoClicavelFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            data['pontos'] = PontoClicavelFormSet(instance=self.object)
+        return data
+
     def form_valid(self, form):
-        messages.success(self.request, "OED atualizado com sucesso.")
+        context = self.get_context_data()
+        pontos = context['pontos']
+        with transaction.atomic():
+            self.object = form.save()
+            if pontos.is_valid():
+                pontos.instance = self.object
+                pontos.save()
+        messages.success(self.request, "OED e pontos atualizados com sucesso.")
         return super().form_valid(form)
