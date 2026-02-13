@@ -44,14 +44,19 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         pontos = context['pontos']
-        with transaction.atomic():
-            form.instance.criado_por = self.request.user #
-            self.object = form.save()
-            if pontos.is_valid():
-                pontos.instance = self.object
-                pontos.save()
-        messages.success(self.request, "OED e pontos criados com sucesso.")
-        return super().form_valid(form)
+        if form.is_valid() and pontos.is_valid():
+            with transaction.atomic():
+                form.instance.criado_por = self.request.user #
+                self.object = form.save()
+                if pontos.is_valid():
+                    pontos.instance = self.object
+                    pontos.save()
+            messages.success(self.request, "OED e pontos criados com sucesso.")
+            return super().form_valid(form)
+        else:
+            # Se o formset for inválido, renderiza a página novamente com os erros
+            messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
+            return self.render_to_response(self.get_context_data(form=form, pontos=pontos))
 
 class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     model = Oed
@@ -70,10 +75,15 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         pontos = context['pontos']
-        with transaction.atomic():
-            self.object = form.save()
-            if pontos.is_valid():
-                pontos.instance = self.object
-                pontos.save()
-        messages.success(self.request, "OED e pontos atualizados com sucesso.")
-        return super().form_valid(form)
+        if form.is_valid() and pontos.is_valid():
+            with transaction.atomic():
+                self.object = form.save()
+                if pontos.is_valid():
+                    pontos.instance = self.object
+                    pontos.save()
+            messages.success(self.request, "OED e pontos atualizados com sucesso.")
+            return super().form_valid(form)
+        else:
+            # Se o formset for inválido, renderiza a página novamente com os erros
+            messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
+            return self.render_to_response(self.get_context_data(form=form, pontos=pontos))

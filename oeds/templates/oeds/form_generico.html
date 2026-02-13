@@ -133,6 +133,11 @@
                         <div id="collapse-__prefix__" class="accordion-collapse collapse"
                             data-bs-parent="#accordionPontos">
                             <div class="accordion-body">
+                                {% if ponto_form.errors %}
+                                    <div class="alert alert-danger">
+                                        {{ ponto_form.errors }}
+                                    </div>
+                                {% endif %}
                                 {{ pontos.empty_form.as_p }}
                             </div>
                         </div>

@@ -159,13 +159,13 @@ CKEDITOR_5_CONFIGS = {
     'default': {
         'plugins': [
             'SourceEditing', 'HtmlEmbed', 'GeneralHtmlSupport',
-            'Essentials', 'Paragraph', 'Bold', 'Italic', 'Heading', 'List',
+            'Essentials', 'Paragraph', 'Bold', 'Italic', 'Heading', #'List',
             'Style', 'RemoveFormat',
         ],
         'toolbar': [
             'style', 'removeFormat', '|', 
             'htmlEmbed', 'sourceEditing', '|', 
-            'bold', 'italic', 'bulletedList', 'numberedList', '|', 
+            'bold', 'italic', '|', #'bulletedList', 'numberedList', '|', 
             'undo', 'redo'
         ],
         'style': {

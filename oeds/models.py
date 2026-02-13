@@ -94,6 +94,7 @@ class Oed(AuditoriaBase):
                     'quantidade_pontos_prevista': 
                     f"A quantidade de pontos deve estar entre {config.min_pontos_clicaveis} e {config.max_pontos_clicaveis}."
                 })
+        super().clean()
     def save(self, *args, **kwargs):
         # Verifica se há uma nova imagem sendo enviada
         if self.imagem_principal and not self.pk:
@@ -132,10 +133,11 @@ class PontoClicavel(AuditoriaBase):
     alt_text_da_imagem_do_ponto = models.TextField('Descrição para acessibilidade', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
     def clean(self):
         # strip_tags remove as tags HTML para checar se existe texto real
-        if not strip_tags(self.titulo_ponto).strip():
+        if not self.titulo_ponto or not strip_tags(self.titulo_ponto).strip():
             raise ValidationError({'titulo_ponto': "O título não pode estar vazio."})
         if not self.pk: # Apenas para novos registros
             if self.oed.total_pontos_cadastrados >= self.oed.quantidade_pontos_prevista:
                 raise ValidationError(
                     f"Este OED já atingiu o limite de {self.oed.quantidade_pontos_prevista} pontos previstos."
                 )
+        super().clean()
