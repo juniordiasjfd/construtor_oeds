@@ -5,7 +5,7 @@ class PontoClicavelInline(admin.StackedInline): # Stacked ocupa melhor o espaço
     model = PontoClicavel
     extra = 0 # Evita linhas vazias desnecessárias se o limite já foi atingido
     fields = [
-        'titulo_ponto', 'texto_ponto', 'possui_imagem', 
+        'titulo_ponto', 'texto_ponto', #'possui_imagem', 
         ('imagem_do_ponto', 'retranca_da_imagem_do_ponto'), # Exibe lado a lado
         'legenda_da_imagem_do_ponto', 'alt_text_da_imagem_do_ponto'
     ]

@@ -162,6 +162,7 @@ CKEDITOR_5_CONFIGS = {
             'Essentials', 'Paragraph', 'Bold', 'Italic', 'Heading', #'List',
             'Style', 'RemoveFormat',
         ],
+        'language': 'pt-br',
         'toolbar': [
             'style', 'removeFormat', '|', 
             'htmlEmbed', 'sourceEditing', '|', 
@@ -188,6 +189,12 @@ CKEDITOR_5_CONFIGS = {
                     'styles': True
                 }
             ]
+        },
+        'extends': {
+            'language': 'pt-br',
+        },
+        'editorConfig': {
+            'browserSpellcheck': True,
         },
     }
 }

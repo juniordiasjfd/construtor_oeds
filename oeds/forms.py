@@ -49,6 +49,7 @@ class OedModelForm(forms.ModelForm):
             'volume', 'capitulo', 'pagina', 'local_insercao', 
             'introducao', 'retranca_da_imagem_principal', 'imagem_principal',
             'legenda_da_imagem_principal', 'alt_text_da_imagem_principal',
+            'credito_da_imagem_principal',
             'conclusao', 'palavras_chave',
             'fonte_de_pesquisa', 
             'quantidade_pontos_prevista',
@@ -60,9 +61,7 @@ class OedModelForm(forms.ModelForm):
             "titulo": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "introducao": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "conclusao": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
-            "palavras_chave": forms.TextInput(attrs={
-                'placeholder': 'Palavras separadas por vírgula',
-            }),
+            "palavras_chave": forms.TextInput(attrs={'placeholder': 'Palavras separadas por vírgula',}),
         }
 
 class PontoClicavelForm(forms.ModelForm):
@@ -82,14 +81,16 @@ class PontoClicavelForm(forms.ModelForm):
     class Meta:
         model = PontoClicavel
         fields = [
-            'titulo_ponto', 'texto_ponto', 'possui_imagem', 
+            'titulo_ponto', 'texto_ponto', #'possui_imagem', 
+            'retranca_da_imagem_do_ponto',
             'imagem_do_ponto', 'legenda_da_imagem_do_ponto', 
-            'alt_text_da_imagem_do_ponto'
+            'alt_text_da_imagem_do_ponto', 'credito_da_imagem_do_ponto'
         ]
         widgets = {
             "titulo_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "texto_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "legenda_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
+            "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
         }
 
 # O FormSet que liga o OED aos seus pontos
@@ -99,7 +100,7 @@ PontoClicavelFormSet = inlineformset_factory(
     form=PontoClicavelForm,
     extra=0, # Deixamos 0 porque o JavaScript criará os campos necessários
     can_delete=True,
-    max_num=20, # Defina um limite razoável para segurança
+    max_num=10, # Defina um limite razoável para segurança
     validate_max=True
 )
 

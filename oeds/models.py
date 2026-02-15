@@ -69,6 +69,7 @@ class Oed(AuditoriaBase):
     )
     legenda_da_imagem_principal = CKEditor5Field("Legenda da imagem principal", config_name='default', blank=True, null=True)
     alt_text_da_imagem_principal = models.TextField('Descrição para acessibilidade da imagem principal', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
+    credito_da_imagem_principal = CKEditor5Field("Crédito da imagem principal", config_name='default', blank=True, null=True)
     quantidade_pontos_prevista = models.PositiveIntegerField(
         "Quantidade de pontos clicáveis", 
         default=1,
@@ -113,7 +114,7 @@ class PontoClicavel(AuditoriaBase):
     oed = models.ForeignKey(Oed, related_name='pontos', on_delete=models.CASCADE)
     titulo_ponto = CKEditor5Field("Título do ponto", config_name='default')
     texto_ponto = CKEditor5Field("Texto do ponto", config_name='default', blank=True, null=True)
-    possui_imagem = models.BooleanField("Haverá imagem no ponto?", default=True)
+    # possui_imagem = models.BooleanField("Haverá imagem no ponto?", default=True)
     retranca_da_imagem_do_ponto = models.CharField(
         verbose_name='Retranca da imagem', 
         max_length=255, 
@@ -131,6 +132,7 @@ class PontoClicavel(AuditoriaBase):
     )
     legenda_da_imagem_do_ponto = CKEditor5Field("Legenda da imagem", config_name='default', blank=True, null=True)
     alt_text_da_imagem_do_ponto = models.TextField('Descrição para acessibilidade', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
+    credito_da_imagem_do_ponto = CKEditor5Field("Crédito da imagem", config_name='default', blank=True, null=True)
     def clean(self):
         # strip_tags remove as tags HTML para checar se existe texto real
         if not self.titulo_ponto or not strip_tags(self.titulo_ponto).strip():
@@ -141,3 +143,16 @@ class PontoClicavel(AuditoriaBase):
                     f"Este OED já atingiu o limite de {self.oed.quantidade_pontos_prevista} pontos previstos."
                 )
         super().clean()
+    def save(self, *args, **kwargs):
+        # Verifica se há uma nova imagem sendo enviada
+        if self.imagem_do_ponto and not self.pk:
+            # Captura o nome original (basename) sem a extensão
+            nome_original = os.path.splitext(self.imagem_do_ponto.name)[0]
+            self.retranca_da_imagem_do_ponto = nome_original
+        # Caso queira atualizar a retranca mesmo se já existir o objeto (opcional)
+        elif self.imagem_do_ponto and self.pk:
+            old_instance = PontoClicavel.objects.filter(pk=self.pk).first()
+            if old_instance and old_instance.imagem_do_ponto != self.imagem_do_ponto:
+                 nome_original = os.path.splitext(self.imagem_do_ponto.name)[0]
+                 self.retranca_da_imagem_do_ponto = nome_original
+        super().save(*args, **kwargs)
