@@ -42,12 +42,12 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOeds" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-folder-open me-1"></i> OEDs
+                            <i class="fa fa-puzzle-piece" aria-hidden="true"></i> OEDs
                         </a>
                         <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdownOeds">
                             <li>
                                 <a class="dropdown-item" href="{% url 'listar_oeds' %}">
-                                    <i class="fas fa-cubes me-1"></i> Listar OEDs
+                                    <i class="fa fa-list-alt" aria-hidden="true"></i> Listar OEDs
                                 </a>
                             </li>
                         </ul>
@@ -60,22 +60,28 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjetos" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-folder-open me-1"></i> Projetos e recursos
+                            <i class="fas fa-diagram-project me-1"></i> Projetos e recursos
+
                         </a>
                         <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdownProjetos">
                             <li>
                                 <a class="dropdown-item" href="{% url 'listar_projetos' %}">
-                                    <i class="fas fa-folder me-2 text-primary"></i> Listar Projetos
+                                    <i class="fas fa-diagram-project me-2 text-primary"></i> Listar Projetos
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{% url 'listar_componentes' %}">
-                                    <i class="fas fa-layer-group me-2 text-success"></i> Listar Componentes
+                                    <i class="fas fa-cubes me-2 text-success"></i> Listar Componentes
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{% url 'listar_creditos' %}">
                                     <i class="fas fa-copyright me-2 text-warning"></i> Listar Créditos
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'listar_status_oed' %}">
+                                    <i class="fas fa-flag me-2 text-info"></i> Listar Status de OED
                                 </a>
                             </li>
                         </ul>

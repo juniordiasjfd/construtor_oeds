@@ -30,3 +30,12 @@ class Credito(AuditoriaBase):
         ordering = ['nome']
     def __str__(self):
         return self.nome
+
+class StatusOed(AuditoriaBase):
+    nome = models.CharField('Status do OED', max_length=100, unique=True)
+    class Meta:
+        verbose_name = 'Status do OED'
+        verbose_name_plural = 'Status dos OEDs'
+        ordering = ['nome']
+    def __str__(self):
+        return self.nome

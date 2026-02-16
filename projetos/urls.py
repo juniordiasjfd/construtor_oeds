@@ -18,4 +18,9 @@ urlpatterns = [
     path('credito/listar/', views.CreditoListView.as_view(), name='listar_creditos'),
     path('credito/novo/', views.CreditoCreateView.as_view(), name='novo_credito'),
     path('credito/editar/<int:pk>/', views.CreditoUpdateView.as_view(), name='editar_credito'),
+
+    # URLs para STATUS de OED
+    path('status-oed/listar/', views.StatusOedListView.as_view(), name='listar_status_oed'),
+    path('status-oed/novo/', views.StatusOedCreateView.as_view(), name='novo_status_oed'),
+    path('status-oed/editar/<int:pk>/', views.StatusOedUpdateView.as_view(), name='editar_status_oed'),
 ]
