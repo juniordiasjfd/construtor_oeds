@@ -6,6 +6,20 @@
 {% block content %}
 
 <style>
+    .accordion-button:not(.collapsed) {
+        background-color: #e7f1ff;
+        color: #0d6efd;
+    }
+
+    .accordion-item {
+        border-left: 4px solid transparent;
+    }
+
+    .accordion-button:not(.collapsed) {
+        border-left: 4px solid #0d6efd;
+    }
+
+
     /* 1. Ajusta o container do grid para permitir colunas mais largas */
     .ck.ck-style-panel .ck-style-grid {
         /* Define que cada coluna deve ter no mínimo 140px */
@@ -129,7 +143,7 @@
                         <h2 class="accordion-header" id="heading-{{ forloop.counter0 }}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapse-{{ forloop.counter0 }}">
-                                Ponto Clicável <span class="ponto-numero ms-1">{{ forloop.counter }}</span>
+                                Ponto clicável <span class="ponto-numero ms-1">{{ forloop.counter }}</span>
                             </button>
                         </h2>
                         <div id="collapse-{{ forloop.counter0 }}" class="accordion-collapse collapse"
@@ -142,7 +156,9 @@
                                 <hr>
 
                                 {% for field in ponto_form %}
-                                {% if field.name != 'coordenadas' %}
+                                {% if field.is_hidden %}
+                                {{ field }}
+                                {% elif field.name != 'coordenadas' %}
                                 <div class="mb-3">
                                     {{ field.label_tag }}
                                     {{ field }}

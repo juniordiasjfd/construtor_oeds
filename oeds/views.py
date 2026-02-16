@@ -5,6 +5,8 @@ from django.contrib import messages
 from .models import Oed
 from django.db import transaction
 from .forms import OedModelForm, PontoClicavelFormSet
+from django.shortcuts import redirect
+
 
 # Mixin para compatibilidade com templates genéricos
 class VerboseNameMixin:
@@ -75,15 +77,16 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         pontos = context['pontos']
-        if form.is_valid() and pontos.is_valid():
+
+        if pontos.is_valid():
             with transaction.atomic():
+                form.instance.criado_por = self.request.user  # só no Create
                 self.object = form.save()
-                if pontos.is_valid():
-                    pontos.instance = self.object
-                    pontos.save()
-            messages.success(self.request, "OED e pontos atualizados com sucesso.")
-            return super().form_valid(form)
+                pontos.instance = self.object
+                pontos.save()
+
+            messages.success(self.request, "OED salvo com sucesso.")
+            return redirect(self.success_url)
         else:
-            # Se o formset for inválido, renderiza a página novamente com os erros
             messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
-            return self.render_to_response(self.get_context_data(form=form, pontos=pontos))
+            return self.render_to_response(self.get_context_data(form=form))
