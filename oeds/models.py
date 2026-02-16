@@ -4,7 +4,7 @@ from django.conf import settings
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.exceptions import ValidationError
 from django.utils.html import strip_tags
-from projetos.models import Projeto, Componente
+from projetos.models import Projeto, Componente, StatusOed, Credito
 from core.models import AuditoriaBase, ConfiguracaoOED
 from django.core.validators import FileExtensionValidator
 import os
@@ -20,6 +20,14 @@ def renomear_imagem_oed(instance, filename):
     return os.path.join('oeds/images/', novo_nome)
 class Oed(AuditoriaBase):
     retranca = models.CharField(verbose_name='Retranca', max_length=50, unique=True, help_text='Campo obrigatório. A retranca pode ser alterada posteriormente, se necessário.')
+    status = models.ForeignKey(
+        StatusOed,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Status do OED',
+        related_name='%(class)s_oeds'
+    )
     TIPOS_CHOICES = [
         ('infografico', 'Infográfico'),
         ('mapa', 'Mapa clicável'),
@@ -69,7 +77,15 @@ class Oed(AuditoriaBase):
     )
     legenda_da_imagem_principal = CKEditor5Field("Legenda da imagem principal", config_name='default', blank=True, null=True)
     alt_text_da_imagem_principal = models.TextField('Descrição para acessibilidade da imagem principal', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
-    credito_da_imagem_principal = CKEditor5Field("Crédito da imagem principal", config_name='default', blank=True, null=True)
+    # credito_da_imagem_principal = CKEditor5Field("Crédito da imagem principal", config_name='default', blank=True, null=True)
+    credito_da_imagem_principal = models.ForeignKey(
+        Credito,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Crédito da imagem principal',
+        related_name='%(class)s_oeds'
+    )
     quantidade_pontos_prevista = models.PositiveIntegerField(
         "Quantidade de pontos clicáveis", 
         default=1,
@@ -139,7 +155,15 @@ class PontoClicavel(AuditoriaBase):
     )
     legenda_da_imagem_do_ponto = CKEditor5Field("Legenda da imagem", config_name='default', blank=True, null=True)
     alt_text_da_imagem_do_ponto = models.TextField('Descrição para acessibilidade', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
-    credito_da_imagem_do_ponto = CKEditor5Field("Crédito da imagem", config_name='default', blank=True, null=True)
+    # credito_da_imagem_do_ponto = CKEditor5Field("Crédito da imagem", config_name='default', blank=True, null=True)
+    credito_da_imagem_do_ponto = models.ForeignKey(
+        Credito,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Crédito da imagem',
+        related_name='%(class)s_oeds'
+    )
     def clean(self):
         # strip_tags remove as tags HTML para checar se existe texto real
         if not self.titulo_ponto or not strip_tags(self.titulo_ponto).strip():

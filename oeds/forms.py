@@ -45,7 +45,7 @@ class OedModelForm(forms.ModelForm):
         model = Oed
         # IMPORTANTE: Remova 'criado_em' e 'atualizado_em' desta lista Meta
         fields = [
-            'retranca', 'titulo', 'tipo', 'projeto', 'componente', 
+            'retranca', 'status', 'titulo', 'tipo', 'projeto', 'componente', 
             'volume', 'capitulo', 'pagina', 'local_insercao', 
             'introducao', 'retranca_da_imagem_principal', 'imagem_principal',
             'legenda_da_imagem_principal', 'alt_text_da_imagem_principal',
@@ -101,7 +101,7 @@ class PontoClicavelForm(forms.ModelForm):
             "titulo_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "texto_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "legenda_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
-            "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
+            # "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             'coordenadas': CoordenadasWidget(),
         }
 

@@ -1,5 +1,7 @@
 from django.db import models
 from core.models import AuditoriaBase
+from django_ckeditor_5.fields import CKEditor5Field
+
 
 
 class Componente(AuditoriaBase):
@@ -23,7 +25,8 @@ class Projeto(AuditoriaBase):
         return self.nome
 
 class Credito(AuditoriaBase):
-    nome = models.CharField('Crédito', max_length=100, unique=True)
+    # nome = models.CharField('Crédito', max_length=100, unique=True)
+    nome = CKEditor5Field("Crédito", config_name='default')
     class Meta:
         verbose_name = 'Crédito'
         verbose_name_plural = 'Créditos'

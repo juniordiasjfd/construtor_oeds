@@ -16,18 +16,19 @@
                     <th>OEDs</th>
                     <th class="text-center" style="width:70px;">Preview</th>
                     <th>Tipo</th>
-                    <th>Projeto/Componente</th>
+                    <th title="Projeto / Componente / Volume">Proj./Comp./Vol.</th>
+                    <th>Status</th>
                     <th class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for oed in object_list %}
                 <tr>
-                    <td>
+                    <td title="Título e retranca">
                         <strong>{{ oed.titulo|striptags }}</strong><br>
                         <small class="text-muted">{{ oed.retranca }}</small>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" title="Preview">
                         {% if oed.imagem_principal %}
                         <img src="{{ oed.imagem_principal.url }}" alt="Preview"
                             style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
@@ -36,13 +37,15 @@
                         {% endif %}
                     </td>
 
-                    <td>{{ oed.get_tipo_display }}</td>
-                    <td>
+                    <td title="Tipo do OED">{{ oed.get_tipo_display }}</td>
+                    <td title="Projeto / Componente / Volume">
                         <span class="badge bg-primary">{{ oed.projeto|default:"-" }}</span>
                         <span class="badge bg-secondary">{{ oed.componente|default:"-" }}</span>
+                        <span class="badge bg-secondary">{{ oed.volume|default:"-" }}</span>
                     </td>
+                    <td title="Status">{{ oed.status }}</td>
                     <td class="text-center">
-                        <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary">
+                        <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary" title="Editar o OED">
                             <i class="fas fa-edit"></i> Editar
                         </a>
                     </td>
