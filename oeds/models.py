@@ -113,6 +113,13 @@ class Oed(AuditoriaBase):
 class PontoClicavel(AuditoriaBase):
     oed = models.ForeignKey(Oed, related_name='pontos', on_delete=models.CASCADE)
     titulo_ponto = CKEditor5Field("Título do ponto", config_name='default')
+    coordenadas = models.CharField(
+        "Coordenadas (X,Y)", 
+        max_length=50, 
+        null=True, 
+        blank=True,
+        help_text="Clique na imagem acima para definir a posição."
+    )
     texto_ponto = CKEditor5Field("Texto do ponto", config_name='default', blank=True, null=True)
     # possui_imagem = models.BooleanField("Haverá imagem no ponto?", default=True)
     retranca_da_imagem_do_ponto = models.CharField(

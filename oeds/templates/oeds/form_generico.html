@@ -59,6 +59,26 @@
         white-space: nowrap !important;
         text-align: left !important;
     }
+
+
+
+
+
+
+    .marker {
+        pointer-events: none;
+        /* ESSENCIAL para conseguir clicar na imagem sob o marcador */
+    }
+
+    .coordenadas-picker-container .position-relative {
+        line-height: 0;
+        /* Remove espaço extra abaixo da imagem */
+    }
+
+    .image-preview-target {
+        border-radius: 4px;
+        max-width: 100%;
+    }
 </style>
 
 <div class="container mt-4">
@@ -100,7 +120,7 @@
                 {% csrf_token %}
                 {{ form.as_p }}
 
-                <h4 class="mt-4">Pontos Clicáveis</h4>
+                <h4 class="mt-4">Pontos clicáveis</h4>
                 {{ pontos.management_form }}
 
                 <div class="accordion" id="accordionPontos">
@@ -115,7 +135,24 @@
                         <div id="collapse-{{ forloop.counter0 }}" class="accordion-collapse collapse"
                             data-bs-parent="#accordionPontos">
                             <div class="accordion-body">
-                                {{ ponto_form.as_p }}
+
+                                {{ ponto_form.coordenadas.label_tag }}
+                                {{ ponto_form.coordenadas }}
+
+                                <hr>
+
+                                {% for field in ponto_form %}
+                                {% if field.name != 'coordenadas' %}
+                                <div class="mb-3">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
                             </div>
                         </div>
                     </div>
@@ -127,16 +164,16 @@
                         <h2 class="accordion-header" id="heading-__prefix__">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapse-__prefix__">
-                                Ponto Clicável <span class="ponto-numero ms-1">__numero__</span>
+                                Ponto clicável <span class="ponto-numero ms-1">__numero__</span>
                             </button>
                         </h2>
                         <div id="collapse-__prefix__" class="accordion-collapse collapse"
                             data-bs-parent="#accordionPontos">
                             <div class="accordion-body">
                                 {% if ponto_form.errors %}
-                                    <div class="alert alert-danger">
-                                        {{ ponto_form.errors }}
-                                    </div>
+                                <div class="alert alert-danger">
+                                    {{ ponto_form.errors }}
+                                </div>
                                 {% endif %}
                                 {{ pontos.empty_form.as_p }}
                             </div>
@@ -182,36 +219,107 @@
 
 
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const inputQuantidade = document.getElementById('id_quantidade_pontos_prevista');
-    const container = document.getElementById('accordionPontos');
-    const totalForms = document.getElementById('id_pontos-TOTAL_FORMS');
-    const emptyFormHtml = document.getElementById('empty-form').innerHTML;
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputQuantidade = document.getElementById('id_quantidade_pontos_prevista');
+        const container = document.getElementById('accordionPontos');
+        const totalForms = document.getElementById('id_pontos-TOTAL_FORMS');
+        const emptyFormHtml = document.getElementById('empty-form').innerHTML;
 
-    function atualizarFormularios() {
-        const quantidadeDesejada = parseInt(inputQuantidade.value) || 0;
-        let formsAtuais = container.getElementsByClassName('ponto-item').length;
+        function atualizarFormularios() {
+            const quantidadeDesejada = parseInt(inputQuantidade.value) || 0;
+            let formsAtuais = container.getElementsByClassName('ponto-item').length;
 
-        // Adicionar novos
-        while (formsAtuais < quantidadeDesejada) {
-            let newForm = emptyFormHtml.replace(/__prefix__/g, formsAtuais);
-            newForm = newForm.replace(/__numero__/g, formsAtuais + 1);
-            container.insertAdjacentHTML('beforeend', newForm);
-            formsAtuais++;
+            // Adicionar novos
+            while (formsAtuais < quantidadeDesejada) {
+                let newForm = emptyFormHtml.replace(/__prefix__/g, formsAtuais);
+                newForm = newForm.replace(/__numero__/g, formsAtuais + 1);
+                container.insertAdjacentHTML('beforeend', newForm);
+                formsAtuais++;
+            }
+
+            // Remover excesso
+            while (formsAtuais > quantidadeDesejada) {
+                container.lastElementChild.remove();
+                formsAtuais--;
+            }
+
+            totalForms.value = formsAtuais;
         }
 
-        // Remover excesso
-        while (formsAtuais > quantidadeDesejada) {
-            container.lastElementChild.remove();
-            formsAtuais--;
+        inputQuantidade.addEventListener('change', atualizarFormularios);
+        atualizarFormularios();
+    });
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. Função para carregar a imagem nos campos de coordenadas
+        function carregarImagensNosPickers() {
+            document.querySelectorAll('.coordenadas-picker-container').forEach(container => {
+
+                const input = container.querySelector('input[name$="coordenadas"]');
+                const img = container.querySelector('.image-preview-target');
+                const marker = container.querySelector('.marker');
+
+                if (!input) return;
+
+                const url = input.getAttribute('data-img-url');
+
+                // 🔥 Sempre carrega a imagem se houver URL
+                if (url) {
+                    img.src = url;
+                    img.style.display = 'block';
+                }
+
+                // 🔥 Reposiciona marcador se já existir valor salvo
+                if (input.value && input.value.includes(',')) {
+                    const [x, y] = input.value.split(',');
+                    marker.style.left = x + '%';
+                    marker.style.top = y + '%';
+                    marker.style.display = 'block';
+                }
+            });
         }
 
-        totalForms.value = formsAtuais;
-    }
 
-    inputQuantidade.addEventListener('change', atualizarFormularios);
-    atualizarFormularios(); 
-});
+        // 2. Evento de clique na imagem para capturar coordenadas
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('image-preview-target')) {
+                const container = e.target.closest('.coordenadas-picker-container');
+                const input = container.querySelector('input[name$="coordenadas"]');
+                const marker = container.querySelector('.marker');
+
+                // Cálculo das coordenadas em porcentagem
+                const rect = e.target.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(2);
+                const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(2);
+
+                input.value = `${x},${y}`;
+                marker.style.left = x + '%';
+                marker.style.top = y + '%';
+                marker.style.display = 'block';
+            }
+        });
+
+        // Inicia o carregamento ao abrir a página
+        carregarImagensNosPickers();
+
+        const accordionContainer = document.getElementById('accordionPontos');
+        if (accordionContainer) {
+            accordionContainer.addEventListener('shown.bs.collapse', function () {
+                carregarImagensNosPickers();
+            });
+        }
+
+        // Re-executa quando o usuário muda a quantidade de pontos (novos campos)
+        const inputQuantidade = document.getElementById('id_quantidade_pontos_prevista');
+        if (inputQuantidade) {
+            inputQuantidade.addEventListener('change', () => {
+                setTimeout(carregarImagensNosPickers, 100);
+            });
+        }
+    });
 </script>
 
 {% endblock %}

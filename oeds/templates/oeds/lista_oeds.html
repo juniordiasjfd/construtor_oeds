@@ -14,6 +14,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>OEDs</th>
+                    <th class="text-center" style="width:70px;">Preview</th>
                     <th>Tipo</th>
                     <th>Projeto/Componente</th>
                     <th class="text-center">Ações</th>
@@ -26,6 +27,15 @@
                         <strong>{{ oed.titulo|striptags }}</strong><br>
                         <small class="text-muted">{{ oed.retranca }}</small>
                     </td>
+                    <td class="text-center">
+                        {% if oed.imagem_principal %}
+                        <img src="{{ oed.imagem_principal.url }}" alt="Preview"
+                            style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
+                        {% else %}
+                        <div style="width:50px; height:50px; background:#f1f1f1; border-radius:6px;"></div>
+                        {% endif %}
+                    </td>
+
                     <td>{{ oed.get_tipo_display }}</td>
                     <td>
                         <span class="badge bg-primary">{{ oed.projeto|default:"-" }}</span>
@@ -38,7 +48,9 @@
                     </td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="4" class="text-center text-muted">Nenhum OED encontrado.</td></tr>
+                <tr>
+                    <td colspan="4" class="text-center text-muted">Nenhum OED encontrado.</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

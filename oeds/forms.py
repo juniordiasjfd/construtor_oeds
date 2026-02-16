@@ -64,24 +64,35 @@ class OedModelForm(forms.ModelForm):
             "palavras_chave": forms.TextInput(attrs={'placeholder': 'Palavras separadas por vírgula',}),
         }
 
+class CoordenadasWidget(forms.TextInput):
+    template_name = 'oeds/coordenadas_picker.html'
+
 class PontoClicavelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # 🔹 Define a URL da imagem principal do OED (se existir)
+        oed = getattr(self.instance, 'oed', None)
+
+        if oed and oed.imagem_principal:
+            self.fields['coordenadas'].widget.attrs.update({
+                'data-img-url': oed.imagem_principal.url,
+                'placeholder': 'Clique na imagem para marcar'
+            })
+
+        # 🔹 Aplica classes Bootstrap
         for name, field in self.fields.items():
-            # 1. Primeiro verificamos se é um Checkbox
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({'class': 'form-check-input'})
-            # 2. Se for CKEditor, não adicionamos classes extras (ele já tem as dele)
             elif isinstance(field.widget, CKEditor5Widget):
                 continue
-            # 3. Para todos os outros campos (Texto, Select, etc), usamos form-control
             else:
                 field.widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = PontoClicavel
         fields = [
-            'titulo_ponto', 'texto_ponto', #'possui_imagem', 
+            'titulo_ponto', 'coordenadas', 'texto_ponto', #'possui_imagem', 
             'retranca_da_imagem_do_ponto',
             'imagem_do_ponto', 'legenda_da_imagem_do_ponto', 
             'alt_text_da_imagem_do_ponto', 'credito_da_imagem_do_ponto'
@@ -91,6 +102,7 @@ class PontoClicavelForm(forms.ModelForm):
             "texto_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "legenda_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
+            'coordenadas': CoordenadasWidget(),
         }
 
 # O FormSet que liga o OED aos seus pontos

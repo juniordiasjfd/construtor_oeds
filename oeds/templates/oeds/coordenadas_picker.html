@@ -1,0 +1,16 @@
+<div class="coordenadas-picker-container mb-3">
+    <label class="form-label">Posicione o ponto na imagem:</label>
+    <div class="position-relative d-inline-block border" style="cursor: crosshair;">
+        <img src="" class="img-fluid image-preview-target" style="max-height: 400px; display: none;">
+        
+        <div class="marker position-absolute bg-danger border border-white rounded-circle" 
+             style="width: 30px; height: 30px; transform: translate(-50%, -50%); display: none;"></div>
+    </div>
+    
+    <input
+    type="text"
+    name="{{ widget.name }}"
+    value="{{ widget.value|default_if_none:'' }}"
+    {% include "django/forms/widgets/attrs.html" %} readonly>
+
+</div>
