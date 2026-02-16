@@ -1,5 +1,5 @@
 from django import forms
-from .models import Projeto, Componente, Credito, StatusOed
+from .models import Projeto, Componente, Credito, StatusOed, TipoOed
 
 
 class ProjetoModelForm(forms.ModelForm):
@@ -21,3 +21,8 @@ class StatusOedModelForm(forms.ModelForm):
     class Meta:
         model = StatusOed
         fields = ['nome']
+
+class TipoOedModelForm(forms.ModelForm):
+    class Meta:
+        model = TipoOed
+        fields = ['nome', 'instrucao', 'botao_fechar', 'credito_imagem_prefixo']

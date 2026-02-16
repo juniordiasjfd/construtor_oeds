@@ -4,7 +4,7 @@ from django.conf import settings
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.exceptions import ValidationError
 from django.utils.html import strip_tags
-from projetos.models import Projeto, Componente, StatusOed, Credito
+from projetos.models import Projeto, Componente, StatusOed, Credito, TipoOed
 from core.models import AuditoriaBase, ConfiguracaoOED
 from django.core.validators import FileExtensionValidator
 import os
@@ -28,12 +28,20 @@ class Oed(AuditoriaBase):
         verbose_name='Status do OED',
         related_name='%(class)s_oeds'
     )
-    TIPOS_CHOICES = [
-        ('infografico', 'Infográfico'),
-        ('mapa', 'Mapa clicável'),
-    ]
+    # TIPOS_CHOICES = [
+    #     ('infografico', 'Infográfico'),
+    #     ('mapa', 'Mapa clicável'),
+    # ]
     titulo = CKEditor5Field("Título do OED", config_name='default')
-    tipo = models.CharField("Tipo de OED", max_length=20, choices=TIPOS_CHOICES, default='infografico')
+    # tipo = models.CharField("Tipo de OED", max_length=20, choices=TIPOS_CHOICES, default='infografico')
+    tipo = models.ForeignKey(
+        TipoOed, 
+        on_delete=models.SET_NULL, 
+        blank=True,
+        null=True,
+        verbose_name="Tipo do OED",
+        related_name="%(class)s_oeds"
+    )
     projeto = models.ForeignKey(
         Projeto, 
         on_delete=models.SET_NULL, 

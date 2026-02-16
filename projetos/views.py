@@ -2,8 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, ListView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import Projeto, Componente, Credito, StatusOed
-from .forms import ProjetoModelForm, ComponenteModelForm, CreditoModelForm, StatusOedModelForm
+from .models import Projeto, Componente, Credito, StatusOed, TipoOed
+from .forms import ProjetoModelForm, ComponenteModelForm, CreditoModelForm, StatusOedModelForm, TipoOedModelForm
 from django.shortcuts import redirect
 
 class CoordenadorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -148,5 +148,38 @@ class StatusOedUpdateView(CoordenadorRequiredMixin, UpdateView):
     success_url = reverse_lazy('listar_status_oed')
     def form_valid(self, form):
         messages.success(self.request, 'Status de OED atualizado.')
+        return super().form_valid(form)
+
+class TipoOedCreateView(CoordenadorRequiredMixin, CreateView):
+    model = TipoOed
+    form_class = TipoOedModelForm
+    template_name = 'projetos/form_generico.html'
+    success_url = reverse_lazy('listar_tipo_oed')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titulo'] = self.model._meta.verbose_name
+        return context
+    def form_valid(self, form):
+        messages.success(self.request, 'Tipo de OED registrado.')
+        return super().form_valid(form)
+class TipoOedListView(CoordenadorRequiredMixin, ListView):
+    model = TipoOed
+    template_name = 'projetos/lista_generica.html'
+    context_object_name = 'tipo_oed'
+    ordering = ['nome']
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['verbose_name'] = self.model._meta.verbose_name
+        context['verbose_name_plural'] = self.model._meta.verbose_name_plural
+        return context
+    def get_create_url(self): return reverse_lazy('novo_tipo_oed')
+    def get_update_url_name(self): return "editar_tipo_oed"
+class TipoOedUpdateView(CoordenadorRequiredMixin, UpdateView):
+    model = TipoOed
+    form_class = TipoOedModelForm
+    template_name = 'projetos/form_generico.html'
+    success_url = reverse_lazy('listar_tipo_oed')
+    def form_valid(self, form):
+        messages.success(self.request, 'Tipo de OED atualizado.')
         return super().form_valid(form)
 

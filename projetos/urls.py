@@ -23,4 +23,9 @@ urlpatterns = [
     path('status-oed/listar/', views.StatusOedListView.as_view(), name='listar_status_oed'),
     path('status-oed/novo/', views.StatusOedCreateView.as_view(), name='novo_status_oed'),
     path('status-oed/editar/<int:pk>/', views.StatusOedUpdateView.as_view(), name='editar_status_oed'),
+
+    # URLs para TIPOS de OED
+    path('tipo-oed/listar/', views.TipoOedListView.as_view(), name='listar_tipo_oed'),
+    path('tipo-oed/novo/', views.TipoOedCreateView.as_view(), name='novo_tipo_oed'),
+    path('tipo-oed/editar/<int:pk>/', views.TipoOedUpdateView.as_view(), name='editar_tipo_oed'),
 ]

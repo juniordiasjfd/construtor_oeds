@@ -42,3 +42,15 @@ class StatusOed(AuditoriaBase):
         ordering = ['nome']
     def __str__(self):
         return self.nome
+
+class TipoOed(AuditoriaBase):
+    nome = CKEditor5Field("Tipo", config_name='default')
+    instrucao = CKEditor5Field("Instruções", config_name='default')
+    botao_fechar = models.CharField('Botão fechar', max_length=100)
+    credito_imagem_prefixo = CKEditor5Field("Prefixo do crédito da imagem", config_name='default')
+    class Meta:
+        verbose_name = 'Tipo do OED'
+        verbose_name_plural = 'Tipos de OED'
+        ordering = ['nome']
+    def __str__(self):
+        return self.nome
