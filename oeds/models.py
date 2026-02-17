@@ -16,7 +16,7 @@ def renomear_imagem_oed(instance, filename):
     Função para renomear o arquivo: gera um UUID e mantém a extensão original.
     """
     ext = filename.split('.')[-1]
-    novo_nome = f"{uuid.uuid4()}.{ext}"
+    novo_nome = f"img_{uuid.uuid4()}.{ext}"
     return os.path.join('oeds/images/', novo_nome)
 class Oed(AuditoriaBase):
     retranca = models.CharField(verbose_name='Retranca', max_length=50, unique=True, help_text='Campo obrigatório. A retranca pode ser alterada posteriormente, se necessário.')

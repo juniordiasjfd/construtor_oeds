@@ -1,8 +1,6 @@
+{% verbatim %}<?xml version="1.0" encoding="utf-8"?>{% endverbatim %}
 {% load static %}
 
-{% verbatim %}
-  <?xml version="1.0" encoding="utf-8"?>
-{% endverbatim %}
 <!DOCTYPE html>
 <html lang="pt-BR" xml:lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -69,6 +67,9 @@
     <!--script vai trocar automaticamente-->
   </div>
   <main>
+    <a href="{% url 'oeds_preview:oed_download_zip' pk=oed.pk %}" class="btn btn-primary">
+      Baixar Pacote ZIP
+    </a>
     <section class="d3boxoed">
       <div class="d3topooed">
         {{ html_titulo }}

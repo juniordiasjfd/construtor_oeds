@@ -4,6 +4,14 @@ import bs4
 from PIL import Image
 from django.utils.safestring import mark_safe
 import copy
+import io
+import zipfile
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.views import View
+import datetime
 
 
 def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
@@ -91,6 +99,7 @@ class OedPreviewDetailView(DetailView):
             context['img_principal_html'] = mark_safe(f'''
                 <div class="img_info_enriquecimento">
                 <figure>
+                    <!--Retranca original: {obj.retranca_da_imagem_principal}-->
                     <img alt="{obj.alt_text_da_imagem_principal}" height="{new_height}" src="{obj.imagem_principal.url}" width="{new_width}" />
                     <figcaption>{legenda_da_imagem_principal}</figcaption>
                 </figure>
@@ -126,6 +135,7 @@ class OedPreviewDetailView(DetailView):
                 html_imagem_do_ponto = f'''
                     <div class="col2c">
                         <figure>
+                            <!--Retranca original: {ponto.retranca_da_imagem_do_ponto}-->
                             <img alt="{ponto.alt_text_da_imagem_do_ponto}" height="{nh_pt}" src="{ponto.imagem_do_ponto.url}" width="{nw_pt}" />
                             {legenda_da_imagem_do_ponto}
                         </figure>
@@ -198,4 +208,70 @@ class OedPreviewDetailView(DetailView):
         context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) else ''
 
         return context
+class OedDownloadZipView(View):
+    def get(self, request, *args, **kwargs):
+        # 1. Obter o objeto e os dados do contexto
+        # Dica: Reutilize a lógica da sua OedPreviewDetailView
+        preview_view = OedPreviewDetailView()
+        preview_view.object = Oed.objects.get(pk=self.kwargs['pk'])
+        context = preview_view.get_context_data(object=preview_view.object)
+        
+        # 2. Renderizar o HTML
+        html_content = render_to_string('oeds_preview/preview.xhtml', context)
+        html_content = html_content.replace('/static/oeds_preview/', '')
+        html_content = html_content.replace('/media/oeds/', '')
+        soup = bs4.BeautifulSoup(html_content, 'lxml')
+        # retirada do botão
+        botao = soup.find(attrs={'class':'btn-primary'})
+        if botao:
+            botao.decompose()
+        # filtrando as imagens
+        lista_de_imagens = list(os.path.basename(x['href']) for x in soup.find_all(attrs={'href':True}))
+        lista_de_imagens += list(os.path.basename(x['src']) for x in soup.find_all(attrs={'src':True}))
+        html_content = str(soup)
+
+        # 3. Criar o arquivo ZIP em memória
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+            
+            # Adicionar o arquivo HTML principal
+            zip_file.writestr(f'{preview_view.object.retranca}.xhtml', html_content)
+
+            # 4. Adicionar Arquivos Estáticos (Styles, Fonts, Images do Static)
+            # Define os caminhos das pastas dentro do seu app oeds_preview
+            static_root = os.path.join(settings.BASE_DIR, 'oeds_preview', 'static', 'oeds_preview')
+            
+            folders_to_include = ['styles', 'fonts', 'images']
+            
+            for folder in folders_to_include:
+                folder_path = os.path.join(static_root, folder)
+                if os.path.exists(folder_path):
+                    for root, dirs, files in os.walk(folder_path):
+                        for file in files:
+                            file_full_path = os.path.join(root, file)
+                            # Cria o caminho relativo dentro do ZIP (ex: styles/arquivo.css)
+                            rel_path = os.path.relpath(file_full_path, static_root)
+                            if folder == 'images':
+                                if os.path.basename(rel_path) not in lista_de_imagens:
+                                    continue
+                            zip_file.write(file_full_path, rel_path)
+
+            # 5. Adicionar Imagens de Media (Uploads do Banco de Dados)
+            # Aqui você deve decidir se quer manter a estrutura original ou mover para images/
+            obj = preview_view.object
+            if obj.imagem_principal:
+                zip_file.write(obj.imagem_principal.path, f"images/{os.path.basename(obj.imagem_principal.path)}")
+            
+            for ponto in obj.pontos.all():
+                if ponto.imagem_do_ponto:
+                    zip_file.write(ponto.imagem_do_ponto.path, f"images/{os.path.basename(ponto.imagem_do_ponto.path)}")
+
+        # 6. Retornar o ZIP como resposta de download
+        buffer.seek(0)
+        response = HttpResponse(buffer, content_type='application/zip')
+        hora = format(datetime.datetime.now(), '%Y-%m-%d_%H-%M-%S')
+        response['Content-Disposition'] = f'attachment; filename="{preview_view.object.retranca}_export_{hora}.zip"'
+        return response
+
+
 
