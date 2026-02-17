@@ -1,0 +1,110 @@
+{% load static %}
+
+{% verbatim %}
+  <?xml version="1.0" encoding="utf-8"?>
+{% endverbatim %}
+<!DOCTYPE html>
+<html lang="pt-BR" xml:lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>key_metadata_dc:title</title>
+  <!--script vai trocar automaticamente-->
+  <link href="{% static 'oeds_preview/images/favicon.jpg' %}" rel="icon" type="image/x-icon" />
+  <meta content="noindex, nofollow" name="robots" />
+  <!-- Metadados -->
+  <meta content="key_metadata_dc:description" name="description" />
+  <!--script vai trocar automaticamente-->
+  <meta content="key_metadata_dc:creator" name="author" />
+  <!--script vai trocar automaticamente-->
+  <meta content="pt-br" name="language" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <!-- Scripts JS -->
+  <!-- Link CSS -->
+  <link href="{% static 'oeds_preview/styles/styles_oed_0.css' %}" rel="stylesheet" type="text/css" />
+  <!--a folha de CSS do infografico deve ter o nome da retranca do OED-->
+  <link href="{% static 'oeds_preview/styles/styles_oed.css' %}" rel="stylesheet" type="text/css" />
+
+  <style>
+    /* Injeção das coordenadas calculadas na View */
+    {% for id, coords in marcador_css.items %}
+    .{{ id }} { 
+        left: {{ coords.0 }}%; 
+        top: {{ coords.1 }}%; 
+    }
+    {% endfor %}
+  </style>
+</head>
+
+<body lang="pt-BR" xml:lang="pt-BR">
+  <div itemscope="" itemtype="https://schema.org/Book">
+    <meta content="Esta publicação está em conformidade com a especificação de acessibilidade em WCAG 2.0 Level AA"
+      itemprop="accessibilitySummary" lang="pt-BR" xml:lang="pt-BR" />
+    <meta content="textual" itemprop="accessMode" />
+    <meta content="visual" itemprop="accessMode" />
+    <meta content="textual" itemprop="accessModeSufficient" />
+    <meta content="largePrint/CSSEnabled" itemprop="accessibilityFeature" />
+    <!--item novo-->
+    <meta content="highContrast/CSSEnabled" itemprop="accessibilityFeature" />
+    <meta content="resizeText/CSSEnabled" itemprop="accessibilityFeature" />
+    <meta content="displayTransformability" itemprop="accessibilityFeature" />
+    <meta content="longDescription" itemprop="accessibilityFeature" />
+    <meta content="alternativeText" itemprop="accessibilityFeature" />
+    <meta content="fullKeyboardControl" itemprop="accessibilityControl" />
+    <!-- Verificar se há ocorrências -->
+    <meta content="noFlashingHazard" itemprop="accessibilityHazard" />
+    <meta content="noSoundHazard" itemprop="accessibilityHazard" />
+    <meta content="MathML" itemprop="accessibilityFeature" />
+    <meta content="describedMath" itemprop="accessibilityFeature" />
+    <meta content="key_metadata_dc:title" itemprop="name" />
+    <!--script vai trocar automaticamente-->
+    <meta content="key_metadata_dc:description" itemprop="description" />
+    <!--script vai trocar automaticamente-->
+    <meta content="key_metadata_unique-identifier" itemprop="isbn" />
+    <!--script vai trocar automaticamente-->
+    <meta content="key_metadata_copyrightYear" itemprop="copyrightYear" />
+    <!--script vai trocar automaticamente-->
+    <meta content="key_metadata_dc:publisher" itemprop="publisher" itemscope=""
+      itemtype="https://schema.org/Organization" />
+    <!--script vai trocar automaticamente-->
+  </div>
+  <main>
+    <section class="d3boxoed">
+      <div class="d3topooed">
+        {{ html_titulo }}
+        {{ html_instrucao }}
+      </div>
+      <div class="d3conteudooed">
+        <!--Texto introdutório-->
+        {{ html_introducao }}
+        <!--início div class="mapa"-->
+        <div class="mapa" role="region" aria-label="Infográfico"> 
+          <!--Início Imagem Principal-->
+          <div class="img_info_enriquecimento">
+            <figure>
+              {{ img_principal_html }}
+            </figure>
+          </div>
+          {{ html_legenda_principal }}
+          <!-- Fim Imagem Principal-->
+
+          {{ pontos_html }}
+
+        </div>
+        <!--Fim div class="mapa"-->
+
+        <!--Créditos-->
+        {{ html_fonte_e_credito }}
+        <!--Texto de Conclusão-->
+        {{ html_conclusao }}
+      </div>
+
+      <!-- <nav class="d3btnvoltaroed">
+        <a href="#">Voltar ao conteúdo</a>
+      </nav> -->
+
+    </section>
+  </main>
+</body>
+
+</html>

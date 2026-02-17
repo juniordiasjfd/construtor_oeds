@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'usuarios',
     'projetos',
     'oeds',
+    'oeds_preview',
     'django_bootstrap5',
     'django_ckeditor_5',
 ]

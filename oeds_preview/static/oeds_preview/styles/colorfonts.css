@@ -1,0 +1,49 @@
+/* CSS Document */
+/* Padrões de Fontes no projeto
+// Citações: 'Noto Serif';
+// Texto: 'Work Sans' ;
+
+/*👉 -------------- TEXTO --------------👈*/
+@font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 400;
+    src:
+        url(../fonts/WorkSans-Regular.woff2) format("woff2"),
+        url(../fonts/WorkSans-Regular.otf) format("opentype"),
+        url(../fonts/WorkSans-Regular.ttf) format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    font-style: italic;
+    font-weight: 400;
+    src:
+        url(../fonts/WorkSans-Italic.woff2) format("woff2"),
+        url(../fonts/WorkSans-Italic.otf) format("opentype"),
+        url(../fonts/WorkSans-Italic.ttf) format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 700;
+    src:
+        url(../fonts/WorkSans-Bold.woff2) format("woff2"),
+        url(../fonts/WorkSans-Bold.otf) format("opentype"),
+        url(../fonts/WorkSans-Bold.ttf) format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    font-style: italic;
+    font-weight: 700;
+    src:
+        url(../fonts/WorkSans-BoldItalic.woff2) format("woff2"),
+        url(../fonts/WorkSans-BoldItalic.otf) format("opentype"),
+        url(../fonts/WorkSans-BoldItalic.ttf) format("truetype");
+    font-display: swap;
+}

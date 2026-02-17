@@ -1,0 +1,494 @@
+@charset "UTF-8";
+@import url(reset.css);
+@import url(colorfonts.css);
+
+/* CSS Document */
+:root {
+    /* Fontes */
+    /*👉--citacao: 'Noto Serif';👈*/
+    --texto: 'Work Sans';
+
+    /* Tamanhos */
+    --peso1: 1.75em;
+    --peso2: 1.65em;
+    --peso3: 1.55em;
+    --peso4: 1.45em;
+    --peso5: 1.35em;
+    --peso6: 1.25em;
+    --peso7: 1.05em;
+    --peso8: 0.85em;
+    --pesoPadrao: 1em;
+    --pesoMenor: 0.8em;
+    --pesoIntermediario: 0.9em;
+
+    /* Cores */
+    --corprof: #8a014c;
+    --preto_: #2B2E34;
+    --preto: #000;
+    --branco: #fff;
+    --link: #00649c;
+    --manualu: #E4F2E7;
+
+    --azul1: #00aaca;
+    --azul2: #d5ecf4;
+    --azul3: #005b6c;
+
+    --amarelo1: #fed061;
+    --amarelo2: #fff1c4;
+
+    --citrico1: #dce169;
+    --citrico2: #f8f4bd;
+
+    --laranja1: #f3953f;
+    --laranja2: #feead3;
+
+    --vermelho1: #e94f35;
+    --vermelho2: #fce4e0;
+
+    --roxoquente1: #b9348b;
+    --roxoquente2: #f2e1f0;
+
+    --turquesa1: #15af97;
+    --turquesa2: #e0f0eb;
+    --turquesa3: #c0dfcd;
+
+    --cinza: #d0d0d0;
+    --cinza15: #edebdd;
+    --cinza50: #9c9a83;
+
+    --unidade: #52ae32;
+    --dezena: #e7343f;
+    --centena: #008bd2;
+    --decimo: #f07e31;
+    --centesimo: #745ba3;
+    --milesimo: #00adba;
+
+    --pinteamarelo: #ffdf30;
+    --pintevermelho: #ed6b62;
+    --pinteverde: #85be57;
+    --pinteazul: #78b7e5;
+    --pintelaranja: #f39655;
+    --pintemarrom: #c0987c;
+}
+
+/* CSS Document */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--texto);
+    font-size: var(--pesoPadrao);
+    line-height: 1.5em;
+    overflow-x: hidden;
+    hyphens: none;
+}
+
+p {
+    hyphens: none !important;
+    line-height: 130%;
+    max-width: 100%;
+    font-size: 18px;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+section {
+    box-sizing: border-box;
+    margin-bottom: 2.5em;
+    page-break-before: always;
+    page-break-after: avoid;
+}
+
+section header {
+    padding: 15px 0 0px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+blockquote {
+    font-size: 1em;
+    max-width: 100%;
+}
+
+figure {
+    margin: 1em 0 0 0;
+}
+
+figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.p4legenda {
+    background: var(--roxoquente2);
+    font-family: var(--texto);
+    font-size: var(--pesoPadrao);
+    padding: 0.5em 1em;
+}
+
+p,
+ul li {
+    hyphens: none;
+}
+
+p {
+    max-width: 100%;
+    line-height: 130%;
+    hyphens: none !important;
+}
+
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+strong em {
+    font-weight: bold;
+    font-style: italic;
+}
+
+/*👉d3hyperlinkoed classe específica para aparência de urls en OEDs👈*/
+a.d3hyperlinkoed {
+    color: #053499;
+    font-size: var(--pesoPadrao);
+    text-decoration: underline;
+}
+
+a.d3hyperlinkoed:visited {
+    color: #4f0792;
+}
+
+a.d3hyperlinkoed:hover {
+    color: rgb(134, 0, 0);
+}
+
+.ocultatx {
+    color: transparent;
+    font-size: 0.6em;
+}
+
+.ocultamn {
+    color: transparent;
+    font-size: 0.3em;
+}
+
+.hifen_ano {
+    margin-left: -8px;
+}
+
+.url_para_encurtar {
+    word-break: break-all;
+}
+
+.bg_branco {
+    background: #fff;
+}
+
+/*👉CLASSES PARA DIAGRAMAR👈*/
+/* COLUNAS E ALINHAMENTO */
+.col2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.col2c {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 16px;
+}
+
+.col2s {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    gap: 16px;
+}
+
+/* Alinhamento vertical */
+.coltop {
+    align-items: flex-start;
+}
+
+.colcenter {
+    align-items: center;
+}
+
+.colbottom {
+    align-items: flex-end;
+}
+
+/*👉Elementos gerais do OED👈*/
+
+.d3boxoed {
+    padding: 1em 0;
+}
+
+.d3topooed {
+    display: flex;
+    align-items: center;
+}
+
+p.d3instrucaooed {
+    font-family: var(--texto);
+    font-size: var(--pesoIntermediario);
+    line-height: 1.1em;
+    width: 36%;
+    padding-left: 1em;
+}
+
+.d3tit1oed {
+    font-family: var(--texto);
+    font-size: var(--peso3);
+    color: var(--preto);
+    border-top: 2px solid var(--roxoquente1);
+    border-left: 2px solid var(--roxoquente1);
+    border-right: 2px solid var(--roxoquente1);
+    background: var(--roxoquente2);
+    text-align: left;
+    border-radius: 0 10px 0 0;
+    padding: 0.5em 1em;
+    max-width: 64%;
+    width: fit-content;
+    line-height: 1.2em;
+    font-weight: normal;
+}
+
+.d3tit1oed .d3titdestaque {
+    font-weight: bold;
+    display: block;
+}
+
+.d3tit2oed {
+    font-size: 1.3em;
+    font-family: var(--texto);
+    margin: 1em 0 0.5em 0;
+    text-align: center;
+}
+
+.d3txtoed {
+    margin: 1em 0;
+    font-family: var(--texto);
+    text-indent: 1.5em;
+    text-align: justify;
+    line-height: 1.5em;
+    font-size: var(--pesoPadrao);
+}
+
+.d3conclusaooed {
+    margin: 2em 0 0 0;
+}
+
+/* classe específica para texto em pop up de infográfico e mapa clicável */
+.d3txtoedmapitem {
+    font-family: var(--texto);
+    font-size: var(--pesoPadrao);
+}
+
+.d3legendaoed {
+    margin: 0.5em 0;
+    font-family: var(--texto);
+}
+
+.d3txinstrucaooed {
+    margin: 0.5em 0 1em 0;
+    font-family: var(--texto);
+    text-align: left;
+    font-size: var(--pesoPadrao);
+    text-indent: 1.5em;
+    text-align: justify;
+    line-height: 1.5em;
+}
+
+.d3conteudooed {
+    padding: 1em 2em;
+    background: #fff;
+    border: 2px solid var(--roxoquente1);
+    border-radius: 0 10px 10px 10px;
+}
+
+.panorama {}
+
+.objeto {}
+
+.d3credito {
+    /*👉display: flex;👈*/
+    /*👉flex-direction: row-reverse;👈*/
+    margin: 0.5em 0 0 0;
+}
+
+/*👉classes adicionadas para OED vídeo e áudio👈*/
+.d3oedvideo,
+.d3oedaudio {
+    margin: 1em 0;
+}
+
+.d3rubricatranscricao {
+    font-weight: bold;
+    margin: 1em 0 0 0 !important;
+}
+
+.d3txtranscricao {
+    margin: 0.5em 0 0.5em 0;
+}
+
+.d3creditoimagemoed,
+.d3fontepesquisa {
+    font-size: var(--pesoIntermediario);
+    text-align: right;
+    margin: 0.5em 0 0.5em 0;
+}
+
+.d3btnvoltaroed {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 1em 0;
+}
+
+.d3btnvoltaroed a {
+    padding: 0.5em 1em;
+    font-weight: bold;
+    font-family: var(--texto);
+    color: var(--preto);
+    border: 2px solid var(--roxoquente1);
+    background: var(--roxoquente2);
+    border-radius: 0 7px 7px 7px;
+}
+
+.d3btnvoltaroed a:hover,
+.d3btnvoltaroed a:focus {
+    animation: 3s ease-in-out;
+    animation-delay: 1000ms;
+    border: 1px solid var(--roxoquente1);
+    box-shadow: 3px 3px 0 0 var(--roxoquente1);
+}
+
+video {
+    max-width: 100%;
+}
+
+.d3vinheta {
+    font-style: italic;
+    text-indent: 0em !important;
+    margin: 1em 0 !important;
+}
+
+/* Recado imagem*/
+.d3p4recadoimagem {
+    font-family: var(--texto);
+    font-size: var(--pesoMenor);
+}
+
+.d3o4recadoimagem1{
+    text-align: right;
+    width: fit-content;
+    margin-left: auto;
+    padding: 5px 10px;
+    border-radius: 7px;
+}
+
+.d3o4recadoimagem1 {
+    background: var(--cinza15);
+}
+
+/* Medida Animal*/
+.d3o4medidaanimalbox {
+    font-size: var(--pesoIntermediario);
+    padding: 15px 15px 20px 20px;
+    position: relative;
+    margin: 1em 0;
+    background-color: var(--branco);
+    border-top-left-radius: 20px;
+    width: fit-content;
+}
+
+.d3o4medidaanimalbox::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 30px;
+    border-top: 2px solid var(--laranja1);
+    border-left: 2px solid var(--laranja1);
+    border-top-left-radius: 20px;
+}
+
+figure .d3o4medidaanimalbox {
+    display: block;
+    max-width: 300px;
+    font-size: var(--pesoIntermediario);
+    margin: 0 0 1em 0;
+    padding: 12px 0 0 15px;
+}
+
+
+/*👉 CLASSE PARA OCULTAR CONTEÚDO VISIVELMENTE, MAS MANTER ACESSÍVEL PARA LEITORES DE TELA 👈*/
+.sr_only {
+    clip-path: inset(50%);
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+/*MEDIA QUERY*/
+/*👉Versão Mobile Cel👈*/
+@media screen and (max-width: 800px) {
+    .d3boxoed {
+        padding: 0.5em 0 1em 0;
+    }
+
+    main {
+        margin: 0.5em;
+    }
+
+    .d3conteudooed {
+        padding: 1em;
+    }
+
+    .d3topooed {
+        display: block;
+    }
+
+    /* POSICIONAMENTO - COLUNAS */
+    .col2,
+    .col2c,
+    .col2s {
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+
+    }
+
+    .d3tit1oed {
+        background-position-y: -20px;
+        border-bottom: 2px solid var(--roxoquente1);
+        max-width: 97%;
+    }
+
+    p.d3instrucaooed {
+        width: 97%;
+        padding: 1em;
+    }
+
+}
