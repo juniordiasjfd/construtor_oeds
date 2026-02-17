@@ -96,7 +96,7 @@ class Oed(AuditoriaBase):
     )
     quantidade_pontos_prevista = models.PositiveIntegerField(
         "Quantidade de pontos clicáveis", 
-        default=1,
+        default=3,
         help_text="Informe quantos pontos clicáveis este OED deve ter."
     )
     orientacoes_para_producao = CKEditor5Field("Orientações para a produção", config_name='default', blank=True, null=True)
