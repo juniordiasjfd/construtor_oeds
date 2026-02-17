@@ -6,6 +6,28 @@ from django.utils.safestring import mark_safe
 import copy
 
 
+def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
+    parents_names = list(x.name for x in tag.parents)
+    return parent_name in parents_names
+def renomeia_tags(
+        soup:bs4.BeautifulSoup, 
+        de_para={
+            'i':'em', 
+            'b':'strong'
+            }):
+    for old_name in de_para:
+        ocorrencias = soup.find_all(old_name)
+        for ocor in ocorrencias:
+            ocor.name = de_para[old_name]
+    ocorrencias = soup.find_all('strong')
+    for ocor in ocorrencias:
+        if has_parent_with(ocor, 'em'):
+            new_em = soup.new_tag('em')
+            ocor.insert_before(new_em)
+            new_em.append(ocor)
+            new_em.name = 'strong'
+            ocor.name = 'em'
+    return soup
 class OedPreviewDetailView(DetailView):
     model = Oed
     template_name = 'oeds_preview/preview.xhtml' # O caminho do seu template específico
@@ -32,7 +54,7 @@ class OedPreviewDetailView(DetailView):
         soup_titulo.find('h1').insert(0, copy.copy(soup_tipo))
         for un in soup_titulo.find_all(attrs={'class':'unwrap'}):
             un.unwrap()
-
+        soup_titulo = renomeia_tags(soup_titulo)
         context['html_titulo'] = mark_safe(str(soup_titulo))
 
         # 2. INSTRUÇÃO + PREFIXO CRÉDITO
@@ -41,15 +63,16 @@ class OedPreviewDetailView(DetailView):
         soup_instrucao = bs4.BeautifulSoup(tipo_oed.instrucao, 'html.parser')
         for p in soup_instrucao.find_all('p'):
             p['class'] = ['d3instrucaooed']
+        soup_instrucao = renomeia_tags(soup_instrucao)
         context['html_instrucao'] = mark_safe(f'<div>{soup_instrucao}</div>')
         
         # Prefixo de crédito (usado várias vezes)
-        credito_imagem_prefixo = bs4.BeautifulSoup(tipo_oed.credito_imagem_prefixo, 'html.parser').p
+        credito_imagem_prefixo = renomeia_tags(bs4.BeautifulSoup(tipo_oed.credito_imagem_prefixo, 'html.parser').p)
         if credito_imagem_prefixo:
             credito_imagem_prefixo.name = 'span'
 
         # 3. INTRODUÇÃO
-        soup_intro = bs4.BeautifulSoup(str(obj.introducao), 'html.parser')
+        soup_intro = renomeia_tags(bs4.BeautifulSoup(str(obj.introducao), 'html.parser'))
         for p in soup_intro.find_all('p'):
             p['class'] = ['d3txtoed']
         if soup_intro.get_text(strip=True):
@@ -62,7 +85,7 @@ class OedPreviewDetailView(DetailView):
             with Image.open(obj.imagem_principal.path) as img_p:
                 new_width = 716
                 new_height = round(img_p.height * (new_width / img_p.width))
-            legenda_da_imagem_principal = bs4.BeautifulSoup(f'<figcaption class="p4legenda">{obj.legenda_da_imagem_principal}</figcaption>', 'html.parser')
+            legenda_da_imagem_principal = renomeia_tags(bs4.BeautifulSoup(f'<figcaption class="p4legenda">{obj.legenda_da_imagem_principal}</figcaption>', 'html.parser'))
             for p in legenda_da_imagem_principal.find_all('p'):
                 p.name = 'span'
             context['img_principal_html'] = mark_safe(f'''
@@ -81,12 +104,14 @@ class OedPreviewDetailView(DetailView):
         for i, ponto in enumerate(pontos, 1):
             # Coordenadas para o CSS
             if ponto.coordenadas:
-                marcador_css[f'marcador{i}'] = ponto.coordenadas.split(',')
+                temporario = ponto.coordenadas.split(',')
+                temporario[1] = str(0.8643356643356643 * float(temporario[1]) + 3.361454545454545)
+                marcador_css[f'marcador{i}'] = temporario
             else:
                 marcador_css[f'marcador{i}'] = ['0','0']
             
             # Título do ponto
-            soup_pt_titulo = bs4.BeautifulSoup(str(ponto.titulo_ponto), 'html.parser')
+            soup_pt_titulo = renomeia_tags(bs4.BeautifulSoup(str(ponto.titulo_ponto), 'html.parser'))
             if soup_pt_titulo.p:
                 soup_pt_titulo.p.insert(0, f'{i}. ')
             
@@ -95,7 +120,7 @@ class OedPreviewDetailView(DetailView):
             if ponto.imagem_do_ponto:
                 with Image.open(ponto.imagem_do_ponto.path) as img_pt:
                     nh_pt = round(img_pt.height * (nw_pt / img_pt.width))
-                legenda_da_imagem_do_ponto = bs4.BeautifulSoup(f'<figcaption class="p4legenda">{ponto.legenda_da_imagem_do_ponto}</figcaption>', 'html.parser')
+                legenda_da_imagem_do_ponto = renomeia_tags(bs4.BeautifulSoup(f'<figcaption class="p4legenda">{ponto.legenda_da_imagem_do_ponto}</figcaption>', 'html.parser'))
                 for p in legenda_da_imagem_do_ponto.find_all('p'):
                     p.name = 'span'
                 html_imagem_do_ponto = f'''
@@ -110,7 +135,7 @@ class OedPreviewDetailView(DetailView):
                 html_imagem_do_ponto = ''
                 
             # Construção do HTML do ponto (usando f-string para clareza)
-            credito_da_imagem_do_ponto = bs4.BeautifulSoup(f'<div>{ponto.credito_da_imagem_do_ponto}</div>', 'html.parser')
+            credito_da_imagem_do_ponto = renomeia_tags(bs4.BeautifulSoup(f'<div>{ponto.credito_da_imagem_do_ponto}</div>', 'html.parser'))
             if credito_da_imagem_do_ponto.get_text('').strip() in ['', 'None']:
                 credito_da_imagem_do_ponto = ''
             elif type(credito_da_imagem_do_ponto) == bs4.BeautifulSoup:
@@ -121,7 +146,7 @@ class OedPreviewDetailView(DetailView):
                     p['class'] = ['d3creditoimagemoed']
             else:
                 credito_da_imagem_do_ponto = ''
-            texto_ponto = bs4.BeautifulSoup(f'<div>{ponto.texto_ponto}</div>', 'html.parser')
+            texto_ponto = renomeia_tags(bs4.BeautifulSoup(f'<div>{ponto.texto_ponto}</div>', 'html.parser'))
             for p in texto_ponto.find_all('p'):
                 p['class'] = ['d3txtoedmapitem']
             if texto_ponto.get_text('').strip() == '':
@@ -143,11 +168,11 @@ class OedPreviewDetailView(DetailView):
         context['marcador_css'] = marcador_css
 
         # 6. FONTE E CRÉDITOS FINAIS
-        fonte_soup = bs4.BeautifulSoup(str(obj.fonte_de_pesquisa), 'html.parser')
+        fonte_soup = renomeia_tags(bs4.BeautifulSoup(str(obj.fonte_de_pesquisa), 'html.parser'))
         for p in fonte_soup.find_all('p'):
             p['class'] = ['d3fontepesquisa']
         fonte_html = f'<div class="d3fontepesquisa">{fonte_soup}</div>' if fonte_soup.get_text(strip=True) else ''
-        credito_da_imagem_principal = bs4.BeautifulSoup(f'<div>{obj.credito_da_imagem_principal}</div>', 'html.parser')
+        credito_da_imagem_principal = renomeia_tags(bs4.BeautifulSoup(f'<div>{obj.credito_da_imagem_principal}</div>', 'html.parser'))
         if credito_da_imagem_principal.get_text('').strip() in ['', 'None']:
             credito_da_imagem_principal = ''
         elif type(credito_da_imagem_principal) == bs4.BeautifulSoup:
@@ -167,7 +192,7 @@ class OedPreviewDetailView(DetailView):
             </div>''')
 
         # 7. CONCLUSÃO
-        concl_soup = bs4.BeautifulSoup(str(obj.conclusao), 'html.parser')
+        concl_soup = renomeia_tags(bs4.BeautifulSoup(str(obj.conclusao), 'html.parser'))
         for p in concl_soup.find_all('p'):
             p['class'] = ['d3txtoed']
         context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) else ''
