@@ -32,7 +32,7 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, ListView):
 class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
     model = Oed
     form_class = OedModelForm
-    template_name = 'oeds/form_generico.html'
+    template_name = 'oeds/form_oed.html'
     success_url = reverse_lazy('listar_oeds')
 
     def get_context_data(self, **kwargs):
@@ -63,7 +63,7 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
 class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     model = Oed
     form_class = OedModelForm
-    template_name = 'oeds/form_generico.html'
+    template_name = 'oeds/form_oed.html'
     success_url = reverse_lazy('listar_oeds')
 
     def get_context_data(self, **kwargs):
