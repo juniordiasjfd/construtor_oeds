@@ -23,6 +23,18 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, ListView):
     context_object_name = 'oeds'
     ordering = ['-id']
 
+    def get_queryset(self):
+        # Obtém o queryset base definido pelo modelo e ordenação
+        queryset = super().get_queryset()
+        
+        # Verifica se o usuário pertence ao grupo "Comum externo"
+        if self.request.user.groups.filter(name="Comum externo").exists():
+            # Filtra para exibir apenas OEDs criados pelo usuário logado
+            return queryset.filter(criado_por=self.request.user)
+        
+        # Para outros grupos (como Coordenadores), retorna a lista completa
+        return queryset
+
     def get_create_url(self):
         return reverse_lazy('novo_oed')
 

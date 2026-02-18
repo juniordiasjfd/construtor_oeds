@@ -21,7 +21,8 @@ class UsuarioActivateDeactivateForm(forms.ModelForm):
     """
     class Meta:
         model = User
-        fields = ['is_active']
+        fields = ['is_active', 'groups']
         widgets = {
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'groups': forms.CheckboxSelectMultiple(),
         }

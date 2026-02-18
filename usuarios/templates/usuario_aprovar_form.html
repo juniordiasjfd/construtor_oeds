@@ -19,12 +19,80 @@
                     <hr>
                 </div>
 
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="fas fa-users-cog me-2"></i>Permissões por Grupos</h5>
+                    <table class="table table-striped table-bordered table-hover text-center align-middle">
+                        <thead class="table-dark">
+                            <th class="text-start">Ação</th>
+                            <th>Coordenador</th>
+                            <th>Comum interno</th>
+                            <th>Comum externo</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-start">gerencia usuários</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">gerencia parâmetros de OED</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">gerencia status e tipos de OED</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">gerencia projetos e recursos</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">visualiza projetos e recursos</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">visualiza e edita outros OEDs</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">visualiza e edita seus próprios OEDs</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><em>download</em> de OEDs</td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-check"></i></td>
+                                <td><i class="fa-solid fa-x"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                </div>
+
                 <form method="post" class="form">
                     {% csrf_token %}
-                    
+
                     <div class="alert alert-warning border-0 bg-light">
-                        <p class="mb-2"><strong>Atenção:</strong> Ao marcar a caixa abaixo e salvar, você concede ao usuário permissão para acessar o sistema e utilizar suas funcionalidades.</p>
-                        {% bootstrap_form form %}
+                        <p class="mb-2"><strong>Status da Conta:</strong></p>
+                        {% bootstrap_field form.is_active %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Atribuir Grupos de Acesso:</label>
+                        {% bootstrap_field form.groups show_label=False %}
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mt-4">
@@ -38,7 +106,7 @@
                 </form>
             </div>
         </div>
-        
+
         <div class="text-center mt-3">
             <small class="text-muted">
                 Cadastrado em: {{ object.date_joined|date:"d/m/Y H:i" }}

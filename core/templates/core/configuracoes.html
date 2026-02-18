@@ -9,8 +9,7 @@
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
-        {# Lógica Restrita: Somente Coordenador vê este card #}
-        {% if request.user.groups.all.0.name == 'Coordenador' or request.user.is_superuser %}
+        
         <div class="col">
             <div class="card h-100 shadow-sm border-0 transition-hover">
                 <div class="card-body text-center p-4">
@@ -26,23 +25,17 @@
                 </div>
             </div>
         </div>
-        {% endif %}
 
-        {# Espaço para configurações futuras de outros grupos (ex: Professor) #}
-        {% if request.user.groups.all.0.name == 'Professor' %}
         <div class="col">
             <div class="card h-100 shadow-sm border-0 border-start border-info border-4">
                 <div class="card-body p-4">
                     <h5 class="fw-bold">Minhas Preferências</h5>
-                    <p class="small text-muted">Configurações específicas para professores.</p>
+                    <p class="small text-muted">Configurações específicas.</p>
                     <button class="btn btn-sm btn-outline-secondary" disabled>Em breve</button>
                 </div>
             </div>
         </div>
-        {% endif %}
 
-        {# Card para Configurações de OED: Somente Coordenador #}
-        {% if request.user.groups.all.0.name == 'Coordenador' or request.user.is_superuser %}
         <div class="col">
             <div class="card h-100 shadow-sm border-0 transition-hover">
                 <div class="card-body text-center p-4">
@@ -58,7 +51,6 @@
                 </div>
             </div>
         </div>
-        {% endif %}
 
     </div>
 </div>

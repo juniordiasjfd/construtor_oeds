@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from usuarios.views import CoordenadorRequiredMixin
 from django.views import View
 from .models import ConfiguracaoOED
 from .forms import ConfiguracaoOEDForm
@@ -15,12 +15,8 @@ class HomeView(TemplateView):
         context['status_projeto'] = 'Em desenvolvimento'
         return context
 
-class ConfiguracaoOEDUpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
+class ConfiguracaoOEDUpdateView(CoordenadorRequiredMixin, View):
     template_name = 'core/configuracao_oed_form.html'
-
-    # Apenas Coordenadores podem acessar
-    def test_func(self):
-        return self.request.user.groups.filter(name='Coordenador').exists()
 
     def get(self, request):
         # Busca a configuração existente ou cria uma nova instância na memória

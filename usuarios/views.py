@@ -5,10 +5,33 @@ from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from braces.views import GroupRequiredMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import UsuarioModelForm, UsuarioActivateDeactivateForm
+from django.shortcuts import redirect
 
+
+class CoordenadorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """Garante que apenas usuários logados e do grupo Coordenador acessem."""
+    def test_func(self):
+        return (
+            self.request.user.groups.filter(name='Coordenador').exists() or 
+            self.request.user.is_superuser
+        )
+    def handle_no_permission(self):
+        messages.error(self.request, "Você não tem permissão para acessar esta área.")
+        return redirect('home')
+    
+class ComumInternoRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """Garante que apenas usuários logados e do grupo Comum interno + Coordenador acessem."""
+    def test_func(self):
+        return (
+            self.request.user.groups.filter(name='Coordenador').exists() or 
+            self.request.user.groups.filter(name='Comum interno').exists() or 
+            self.request.user.is_superuser
+        )
+    def handle_no_permission(self):
+        messages.error(self.request, "Você não tem permissão para acessar esta área.")
+        return redirect('home')
 
 # Referência ao modelo de usuário que será definido no settings
 User = get_user_model()
@@ -24,7 +47,7 @@ class UsuarioCreate(CreateView):
         with transaction.atomic():
             response = super().form_valid(form)
             # Busca o grupo ou cria se não existir para evitar erro 404
-            grupo, created = Group.objects.get_or_create(name='Comum')
+            grupo, created = Group.objects.get_or_create(name='Comum externo')
             self.object.groups.add(grupo)
             self.object.is_active = False 
             self.object.save()
@@ -35,8 +58,7 @@ class UsuarioCreate(CreateView):
 class UsuarioCreateDone(TemplateView):
     template_name = 'usuario_registro_done.html'
 
-class UsuarioAprovarView(GroupRequiredMixin, UpdateView):
-    group_required = [u"Coordenador"]
+class UsuarioAprovarView(CoordenadorRequiredMixin, UpdateView):
     model = User
     form_class = UsuarioActivateDeactivateForm
     template_name = 'usuario_aprovar_form.html' # Um template opcional para edição individual
@@ -46,8 +68,7 @@ class UsuarioAprovarView(GroupRequiredMixin, UpdateView):
         messages.success(self.request, f"Status do usuário {self.object.username} atualizado.")
         return super().form_valid(form)
 
-class UsuarioListarTodosView(GroupRequiredMixin, TemplateView):
-    group_required = [u"Coordenador"]
+class UsuarioListarTodosView(ComumInternoRequiredMixin, TemplateView):
     template_name = 'usuario_gerenciamento_todos.html'
 
     def get_context_data(self, **kwargs):

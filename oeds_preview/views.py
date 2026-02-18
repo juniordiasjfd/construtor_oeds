@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views import View
 import datetime
+from usuarios.views import ComumInternoRequiredMixin
 
 
 def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
@@ -208,7 +209,7 @@ class OedPreviewDetailView(DetailView):
         context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) else ''
 
         return context
-class OedDownloadZipView(View):
+class OedDownloadZipView(ComumInternoRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # 1. Obter o objeto e os dados do contexto
         # Dica: Reutilize a lógica da sua OedPreviewDetailView

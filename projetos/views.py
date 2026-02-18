@@ -1,20 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, ListView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Projeto, Componente, Credito, StatusOed, TipoOed
 from .forms import ProjetoModelForm, ComponenteModelForm, CreditoModelForm, StatusOedModelForm, TipoOedModelForm
-from django.shortcuts import redirect
+from usuarios.views import CoordenadorRequiredMixin, ComumInternoRequiredMixin
 
-class CoordenadorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
-    """Garante que apenas usuários logados e do grupo Coordenador acessem."""
-    def test_func(self):
-        return self.request.user.groups.filter(name='Coordenador').exists() or self.request.user.is_superuser
-    def handle_no_permission(self):
-        messages.error(self.request, "Você não tem permissão para acessar esta área.")
-        return redirect('home')
 
-class ComponenteCreateView(CoordenadorRequiredMixin, CreateView):
+class ComponenteCreateView(ComumInternoRequiredMixin, CreateView):
     model = Componente
     form_class = ComponenteModelForm
     template_name = 'projetos/form_generico.html'
@@ -29,7 +21,7 @@ class ComponenteCreateView(CoordenadorRequiredMixin, CreateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Erro ao cadastrar componente. Verifique os dados.')
         return super().form_invalid(form)
-class ComponenteListView(CoordenadorRequiredMixin, ListView):
+class ComponenteListView(ListView):
     model = Componente
     template_name = 'projetos/lista_generica.html'
     context_object_name = 'componentes'
@@ -41,7 +33,7 @@ class ComponenteListView(CoordenadorRequiredMixin, ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_componente')
     def get_update_url_name(self): return "editar_componente"
-class ComponenteUpdateView(CoordenadorRequiredMixin, UpdateView):
+class ComponenteUpdateView(ComumInternoRequiredMixin, UpdateView):
     model = Componente
     form_class = ComponenteModelForm
     template_name = 'projetos/form_generico.html'
@@ -51,7 +43,7 @@ class ComponenteUpdateView(CoordenadorRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ProjetoCreateView(CoordenadorRequiredMixin, CreateView):
+class ProjetoCreateView(ComumInternoRequiredMixin, CreateView):
     model = Projeto
     form_class = ProjetoModelForm
     template_name = 'projetos/form_generico.html'
@@ -63,7 +55,7 @@ class ProjetoCreateView(CoordenadorRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, f'Projeto "{form.instance.nome}" criado.')
         return super().form_valid(form)
-class ProjetoListView(CoordenadorRequiredMixin, ListView):
+class ProjetoListView(ListView):
     model = Projeto
     template_name = 'projetos/lista_generica.html'
     context_object_name = 'projetos'
@@ -75,7 +67,7 @@ class ProjetoListView(CoordenadorRequiredMixin, ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_projeto')
     def get_update_url_name(self): return "editar_projeto"
-class ProjetoUpdateView(CoordenadorRequiredMixin, UpdateView):
+class ProjetoUpdateView(ComumInternoRequiredMixin, UpdateView):
     model = Projeto
     form_class = ProjetoModelForm
     template_name = 'projetos/form_generico.html'
@@ -84,7 +76,7 @@ class ProjetoUpdateView(CoordenadorRequiredMixin, UpdateView):
         messages.success(self.request, f'Projeto "{form.instance.nome}" atualizado.')
         return super().form_valid(form)
 
-class CreditoCreateView(CoordenadorRequiredMixin, CreateView):
+class CreditoCreateView(ComumInternoRequiredMixin, CreateView):
     model = Credito
     form_class = CreditoModelForm
     template_name = 'projetos/form_generico.html'
@@ -96,7 +88,7 @@ class CreditoCreateView(CoordenadorRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Crédito registrado.')
         return super().form_valid(form)
-class CreditoListView(CoordenadorRequiredMixin, ListView):
+class CreditoListView(ListView):
     model = Credito
     template_name = 'projetos/lista_generica.html'
     context_object_name = 'creditos'
@@ -108,7 +100,7 @@ class CreditoListView(CoordenadorRequiredMixin, ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_credito')
     def get_update_url_name(self): return "editar_credito"
-class CreditoUpdateView(CoordenadorRequiredMixin, UpdateView):
+class CreditoUpdateView(ComumInternoRequiredMixin, UpdateView):
     model = Credito
     form_class = CreditoModelForm
     template_name = 'projetos/form_generico.html'
@@ -129,7 +121,7 @@ class StatusOedCreateView(CoordenadorRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Status de OED registrado.')
         return super().form_valid(form)
-class StatusOedListView(CoordenadorRequiredMixin, ListView):
+class StatusOedListView(ListView):
     model = StatusOed
     template_name = 'projetos/lista_generica.html'
     context_object_name = 'status_oed'
@@ -162,7 +154,7 @@ class TipoOedCreateView(CoordenadorRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Tipo de OED registrado.')
         return super().form_valid(form)
-class TipoOedListView(CoordenadorRequiredMixin, ListView):
+class TipoOedListView(ListView):
     model = TipoOed
     template_name = 'projetos/lista_generica.html'
     context_object_name = 'tipo_oed'
