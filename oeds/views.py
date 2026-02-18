@@ -92,7 +92,6 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
 
         if pontos.is_valid():
             with transaction.atomic():
-                form.instance.criado_por = self.request.user  # só no Create
                 self.object = form.save()
                 pontos.instance = self.object
                 pontos.save()

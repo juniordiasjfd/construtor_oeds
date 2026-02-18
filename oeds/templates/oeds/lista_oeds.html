@@ -18,6 +18,7 @@
                     <th>Tipo</th>
                     <th title="Projeto / Componente / Volume">Proj./Comp./Vol.</th>
                     <th>Status</th>
+                    <th>Criado por</th>
                     <th class="text-center">Ações</th>
                 </tr>
             </thead>
@@ -41,13 +42,14 @@
                         </a>
                     </td>
 
-                    <td title="Tipo do OED">{{ oed.get_tipo_display }}</td>
+                    <td title="Tipo do OED">{{ oed.tipo|striptags }}</td>
                     <td title="Projeto / Componente / Volume">
                         <span class="badge bg-primary">{{ oed.projeto|default:"-" }}</span>
                         <span class="badge bg-secondary">{{ oed.componente|default:"-" }}</span>
                         <span class="badge bg-secondary">{{ oed.volume|default:"-" }}</span>
                     </td>
                     <td title="Status">{{ oed.status }}</td>
+                    <td title="Criado por">{{ oed.criado_por }}</td>
                     <td class="text-center">
                         <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary" title="Editar o OED">
                             <i class="fas fa-edit"></i> Editar
