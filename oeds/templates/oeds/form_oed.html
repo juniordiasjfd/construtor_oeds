@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tz %}
 {% load django_bootstrap5 %}
 
 
@@ -94,6 +95,19 @@
         border-radius: 4px;
         max-width: 100%;
     }
+
+    .ck-content .latex {
+        background-color: rgb(240, 198, 229) !important;
+        border: 1px solid #f31f03 !important;
+        display: inline-block;
+        padding: 0 2px;
+    }
+    .latex {
+        background-color: rgb(240, 198, 229) !important;
+        border: 1px solid #f31f03 !important;
+        display: inline-block;
+        padding: 0 2px;
+    }
 </style>
 
 <div class="container mt-4">
@@ -163,6 +177,9 @@
                         marcadores de posição.
                     </p>
                 </div>
+
+                <hr class="my-3">
+                <p class="mb-2">Para inserir equações, utilize o <a href="https://shared-wiris.abbi.pearson.com/wiris/tests/pt/test.html" target="_blank"><strong>LaTex Editor</strong></a> e escreva-as na linguagem LaTex. Depois, utilize o estilo <span class="latex">equacao_latex</span> para demarcá-las.</p>
             </div>
 
             {# 1. CSS Customizado para o HTML Embed não quebrar a linha (opcional) #}

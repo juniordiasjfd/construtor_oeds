@@ -21,6 +21,11 @@
     font-weight: bold !important;
     font-style: italic !important;
 }
+.latex {
+    background-color: rgb(240, 198, 229) !important;
+    border: 1px solid #f31f03 !important; 
+}
+
 
 /* Ajustes de layout para o editor não quebrar o Bootstrap */
 .ck-editor__editable_inline {

@@ -188,6 +188,7 @@ CKEDITOR_5_CONFIGS = {
                 {'name': 'c3idiomabold', 'element': 'span', 'classes': ['c3idiomabold']},
                 {'name': 'c3idiomaitalico', 'element': 'span', 'classes': ['c3idiomaitalico']},
                 {'name': 'c3idiomabolditalico', 'element': 'span', 'classes': ['c3idiomabolditalico']},
+                {'name': 'equacao_latex', 'element': 'span', 'classes': ['latex']},
             ]
         },
         'htmlEmbed': {
