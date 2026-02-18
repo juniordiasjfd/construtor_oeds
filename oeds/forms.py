@@ -2,6 +2,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from .models import Oed, PontoClicavel
 from django_ckeditor_5.widgets import CKEditor5Widget
+from django.utils.html import strip_tags
 
 
 class OedModelForm(forms.ModelForm):
@@ -40,6 +41,13 @@ class OedModelForm(forms.ModelForm):
             # Bloqueia os campos de autoria
             if name in readonly_fields:
                 field.disabled = True
+        
+        for field_name, field in self.fields.items():
+            if isinstance(field, forms.ModelChoiceField):
+                # Adiciona a classe que o JS procura
+                field.widget.attrs.update({'class': 'form-select select-busca'})
+                # Limpa o HTML das opções
+                field.label_from_instance = lambda obj: strip_tags(str(obj))
 
     class Meta:
         model = Oed
@@ -62,6 +70,11 @@ class OedModelForm(forms.ModelForm):
             "introducao": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "conclusao": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "palavras_chave": forms.TextInput(attrs={'placeholder': 'Palavras separadas por vírgula',}),
+            'status': forms.Select(attrs={'class': 'form-select select-busca'}),
+            'tipo': forms.Select(attrs={'class': 'form-select select-busca'}),
+            'projeto': forms.Select(attrs={'class': 'form-select select-busca'}),
+            'componente': forms.Select(attrs={'class': 'form-select select-busca'}),
+            'credito_da_imagem_principal': forms.Select(attrs={'class': 'form-select select-busca'}),
         }
 
 class CoordenadasWidget(forms.TextInput):
@@ -88,6 +101,13 @@ class PontoClicavelForm(forms.ModelForm):
                 continue
             else:
                 field.widget.attrs.update({'class': 'form-control'})
+        
+        for field_name, field in self.fields.items():
+            if isinstance(field, forms.ModelChoiceField):
+                # Adiciona a classe que o JS procura
+                field.widget.attrs.update({'class': 'form-select select-busca'})
+                # Limpa o HTML das opções
+                field.label_from_instance = lambda obj: strip_tags(str(obj))
 
     class Meta:
         model = PontoClicavel
@@ -103,6 +123,7 @@ class PontoClicavelForm(forms.ModelForm):
             "legenda_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             # "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             'coordenadas': CoordenadasWidget(),
+            'credito_da_imagem_do_ponto': forms.Select(attrs={'class': 'form-select select-busca'}),
         }
 
 # O FormSet que liga o OED aos seus pontos

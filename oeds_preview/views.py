@@ -7,6 +7,7 @@ import copy
 import io
 import zipfile
 import os
+import re
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -50,7 +51,7 @@ class OedPreviewDetailView(DetailView):
         # 1. TIPO + TITULO (Processamento com BeautifulSoup)
         soup_titulo = bs4.BeautifulSoup(f'<div class="d3tit1oed">{obj.titulo}</div>', 'html.parser')
         nivel_h = 1
-        for p in soup_titulo.find_all('p'):
+        for p in soup_titulo.find_all(re.compile(r'^p$|h\d')):
             p.name = f'h{nivel_h}'
             nivel_h = (nivel_h + 1 if nivel_h <= 6 else nivel_h)
         

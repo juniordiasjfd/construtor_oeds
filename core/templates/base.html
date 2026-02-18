@@ -11,6 +11,9 @@
     {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+
+    
 
     <style>
         /* Ajuste para o conteúdo não ficar sob a navbar fixa */
@@ -142,6 +145,29 @@
     {% bootstrap_javascript %}
     {% block extra_js %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Seleciona todos os elementos configurados no forms.py
+        const selects = document.querySelectorAll('.select-busca');
+        
+        selects.forEach(el => {
+            if (!el.tomselect && typeof TomSelect !== 'undefined') {
+                new TomSelect(el, {
+                    create: false,
+                    allowEmptyOption: true,
+                    placeholder: "Digite para pesquisar...",
+                    // REMOVIDO: controlInput: null (isso impedia a busca por texto)
+                    dropdownParent: 'body',
+                    sortField: {
+                        field: "text",
+                        direction: "asc"
+                    }
+                });
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
