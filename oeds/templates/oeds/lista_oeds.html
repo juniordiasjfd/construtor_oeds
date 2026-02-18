@@ -28,13 +28,17 @@
                         <strong>{{ oed.titulo|striptags }}</strong><br>
                         <small class="text-muted">{{ oed.retranca }}</small>
                     </td>
-                    <td class="text-center" title="Preview">
-                        {% if oed.imagem_principal %}
-                        <img src="{{ oed.imagem_principal.url }}" alt="Preview"
-                            style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
-                        {% else %}
-                        <div style="width:50px; height:50px; background:#f1f1f1; border-radius:6px;"></div>
-                        {% endif %}
+                    <td class="text-center" title="Visualizar OED">
+                        <a href="{% url 'oeds_preview:oed_preview' pk=oed.pk %}" target="_blank" class="btn btn-outline-secondary"> 
+
+                            {% if oed.imagem_principal %}
+                            <img src="{{ oed.imagem_principal.url }}" alt="Preview"
+                                style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
+                            {% else %}
+                            <div style="width:50px; height:50px; background:#f1f1f1; border-radius:6px;"></div>
+                            {% endif %}
+
+                        </a>
                     </td>
 
                     <td title="Tipo do OED">{{ oed.get_tipo_display }}</td>
