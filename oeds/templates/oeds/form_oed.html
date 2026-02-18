@@ -19,7 +19,7 @@
         border-left: 4px solid #0d6efd;
     }
 
-    
+
 
     /* 1. Ajusta o container do grid para permitir colunas mais largas */
     .ck.ck-style-panel .ck-style-grid {
@@ -100,17 +100,71 @@
     <div class="card shadow-sm border-0">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h3 class="mb-0">
-                {% if object %} 
-                    <i class="fas fa-edit me-2"></i>Editar 
-                    {{ verbose_name|default:"OED" }}
-                    <a href="{% url 'oeds_preview:oed_preview' pk=object.pk %}" target="_blank" class="btn btn-outline-secondary"><i class="fa fa-eye" aria-hidden="true"></i> Visualizar OED</a>   
-                {% else %} 
-                    <i class="fas fa-plus me-2"></i>Novo
-                    {{ verbose_name|default:"OED" }}
+                {% if object %}
+                <i class="fas fa-edit me-2"></i>Editar
+                {{ verbose_name|default:"OED" }}
+                <a href="{% url 'oeds_preview:oed_preview' pk=object.pk %}" target="_blank"
+                    class="btn btn-outline-secondary"><i class="fa fa-eye" aria-hidden="true"></i> Visualizar OED</a>
+                {% else %}
+                <i class="fas fa-plus me-2"></i>Novo
+                {{ verbose_name|default:"OED" }}
                 {% endif %}
             </h3>
+
         </div>
         <div class="card-body">
+
+            <div class="alert alert-info border-0 shadow-sm p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-info-circle fa-2x me-3 text-primary"></i>
+                    <h5 class="alert-heading mb-0 fw-bold">Guia de Preenchimento Rápido</h5>
+                </div>
+
+                <p class="mb-2">Para criar um novo <strong>{{ verbose_name }}</strong>, certifique-se de preencher os
+                    campos obrigatórios:</p>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush bg-transparent">
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Retranca</li>
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Status do OED</li>
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Título do OED</li>
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Tipo do OED</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush bg-transparent">
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Imagem principal</li>
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Quantidade de pontos</li>
+                            <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Títulos dos pontos</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr class="my-3">
+
+                <div class="bg-white rounded p-3 border-start border-4 border-warning">
+                    <p class="fw-bold mb-2 text-dark"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Fluxo
+                        Obrigatório:</p>
+                    <ol class="mb-0">
+                        <li>Clique no botão <strong>"Guardar OED e Pontos"</strong>.</li>
+                        <li>Após salvar, <strong>edite o OED novamente</strong> para configurar as posições dos pontos.
+                        </li>
+                    </ol>
+                    <p class="small text-muted mt-2 mb-0">
+                        Esta ordem é necessária para que a imagem principal seja processada e exibida corretamente nos
+                        marcadores de posição.
+                    </p>
+                </div>
+            </div>
+
             {# 1. CSS Customizado para o HTML Embed não quebrar a linha (opcional) #}
             <style>
                 .ck-content .raw-html-embed {
@@ -204,7 +258,9 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-3">Guardar OED e Pontos</button>
-                {% if object %} <a href="{% url 'oeds_preview:oed_preview' pk=object.pk %}" target="_blank" class="btn btn-outline-secondary mt-3"><i class="fa fa-eye" aria-hidden="true"></i> Visualizar OED</a> {% endif %}
+                {% if object %} <a href="{% url 'oeds_preview:oed_preview' pk=object.pk %}" target="_blank"
+                    class="btn btn-outline-secondary mt-3"><i class="fa fa-eye" aria-hidden="true"></i> Visualizar
+                    OED</a> {% endif %}
             </form>
 
         </div>

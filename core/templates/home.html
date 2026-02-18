@@ -8,27 +8,25 @@
         <img src="{% static 'images/logo.png' %}" alt="logotipo da plataforma" width="35%">
         <figcaption>© Junior Dias</figcaption>
     </figure>
-    {% if messages %}
+    
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
                 <h3 class="mb-0">Mensagens</h3>
             </div>
-            {% for message in messages %}
             <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm"
                 role="alert">
-                {% if message.tags == 'error' %}
                 <i class="fas fa-exclamation-circle me-2"></i>
-                {% elif message.tags == 'success' %}
-                <i class="fas fa-check-circle me-2"></i>
-                {% endif %}
-
+                
                 {{ message }}
-
+        
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            {% endfor %}
         </div>
-    {% endif %}
+        {% endif %}
+    {% endfor %}
+    
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <h3 class="mb-0">Instruções de uso</h3>

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import environ
+import dj_database_url
 
 # Inicializa o environ
 env = environ.Env(
@@ -93,13 +94,24 @@ WSGI_APPLICATION = 'construtor_oeds.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+DATABASES = { # database de teste
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'oed_builder',        # O nome que você criou
+        'USER': 'django_app_user',           # O usuário que você criou
+        'PASSWORD': 'Scriba123',     # A senha desse usuário
+        'HOST': 'localhost',                 # O servidor é seu próprio computador
+        'PORT': '5432',                      # A porta padrão do PostgreSQL
     }
 }
-
+if DEBUG == False:
+    DATABASES['default'] = dj_database_url.parse(env('DATABASES_URL'))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
