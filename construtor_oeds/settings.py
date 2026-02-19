@@ -153,7 +153,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Onde o Django busca arquivos estáticos globais
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -172,9 +172,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuração de Media (Uploads do usuário)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-if DEBUG == False:
-    MEDIA_ROOT = '/opt/render/project/src/media'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# if DEBUG == False:
+MEDIA_ROOT = '/opt/render/project/src/media'
 
 
 
@@ -235,3 +235,7 @@ EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=False, cast=bool)
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+
+print("MEDIA_ROOT:", MEDIA_ROOT)
+print("DEBUG:", DEBUG)
