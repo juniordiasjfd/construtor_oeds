@@ -156,7 +156,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Onde o Django busca arquivos estáticos globais
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Esta pasta será criada automaticamente pelo Render durante o build
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -210,7 +210,7 @@ CKEDITOR_5_CONFIGS = {
         'htmlSupport': {
             'allow': [
                 {
-                    'name': '\w+',
+                    'name': r'\w+',
                     'attributes': True,
                     'classes': True,
                     'styles': True
