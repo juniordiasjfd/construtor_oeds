@@ -8,11 +8,14 @@ django-ckeditor-5==0.2.19
 django-crum==0.7.9
 django-environ==0.12.0
 django-filter==25.2
+gunicorn==25.1.0
 latex2mathml==3.78.1
 lxml==6.0.2
+packaging==26.0
 pillow==12.1.1
 psycopg2-binary==2.9.11
 soupsieve==2.8.3
 sqlparse==0.5.5
 typing_extensions==4.15.0
 tzdata==2025.3
+whitenoise==6.11.0
