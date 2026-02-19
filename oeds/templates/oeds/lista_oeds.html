@@ -13,19 +13,19 @@
         <div class="card-body">
             <form method="get" class="row g-3">
 
-                <div class="col-12">
+                <div class="col-12 mt-1">
                     <label class="form-label fw-bold text-primary">Busca rápida</label>
                     <div class="input-group">
                         <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
                         <input type="text" name="q" class="form-control form-control-lg" placeholder="Pesquise em todos os campos..."
                             value="{{ request.GET.q }}">
                     </div>
-                    <p class="small">Exceto: status, tipo, projeto, componente, volume, capítulo, página, quantidade de
-                        pontos, coordenadas</p>
                 </div>
-
-                <div class="col-12">
-                    <div class="accordion" id="accordionFiltros">
+                <div class="col-12 mt-0">
+                    <p class="text-muted mb-0" style="font-size: 0.75rem; letter-spacing: -0.2px;">Exceto: status, tipo, projeto, componente, volume, capítulo, página, quantidade de pontos, coordenadas, criado por (ver filtros avançados)</p>
+                </div>
+                <div class="col-12 mt-0">
+                    <div class="accordion mt-1" id="accordionFiltros">
                         <div class="accordion-item border-0">
                             <h2 class="accordion-header" id="headingFiltros">
                                 <button class="accordion-button collapsed p-2 bg-light text-muted small" type="button"
@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 d-flex justify-content-end gap-2 border-top pt-3">
+                <div class="col-12 d-flex justify-content-end gap-2 border-top pt-3 mt-1">
                     <a href="{% url 'listar_oeds' %}" class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-eraser me-1"></i> Limpar
                     </a>
