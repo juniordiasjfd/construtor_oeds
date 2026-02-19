@@ -50,7 +50,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
 
 
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
 
                     {% if request.user.is_authenticated %}
                     <li>
@@ -144,11 +144,10 @@
                     {% else %}
                     {# Itens visíveis apenas para quem está DESLOGADO #}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+                        <a class="nav-link px-3" href="{% url 'login' %}">Entrar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-primary btn-sm ms-lg-2 mt-1 mt-lg-0"
-                            href="{% url 'registrar' %}">Registrar</a>
+                        <a class="btn btn-primary btn-sm ms-2" href="{% url 'registrar' %}">Registrar</a>
                     </li>
                     {% endif %}
                 </ul>
