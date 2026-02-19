@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'oeds_preview',
     'django_bootstrap5',
     'django_ckeditor_5',
+
+    'django_filters',
 ]
 
 MIDDLEWARE = [

@@ -9,6 +9,23 @@
         </a>
     </div>
 
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                {% for field in filter.form %}
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">{{ field.label }}</label>
+                        {{ field }} </div>
+                {% endfor %}
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <a href="{% url 'listar_oeds' %}" class="btn btn-outline-secondary btn-sm">Limpar</a>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="table-responsive shadow-sm rounded">
         <table class="table table-hover align-middle bg-white">
             <thead class="table-dark">

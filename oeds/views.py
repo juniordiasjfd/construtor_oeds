@@ -6,6 +6,8 @@ from .models import Oed
 from django.db import transaction
 from .forms import OedModelForm, PontoClicavelFormSet
 from django.shortcuts import redirect
+from django_filters.views import FilterView
+from .filters import OedFilter
 
 
 # Mixin para compatibilidade com templates genéricos
@@ -17,10 +19,12 @@ class VerboseNameMixin:
         context['titulo'] = self.model._meta.verbose_name
         return context
 
-class OedListView(LoginRequiredMixin, VerboseNameMixin, ListView):
+class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     model = Oed
     template_name = 'oeds/lista_oeds.html' # Template específico para listar OEDs
     context_object_name = 'oeds'
+    filterset_class = OedFilter
+    paginate_by = 20
     ordering = ['-id']
 
     def get_queryset(self):

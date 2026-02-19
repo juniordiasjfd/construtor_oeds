@@ -13,12 +13,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 
-    
+
 
     <style>
         /* Ajuste para o conteúdo não ficar sob a navbar fixa */
         body {
             padding-top: 70px;
+        }
+
+        .ts-control {
+            min-height: 31px;
+            /* Alinha com a altura do form-control-sm */
+            padding: 2px 8px !important;
+        }
+
+        .ts-wrapper.multi .ts-control>div {
+            margin: 0 4px 2px 0;
+            /* Espaçamento entre as "tags" selecionadas */
         }
     </style>
 
@@ -43,7 +54,9 @@
 
                     {% if request.user.is_authenticated %}
                     <li>
-                        <a class="nav-link" href="https://www.wiris.net/demo/editor/tests/en/test.html?mml=%3Cmath%20xmlns%3D%22http%3A//www.w3.org/1998/Math/MathML%22%3E%3Cmn%3E45%3C/mn%3E%3Cmo%3E%2C%3C/mo%3E%3Cmn%3E4%3C/mn%3E%3Cmtext%3E%26%23xA0%3Bcm%3C/mtext%3E%3Cmo%3E%26%23xD7%3B%3C/mo%3E%3Cmn%3E53%3C/mn%3E%3Cmo%3E%2C%3C/mo%3E%3Cmn%3E7%3C/mn%3E%3Cmtext%3E%26%23xA0%3Bcm%3C/mtext%3E%3C/math%3E" role="button" target="_blank">
+                        <a class="nav-link"
+                            href="https://www.wiris.net/demo/editor/tests/en/test.html?mml=%3Cmath%20xmlns%3D%22http%3A//www.w3.org/1998/Math/MathML%22%3E%3Cmn%3E45%3C/mn%3E%3Cmo%3E%2C%3C/mo%3E%3Cmn%3E4%3C/mn%3E%3Cmtext%3E%26%23xA0%3Bcm%3C/mtext%3E%3Cmo%3E%26%23xD7%3B%3C/mo%3E%3Cmn%3E53%3C/mn%3E%3Cmo%3E%2C%3C/mo%3E%3Cmn%3E7%3C/mn%3E%3Cmtext%3E%26%23xA0%3Bcm%3C/mtext%3E%3C/math%3E"
+                            role="button" target="_blank">
                             <i class="fa-solid fa-square-root-variable"></i> LaTex Editor
                         </a>
                     </li>
@@ -152,7 +165,7 @@
     {% block extra_js %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-    <script>
+    <!-- <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Seleciona todos os elementos configurados no forms.py
         const selects = document.querySelectorAll('.select-busca');
@@ -173,7 +186,27 @@
             }
         });
     });
-</script>
+</script> -->
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const selects = document.querySelectorAll('.select-busca');
+
+            selects.forEach(el => {
+                if (!el.tomselect) {
+                    new TomSelect(el, {
+                        plugins: ['remove_button'], // Adiciona o "X" para remover itens
+                        create: false,
+                        allowEmptyOption: true,
+                        placeholder: "Selecione opções...",
+                        dropdownParent: 'body',
+                        // controlInput: null, // Removido para permitir busca por texto
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
