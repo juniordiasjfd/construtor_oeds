@@ -8,6 +8,7 @@ from .forms import OedModelForm, PontoClicavelFormSet
 from django.shortcuts import redirect
 from django_filters.views import FilterView
 from .filters import OedFilter
+from django.db.models import Q
 
 
 # Mixin para compatibilidade com templates genéricos
@@ -28,13 +29,40 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     ordering = ['-id']
 
     def get_queryset(self):
-        # Obtém o queryset base definido pelo modelo e ordenação
+        # 1. Pega o queryset base
         queryset = super().get_queryset()
         
-        # Verifica se o usuário pertence ao grupo "Comum externo"
+        # 2. Lógica de Segurança: Restringe por grupo
         if self.request.user.groups.filter(name="Comum externo").exists():
-            # Filtra para exibir apenas OEDs criados pelo usuário logado
             return queryset.filter(criado_por=self.request.user)
+        
+        # 3. Busca Global "Estilo Google" (parâmetro 'q')
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                # OED
+                Q(retranca__icontains=query) |
+                Q(titulo__icontains=query) |
+                Q(introducao__icontains=query) |
+                Q(conclusao__icontains=query) |
+                Q(palavras_chave__icontains=query) |
+                Q(fonte_de_pesquisa__icontains=query) |
+                Q(legenda_da_imagem_principal__icontains=query) |
+                Q(alt_text_da_imagem_principal__icontains=query) |
+                Q(orientacoes_para_producao__icontains=query) |
+                Q(local_insercao__icontains=query) |
+                Q(retranca_da_imagem_principal__icontains=query) |
+                Q(credito_da_imagem_principal__nome__icontains=query) |
+                
+                # pontos clicáveis
+                Q(pontos__titulo_ponto__icontains=query) | 
+                Q(pontos__texto_ponto__icontains=query) |
+                Q(pontos__legenda_da_imagem_do_ponto__icontains=query) |
+                Q(pontos__alt_text_da_imagem_do_ponto__icontains=query) |
+                Q(pontos__retranca_da_imagem_do_ponto__icontains=query) |
+                Q(pontos__credito_da_imagem_do_ponto__nome__icontains=query)
+                
+            ).distinct()
         
         # Para outros grupos (como Coordenadores), retorna a lista completa
         return queryset

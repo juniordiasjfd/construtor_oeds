@@ -12,20 +12,59 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <form method="get" class="row g-3">
-                {% for field in filter.form %}
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold">{{ field.label }}</label>
-                        {{ field }} </div>
-                {% endfor %}
-                <div class="col-12 d-flex justify-content-end gap-2">
-                    <a href="{% url 'listar_oeds' %}" class="btn btn-outline-secondary btn-sm">Limpar</a>
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fas fa-search me-1"></i> Filtrar
+
+                <div class="col-12">
+                    <label class="form-label fw-bold text-primary">Busca rápida</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                        <input type="text" name="q" class="form-control form-control-lg" placeholder="Pesquise em todos os campos..."
+                            value="{{ request.GET.q }}">
+                    </div>
+                    <p class="small">Exceto: status, tipo, projeto, componente, volume, capítulo, página, quantidade de
+                        pontos, coordenadas</p>
+                </div>
+
+                <div class="col-12">
+                    <div class="accordion" id="accordionFiltros">
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header" id="headingFiltros">
+                                <button class="accordion-button collapsed p-2 bg-light text-muted small" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseFiltros" aria-expanded="false"
+                                    aria-controls="collapseFiltros">
+                                    <i class="fas fa-filter me-2"></i> Filtros avançados
+                                </button>
+                            </h2>
+                            <div id="collapseFiltros"
+                                class="accordion-collapse collapse {% if not request.GET.q and request.GET %}show{% endif %}"
+                                aria-labelledby="headingFiltros" data-bs-parent="#accordionFiltros">
+                                <div class="accordion-body px-0 py-3">
+                                    <div class="row g-3">
+                                        {% for field in filter.form %}
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">{{ field.label }}</label>
+                                            {{ field }}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-end gap-2 border-top pt-3">
+                    <a href="{% url 'listar_oeds' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-eraser me-1"></i> Limpar
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-sm px-4">
+                        <i class="fas fa-filter me-1"></i> Aplicar filtros
                     </button>
                 </div>
             </form>
         </div>
     </div>
+
+
     <div class="table-responsive shadow-sm rounded">
         <table class="table table-hover align-middle bg-white">
             <thead class="table-dark">
@@ -47,7 +86,8 @@
                         <small class="text-muted">{{ oed.retranca }}</small>
                     </td>
                     <td class="text-center" title="Visualizar OED">
-                        <a href="{% url 'oeds_preview:oed_preview' pk=oed.pk %}" target="_blank" class="btn btn-outline-secondary"> 
+                        <a href="{% url 'oeds_preview:oed_preview' pk=oed.pk %}" target="_blank"
+                            class="btn btn-outline-secondary">
 
                             {% if oed.imagem_principal %}
                             <img src="{{ oed.imagem_principal.url }}" alt="Preview"
@@ -68,7 +108,8 @@
                     <td title="Status">{{ oed.status }}</td>
                     <td title="Criado por">{{ oed.criado_por }}</td>
                     <td class="text-center">
-                        <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary" title="Editar o OED">
+                        <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary"
+                            title="Editar o OED">
                             <i class="fas fa-edit"></i> Editar
                         </a>
                     </td>
