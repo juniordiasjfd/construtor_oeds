@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django_filters.views import FilterView
 from .filters import OedFilter
 from django.db.models import Q
+from django.urls import reverse
 
 
 # Mixin para compatibilidade com templates genéricos
@@ -98,6 +99,11 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
                     pontos.instance = self.object
                     pontos.save()
             messages.success(self.request, "OED e pontos criados com sucesso.")
+            # VERIFICAÇÃO DO BOTÃO FLUTUANTE
+            if "_continue" in self.request.POST:
+                # Redireciona para a mesma página de edição usando o ID do objeto salvo
+                # Certifique-se de que o nome da URL de edição é 'editar_oed'
+                return redirect(reverse('editar_oed', kwargs={'pk': self.object.pk}))
             return super().form_valid(form)
         else:
             # Se o formset for inválido, renderiza a página novamente com os erros
@@ -129,6 +135,11 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
                 pontos.save()
 
             messages.success(self.request, "OED salvo com sucesso.")
+            # VERIFICAÇÃO DO BOTÃO FLUTUANTE
+            if "_continue" in self.request.POST:
+                # Redireciona para a mesma página de edição usando o ID do objeto salvo
+                # Certifique-se de que o nome da URL de edição é 'editar_oed'
+                return redirect(reverse('editar_oed', kwargs={'pk': self.object.pk}))
             return redirect(self.success_url)
         else:
             messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")

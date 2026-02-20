@@ -20,7 +20,7 @@
             <tbody>
                 {% for item in object_list %}
                 <tr>
-                    <td>{{ item.nome }}</td>
+                    <td>{{ item.nome|striptags }}</td>
                     <td class="text-center">
                         <a href="{% url view.get_update_url_name pk=item.pk %}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit"></i> Editar
