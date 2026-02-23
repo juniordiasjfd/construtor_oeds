@@ -15,6 +15,7 @@ from django.views import View
 import datetime
 from usuarios.views import ComumInternoRequiredMixin
 from .latex import html_with_latex_class_2_html_with_mathml
+from xhtml2pdf import pisa
 
 
 def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
@@ -226,9 +227,12 @@ class OedDownloadZipView(ComumInternoRequiredMixin, View):
         html_content = html_content.replace('/media/oeds/', '')
         soup = bs4.BeautifulSoup(html_content, 'lxml')
         # retirada do botão
-        botao = soup.find(attrs={'class':'btn-primary'})
-        if botao:
-            botao.decompose()
+        botao_zip = soup.find(attrs={'class':'btn-primary'})
+        if botao_zip:
+            botao_zip.decompose()
+        botao_pdf = soup.find(attrs={'class':'btn-secondary'})
+        if botao_pdf:
+            botao_pdf.decompose()
         # filtrando as imagens
         lista_de_imagens = list(os.path.basename(x['href']) for x in soup.find_all(attrs={'href':True}))
         lista_de_imagens += list(os.path.basename(x['src']) for x in soup.find_all(attrs={'src':True}))
@@ -277,5 +281,57 @@ class OedDownloadZipView(ComumInternoRequiredMixin, View):
         response['Content-Disposition'] = f'attachment; filename="{preview_view.object.retranca}_export_{hora}.zip"'
         return response
 
+class OedDownloadPDFView(ComumInternoRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        # 1. Obter o objeto e os dados do contexto (Reutilizando sua lógica existente)
+        preview_view = OedPreviewDetailView()
+        preview_view.object = Oed.objects.get(pk=self.kwargs['pk'])
+        context = preview_view.get_context_data(object=preview_view.object)
+        
+        # 2. Renderizar o HTML e limpar com BeautifulSoup
+        html_string = render_to_string('oeds_preview/preview.xhtml', context)
+        soup = bs4.BeautifulSoup(html_string, 'lxml')
+        for fig in soup.find_all('figcaption'):
+            fig.name = 'p'
 
+        # Remove CSS e Scripts originais para o PDF ficar limpo
+        for s in soup.find_all(['link', 'style', 'script']):
+            s.decompose()
+        
+        # Remove botões de interface
+        for btn in soup.find_all(attrs={'class': 'btn'}):
+            btn.decompose()
 
+        # Ajuste de caminhos de imagem para o xhtml2pdf encontrar os arquivos no servidor
+        for img in soup.find_all('img'):
+            if img.get('src') and img['src'].startswith('/media/'):
+                # Transforma a URL do browser em caminho de arquivo local
+                relative_path = img['src'].replace('/media/', '')
+                img['src'] = os.path.join(settings.MEDIA_ROOT, relative_path)
+
+        # 3. Adicionar estilo básico para impressão
+        estilo_pdf = soup.new_tag('style')
+        estilo_pdf.string = """
+            @page { size: a4 portrait; margin: 1cm; }
+            body { font-family: Helvetica, Arial, sans-serif; font-size: 10pt; line-height: 1.4; }
+            h1, h2, h3 { color: #333; margin-top: 15pt; }
+            img { max-width: 100%; height: auto; }
+            .mapa-popup { border: 0.5pt solid #aaa; padding: 10px; margin-bottom: 20px; }
+        """
+        soup.head.append(estilo_pdf)
+
+        # 4. Gerar o PDF
+        html_final = str(soup)
+        result = io.BytesIO()
+        
+        # O pisa.pisaDocument transforma o HTML em PDF
+        pdf = pisa.pisaDocument(io.BytesIO(html_final.encode("utf-8")), result)
+
+        if not pdf.err:
+            response = HttpResponse(result.getvalue(), content_type='application/pdf')
+            hora = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            filename = f"{preview_view.object.retranca}_{hora}.pdf"
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+            
+        return HttpResponse("Erro técnico ao gerar o PDF.", status=500)
