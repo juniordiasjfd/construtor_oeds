@@ -38,10 +38,14 @@ class OedFilter(django_filters.FilterSet):
         queryset=Usuario.objects.all(),
         label='Criado por'
     )
+    atribuido_a = django_filters.ModelMultipleChoiceFilter(
+        queryset=Usuario.objects.all(),
+        label='Atribuído a'
+    )
 
     class Meta:
         model = Oed
-        fields = ['retranca', 'titulo', 'status', 'tipo', 'projeto', 'componente', 'volume', 'capitulo', 'criado_por']
+        fields = ['retranca', 'titulo', 'status', 'tipo', 'projeto', 'componente', 'volume', 'capitulo', 'criado_por', 'atribuido_a']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

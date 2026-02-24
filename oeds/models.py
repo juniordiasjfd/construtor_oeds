@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import strip_tags
 from projetos.models import Projeto, Componente, StatusOed, Credito, TipoOed
 from core.models import AuditoriaBase, ConfiguracaoOED
+from usuarios.models import Usuario
 from django.core.validators import FileExtensionValidator
 import os
 import uuid
@@ -93,6 +94,12 @@ class Oed(AuditoriaBase):
         null=True,
         verbose_name='Crédito da imagem principal',
         related_name='%(class)s_oeds'
+    )
+    atribuido_a = models.ManyToManyField(
+        Usuario,
+        blank=True,
+        verbose_name='Usuários atribuídos',
+        help_text='Os usuários listados aqui poderão editar esse OED, independente do grupo a que pertencem.'
     )
     quantidade_pontos_prevista = models.PositiveIntegerField(
         "Quantidade de pontos clicáveis", 

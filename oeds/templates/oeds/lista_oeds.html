@@ -74,7 +74,7 @@
                     <th>Tipo</th>
                     <th title="Projeto / Componente / Volume">Proj./Comp./Vol.</th>
                     <th>Status</th>
-                    <th>Criado por</th>
+                    <th>Criado por / Atribuído a</th>
                     <th class="text-center">Ações</th>
                 </tr>
             </thead>
@@ -106,7 +106,10 @@
                         <span class="badge bg-secondary">{{ oed.volume|default:"-" }}</span>
                     </td>
                     <td title="Status">{{ oed.status }}</td>
-                    <td title="Criado por">{{ oed.criado_por }}</td>
+                    <td title="Criado por ou atribuído a">
+                        <small><strong>Criado por:</strong> {{ oed.criado_por }}</small> <br>
+                        <small><strong>Atribuído a:</strong> {{ oed.atribuido_a.all|join:", "|default:"-" }}</small>
+                    </td>
                     <td class="text-center">
                         <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary"
                             title="Editar o OED">

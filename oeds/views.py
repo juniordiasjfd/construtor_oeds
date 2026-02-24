@@ -23,6 +23,7 @@ class VerboseNameMixin:
 
 class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     model = Oed
+    queryset = Oed.objects.select_related('criado_por').prefetch_related('atribuido_a')
     template_name = 'oeds/lista_oeds.html' # Template específico para listar OEDs
     context_object_name = 'oeds'
     filterset_class = OedFilter
@@ -35,7 +36,9 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
         
         # 2. Lógica de Segurança: Restringe por grupo
         if self.request.user.groups.filter(name="Comum externo").exists():
-            return queryset.filter(criado_por=self.request.user)
+            return queryset.filter(
+            Q(criado_por=self.request.user) | Q(atribuido_a=self.request.user)
+        ).distinct()
         
         # 3. Busca Global "Estilo Google" (parâmetro 'q')
         query = self.request.GET.get('q')
