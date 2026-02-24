@@ -8,6 +8,9 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import UsuarioModelForm, UsuarioActivateDeactivateForm
 from django.shortcuts import redirect
+from django.core.mail import send_mail
+from construtor_oeds.settings import DEFAULT_FROM_EMAIL, RECIPIENT_LIST
+from django.urls import reverse
 
 
 class CoordenadorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -51,6 +54,15 @@ class UsuarioCreate(CreateView):
             self.object.groups.add(grupo)
             self.object.is_active = False 
             self.object.save()
+
+            manage_url = self.request.build_absolute_uri(reverse('gerenciar_usuarios_todos'))
+            send_mail(
+                'OED Builder | Novo usuário registrado',
+                f'O usuário {self.object.username} ({self.object.email}) se cadastrou e aguarda aprovação.\n\nAcesse {manage_url} para gerenciar os usuários.',
+                DEFAULT_FROM_EMAIL,
+                RECIPIENT_LIST,
+                fail_silently=True,
+            )
             
             messages.success(self.request, "Cadastro realizado! Aguarde a aprovação.")
             return response
