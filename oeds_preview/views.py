@@ -16,6 +16,7 @@ import datetime
 from usuarios.views import ComumInternoRequiredMixin
 from .latex import html_with_latex_class_2_html_with_mathml
 from xhtml2pdf import pisa
+from django.urls import reverse
 
 
 def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
@@ -293,6 +294,10 @@ class OedDownloadPDFView(ComumInternoRequiredMixin, View):
         soup = bs4.BeautifulSoup(html_string, 'lxml')
         for fig in soup.find_all('figcaption'):
             fig.name = 'p'
+        url_editar = self.request.build_absolute_uri(
+            reverse('editar_oed', kwargs={'pk': preview_view.object.pk})
+        )
+        soup.find('body').insert(0, bs4.BeautifulSoup(f'<p><strong>Acesse para editar:</strong> <a href="{url_editar}">{url_editar}</a></p><p><strong>Retranca:</strong> {preview_view.object.retranca}</p>','html.parser'))
 
         # Remove CSS e Scripts originais para o PDF ficar limpo
         for s in soup.find_all(['link', 'style', 'script']):
