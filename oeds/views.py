@@ -119,6 +119,9 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
         motor = self.tipo.motor_de_renderizacao
         data["tipo"] = self.tipo
 
+        audio_form = kwargs.get("audio_form")
+        pontos = kwargs.get("pontos")
+
         if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
             data["audio_form"] = OedAudioForm(
                 self.request.POST or None,
@@ -171,11 +174,16 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
         if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
             if audio_form and not audio_form.is_valid():
                 print("ERRO AUDIO_FORM:", audio_form.errors)
-                return self.form_invalid(form)
+                context = self.get_context_data(
+                        form=form,
+                        audio_form=audio_form
+                    )
+                return self.render_to_response(context)
         else:
             if pontos and not pontos.is_valid():
                 print("ERRO PONTOS:", pontos.errors)
-                return self.form_invalid(form)
+                context = self.get_context_data(form=form)
+                return self.render_to_response(context)
 
         with transaction.atomic():
             form.instance.criado_por = self.request.user

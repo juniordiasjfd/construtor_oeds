@@ -40,7 +40,7 @@ class Oed(AuditoriaBase):
     #     ('infografico', 'Infográfico'),
     #     ('mapa', 'Mapa clicável'),
     # ]
-    titulo = CKEditor5Field("Título do OED", config_name='default')
+    titulo = CKEditor5Field("Título do OED", config_name='default', blank=True)
     # tipo = models.CharField("Tipo de OED", max_length=20, choices=TIPOS_CHOICES, default='infografico')
     tipo = models.ForeignKey(
         TipoOed, 

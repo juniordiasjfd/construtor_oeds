@@ -429,22 +429,22 @@
                     {% endif %}
 
                     {% if form.non_field_errors %}
-  {% for error in form.non_field_errors %}
-    <li><strong>Formulário:</strong> {{ error }}</li>
-  {% endfor %}
-{% endif %}
+                        {% for error in form.non_field_errors %}
+                            <li><strong>Formulário:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
 
-{% if audio_form and audio_form.non_field_errors %}
-  {% for error in audio_form.non_field_errors %}
-    <li><strong>Áudio:</strong> {{ error }}</li>
-  {% endfor %}
-{% endif %}
+                    {% if audio_form and audio_form.non_field_errors %}
+                        {% for error in audio_form.non_field_errors %}
+                            <li><strong>Áudio:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
 
-{% if pontos %}
-  {% for ponto in pontos.non_form_errors %}
-    <li><strong>Pontos:</strong> {{ ponto }}</li>
-  {% endfor %}
-{% endif %}
+                    {% if pontos %}
+                        {% for ponto in pontos.non_form_errors %}
+                            <li><strong>Pontos:</strong> {{ ponto }}</li>
+                        {% endfor %}
+                    {% endif %}
 
                 </ul>
 
@@ -519,8 +519,10 @@
             totalForms.value = formsAtuais;
         }
 
+        if (inputQuantidade) {
         inputQuantidade.addEventListener('change', atualizarFormularios);
         atualizarFormularios();
+        }
     });
 
 

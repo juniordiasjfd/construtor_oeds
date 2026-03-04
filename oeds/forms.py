@@ -68,7 +68,14 @@ class OedModelForm(forms.ModelForm):
 
             for campo in campos_para_remover:
                 self.fields.pop(campo, None)
-
+    def clean_titulo(self):
+        titulo = self.cleaned_data.get("titulo", "")
+        texto = strip_tags(titulo)
+        texto = texto.replace("\xa0", "").strip()
+        if not texto:
+            raise forms.ValidationError("Informe um título para o OED.")
+        return titulo
+    
     class Meta:
         model = Oed
         # IMPORTANTE: Remova 'criado_em' e 'atualizado_em' desta lista Meta
