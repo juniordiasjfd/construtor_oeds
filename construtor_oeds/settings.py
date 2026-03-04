@@ -202,6 +202,15 @@ CKEDITOR_5_CONFIGS = {
                 {'name': 'c3idiomaitalico', 'element': 'span', 'classes': ['c3idiomaitalico']},
                 {'name': 'c3idiomabolditalico', 'element': 'span', 'classes': ['c3idiomabolditalico']},
                 {'name': 'equacao_latex', 'element': 'span', 'classes': ['latex']},
+
+                {'name': 'd3vinheta', 'element': 'p', 'classes': ['d3vinheta']},
+                {'name': 'd3rubricatranscricao', 'element': 'p', 'classes': ['d3rubricatranscricao']},
+                {'name': 'd3txtranscricao', 'element': 'p', 'classes': ['d3txtranscricao']},
+                {'name': 'd3creditosoed', 'element': 'p', 'classes': ['d3creditosoed']},
+                {'name': 'd3txtranscanto', 'element': 'p', 'classes': ['d3txtranscanto']},
+                {'name': 'd3rubricatxad', 'element': 'p', 'classes': ['d3rubricatxad']},
+                {'name': 'd3txad', 'element': 'p', 'classes': ['d3txad']},
+                {'name': 'd3vinhetaabertura', 'element': 'p', 'classes': ['d3vinhetaabertura']},
             ]
         },
         'htmlEmbed': {

@@ -214,8 +214,8 @@ class OedAudio(AuditoriaBase):
         validators=[FileExtensionValidator(allowed_extensions=['mp3'])],
         help_text="Formato aceito: MP3.",
     )
-    transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default')
-    creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default')
+    transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default', blank=True, null=True)
+    creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default', blank=True, null=True)
 
 
 
