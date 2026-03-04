@@ -32,7 +32,7 @@ class OedTipoSelectView(LoginRequiredMixin, TemplateView):
 
 class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     model = Oed
-    queryset = Oed.objects.select_related('criado_por').prefetch_related('atribuido_a')
+    queryset = Oed.objects.select_related('criado_por', 'tipo').prefetch_related('atribuido_a')
     template_name = 'oeds/lista_oeds.html' # Template específico para listar OEDs
     context_object_name = 'oeds'
     filterset_class = OedFilter

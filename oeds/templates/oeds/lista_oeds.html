@@ -99,7 +99,18 @@
                         </a>
                     </td>
 
-                    <td title="Tipo do OED">{{ oed.tipo|striptags }}</td>
+                    <td title="Tipo do OED">
+                        {% if oed.tipo %}
+                            {% if oed.tipo.motor_de_renderizacao == "PONTO_CLICAVEL" %}
+                                <i class="fas fa-map-marker-alt text-primary me-1"></i>
+                            {% elif oed.tipo.motor_de_renderizacao == "MAPA_CLICAVEL" %}
+                                <i class="fas fa-map text-success me-1"></i>
+                            {% elif oed.tipo.motor_de_renderizacao == "FAIXA_AUDIO" %}
+                                <i class="fas fa-headphones text-warning me-1"></i>
+                            {% endif %}
+                        {% endif %}
+                        {{ oed.tipo|striptags }}
+                    </td>
                     <td title="Projeto / Componente / Volume">
                         <span class="badge bg-primary">{{ oed.projeto|default:"-" }}</span>
                         <span class="badge bg-secondary">{{ oed.componente|default:"-" }}</span>
