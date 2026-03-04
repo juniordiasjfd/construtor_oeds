@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Oed
 from django.db import transaction
-from .forms import OedModelForm, PontoClicavelFormSet
+from .forms import OedModelForm, PontoClicavelFormSet, OedAudioForm
+from projetos.models import TipoOed
 from django.shortcuts import redirect
 from django_filters.views import FilterView
 from .filters import OedFilter
@@ -19,6 +20,14 @@ class VerboseNameMixin:
         context['verbose_name'] = self.model._meta.verbose_name
         context['verbose_name_plural'] = self.model._meta.verbose_name_plural
         context['titulo'] = self.model._meta.verbose_name
+        return context
+
+class OedTipoSelectView(LoginRequiredMixin, TemplateView):
+    template_name = "oeds/escolher_tipo.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tipos"] = TipoOed.objects.all()
         return context
 
 class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
@@ -83,7 +92,7 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
     template_name = 'oeds/form_oed.html'
     success_url = reverse_lazy('listar_oeds')
 
-    def get_context_data(self, **kwargs):
+    def get_context_data_old(self, **kwargs):
         data = super().get_context_data(**kwargs)
         if self.request.POST:
             data['pontos'] = PontoClicavelFormSet(self.request.POST, self.request.FILES)
@@ -91,7 +100,30 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
             data['pontos'] = PontoClicavelFormSet()
         return data
     
-    def form_valid(self, form):
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        tipo = TipoOed.objects.get(pk=self.tipo_id)
+        motor = tipo.motor_de_renderizacao
+
+        data["tipo"] = tipo
+
+        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+            data["audio_form"] = OedAudioForm(
+                self.request.POST or None,
+                self.request.FILES or None
+            )
+            data["pontos"] = None
+        else:
+            data["pontos"] = PontoClicavelFormSet(
+                self.request.POST or None,
+                self.request.FILES or None
+            )
+            data["audio_form"] = None
+
+        return data
+    
+    def form_valid_old(self, form):
         context = self.get_context_data()
         pontos = context['pontos']
         if form.is_valid() and pontos.is_valid():
@@ -112,6 +144,47 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
             # Se o formset for inválido, renderiza a página novamente com os erros
             messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
             return self.render_to_response(self.get_context_data(form=form, pontos=pontos))
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        pontos = context.get("pontos")
+        audio_form = context.get("audio_form")
+
+        with transaction.atomic():
+            form.instance.criado_por = self.request.user
+            tipo = TipoOed.objects.get(pk=self.tipo_id)
+            form.instance.tipo = tipo
+            self.object = form.save()
+
+            motor = self.object.tipo.motor_de_renderizacao
+
+            if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+                if audio_form and audio_form.is_valid():
+                    audio = audio_form.save(commit=False)
+                    audio.oed = self.object
+                    audio.save()
+                else:
+                    return self.form_invalid(form)
+
+            else:
+                if pontos and pontos.is_valid():
+                    pontos.instance = self.object
+                    pontos.save()
+                else:
+                    return self.form_invalid(form)
+
+        messages.success(self.request, "OED criado com sucesso.")
+
+        if "_continue" in self.request.POST:
+            return redirect(reverse('editar_oed', kwargs={'pk': self.object.pk}))
+
+        return super().form_valid(form)
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.tipo_id = request.GET.get("tipo")
+        if not self.tipo_id:
+            return redirect("novo_oed")  # volta para escolher tipo
+        return super().dispatch(request, *args, **kwargs)
 
 class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     model = Oed

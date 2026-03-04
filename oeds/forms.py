@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Oed, PontoClicavel
+from .models import Oed, PontoClicavel, OedAudio
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django.utils.html import strip_tags
 
@@ -53,7 +53,7 @@ class OedModelForm(forms.ModelForm):
         model = Oed
         # IMPORTANTE: Remova 'criado_em' e 'atualizado_em' desta lista Meta
         fields = [
-            'retranca', 'atribuido_a', 'status', 'titulo', 'tipo', 'projeto', 'componente', 
+            'retranca', 'atribuido_a', 'status', 'titulo', 'projeto', 'componente', # 'tipo',
             'volume', 'capitulo', 'pagina', 'local_insercao', 
             'introducao', 'retranca_da_imagem_principal', 'imagem_principal',
             'legenda_da_imagem_principal', 'alt_text_da_imagem_principal',
@@ -137,6 +137,31 @@ PontoClicavelFormSet = inlineformset_factory(
     validate_max=True
 )
 
+# formulário para faixas de áudio
+class OedAudioForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Aplica Bootstrap igual você faz nos outros forms
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({'class': 'form-check-input'})
+            elif isinstance(field.widget, CKEditor5Widget):
+                continue
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = OedAudio
+        fields = [
+            'arquivo_do_audio',
+            'transcricao_do_audio',
+            'creditos_do_audio',
+        ]
+        widgets = {
+            "transcricao_do_audio": CKEditor5Widget(config_name="default"),
+            "creditos_do_audio": CKEditor5Widget(config_name="default"),
+        }
 
 
 

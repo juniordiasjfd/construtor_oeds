@@ -231,6 +231,27 @@
                 {% csrf_token %}
                 {{ form.as_p }}
 
+                {% if audio_form %}
+                <hr class="my-4">
+                <h4>Faixa de áudio</h4>
+                
+                <div class="mb-3">
+                    {{ audio_form.arquivo_do_audio.label_tag }}
+                    {{ audio_form.arquivo_do_audio }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ audio_form.transcricao_do_audio.label_tag }}
+                    {{ audio_form.transcricao_do_audio }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ audio_form.creditos_do_audio.label_tag }}
+                    {{ audio_form.creditos_do_audio }}
+                </div>
+                {% endif %}
+
+                {% if pontos %}
                 <h4 class="mt-4">Pontos clicáveis</h4>
                 {{ pontos.management_form }}
 
@@ -293,6 +314,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
                 <button type="submit" class="btn btn-primary mt-3">Salvar e sair da página</button>
                 {% if object %} <a href="{% url 'oeds_preview:oed_preview' pk=object.pk %}" target="_blank"
@@ -329,7 +351,9 @@
             observer.observe(editorContainer, { childList: true, subtree: true });
         }
     });
-
+</script>
+{% if pontos %}
+<script>
 
 
 
@@ -437,5 +461,6 @@
         }
     });
 </script>
+{% endif %}
 
 {% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-4">Escolha o tipo de OED</h3>
+
+            <div class="row">
+                {% for tipo in tipos %}
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'criar_oed' %}?tipo={{ tipo.id }}"
+                       class="btn btn-outline-primary w-100 p-4">
+                        {{ tipo.nome|safe }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

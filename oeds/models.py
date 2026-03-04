@@ -202,3 +202,21 @@ class PontoClicavel(AuditoriaBase):
                  nome_original = os.path.splitext(self.imagem_do_ponto.name)[0]
                  self.retranca_da_imagem_do_ponto = nome_original
         super().save(*args, **kwargs)
+
+class OedAudio(AuditoriaBase):
+    oed = models.OneToOneField(
+        Oed,
+        on_delete=models.CASCADE,
+        related_name='audio'
+    )
+    arquivo_do_audio = models.FileField(
+        upload_to='oeds/audios/',
+        validators=[FileExtensionValidator(allowed_extensions=['mp3'])],
+        help_text="Formato aceito: MP3.",
+    )
+    transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default')
+    creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default')
+
+
+
+
