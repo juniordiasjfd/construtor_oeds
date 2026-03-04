@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
 from .models import Oed, PontoClicavel, OedAudio
+from projetos.models import TipoOed
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django.utils.html import strip_tags
 
@@ -11,6 +12,7 @@ class OedModelForm(forms.ModelForm):
     atualizado_em = forms.CharField(label="Atualizado em", required=False)
 
     def __init__(self, *args, **kwargs):
+        tipo = kwargs.pop("tipo", None)
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
             # 1. Primeiro verificamos se é um Checkbox
@@ -48,6 +50,24 @@ class OedModelForm(forms.ModelForm):
                 field.widget.attrs.update({'class': 'form-select select-busca'})
                 # Limpa o HTML das opções
                 field.label_from_instance = lambda obj: strip_tags(str(obj))
+        
+        if tipo and tipo.motor_de_renderizacao == \
+           TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+
+            campos_para_remover = [
+                "introducao",
+                "conclusao",
+                'fonte_de_pesquisa',
+                "retranca_da_imagem_principal",
+                "imagem_principal",
+                "legenda_da_imagem_principal",
+                "alt_text_da_imagem_principal",
+                "credito_da_imagem_principal",
+                "quantidade_pontos_prevista",
+            ]
+
+            for campo in campos_para_remover:
+                self.fields.pop(campo, None)
 
     class Meta:
         model = Oed
@@ -71,7 +91,7 @@ class OedModelForm(forms.ModelForm):
             "conclusao": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "palavras_chave": forms.TextInput(attrs={'placeholder': 'Palavras separadas por vírgula',}),
             'status': forms.Select(attrs={'class': 'form-select select-busca'}),
-            'tipo': forms.Select(attrs={'class': 'form-select select-busca'}),
+            # 'tipo': forms.Select(attrs={'class': 'form-select select-busca'}),
             'projeto': forms.Select(attrs={'class': 'form-select select-busca'}),
             'componente': forms.Select(attrs={'class': 'form-select select-busca'}),
             'credito_da_imagem_principal': forms.Select(attrs={'class': 'form-select select-busca'}),

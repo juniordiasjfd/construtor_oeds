@@ -144,6 +144,13 @@
                 {{ verbose_name|default:"OED" }}
                 {% endif %}
             </h3>
+            {% if tipo %}
+            <div class="mt-2">
+                <span class="badge bg-info text-dark">
+                    Tipo de OED: {{ tipo.nome|striptags }}
+                </span>
+            </div>
+            {% endif %}
 
         </div>
         <div class="card-body">
@@ -166,10 +173,11 @@
                                     class="fas fa-check me-2 text-success small"></i>Status do OED</li>
                             <li class="list-group-item bg-transparent border-0 py-1"><i
                                     class="fas fa-check me-2 text-success small"></i>Título do OED</li>
-                            <li class="list-group-item bg-transparent border-0 py-1"><i
-                                    class="fas fa-check me-2 text-success small"></i>Tipo do OED</li>
+                            <!-- <li class="list-group-item bg-transparent border-0 py-1"><i
+                                    class="fas fa-check me-2 text-success small"></i>Tipo do OED</li> -->
                         </ul>
                     </div>
+                    {% if pontos %}
                     <div class="col-md-6">
                         <ul class="list-group list-group-flush bg-transparent">
                             <li class="list-group-item bg-transparent border-0 py-1"><i
@@ -180,10 +188,11 @@
                                     class="fas fa-check me-2 text-success small"></i>Títulos dos pontos</li>
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
 
+                {% if pontos %}
                 <hr class="my-3">
-
                 <div class="bg-white rounded p-3 border-start border-4 border-warning">
                     <p class="fw-bold mb-2 text-dark"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Fluxo
                         obrigatório:</p>
@@ -197,6 +206,7 @@
                         marcadores de posição.
                     </p>
                 </div>
+                {% endif %}
 
                 <hr class="my-3">
                 <p class="mb-2">Para inserir equações, utilize o <a href="https://www.wiris.net/demo/editor/tests/en/test.html?mml=%3Cmath%20xmlns%3D%22http%3A//www.w3.org/1998/Math/MathML%22%3E%3Cmn%3E45%3C/mn%3E%3Cmo%3E%2C%3C/mo%3E%3Cmn%3E4%3C/mn%3E%3Cmtext%3E%26%23xA0%3Bcm%3C/mtext%3E%3Cmo%3E%26%23xD7%3B%3C/mo%3E%3Cmn%3E53%3C/mn%3E%3Cmo%3E%2C%3C/mo%3E%3Cmn%3E7%3C/mn%3E%3Cmtext%3E%26%23xA0%3Bcm%3C/mtext%3E%3C/math%3E" target="_blank"><strong>LaTex Editor</strong></a> e escreva-as na linguagem LaTex. Depois, utilize o estilo <span class="latex">equacao_latex</span> para demarcá-las.</p>

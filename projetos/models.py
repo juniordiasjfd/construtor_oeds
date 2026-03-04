@@ -56,8 +56,8 @@ class TipoOed(AuditoriaBase):
         default=MotorDeRenderizacao.PONTO_CLICAVEL
     )
     instrucao = CKEditor5Field("Instruções", config_name='default')
-    botao_fechar = models.CharField('Botão fechar', max_length=100, help_text='Preencher somente para as engines com pop-ups (modais).')
-    credito_imagem_prefixo = CKEditor5Field("Prefixo do crédito da imagem", config_name='default', help_text='Preencher somente para as engines com imagens.')
+    botao_fechar = models.CharField('Botão fechar', max_length=100, help_text='Necessário somente para as engines com pop-ups (modais), mas não deixe em branco.', default='Fechar')
+    credito_imagem_prefixo = CKEditor5Field("Prefixo do crédito da imagem", config_name='default', help_text='Necessário somente para as engines com imagens, mas não deixe em branco.', default='Crédito da imagem:')
     class Meta:
         verbose_name = 'Tipo do OED'
         verbose_name_plural = 'Tipos de OED'

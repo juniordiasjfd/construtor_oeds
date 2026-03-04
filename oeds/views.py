@@ -150,28 +150,28 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
         pontos = context.get("pontos")
         audio_form = context.get("audio_form")
 
+        motor = self.tipo.motor_de_renderizacao
+
+        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+            if audio_form and not audio_form.is_valid():
+                return self.form_invalid(form)
+        else:
+            if pontos and not pontos.is_valid():
+                return self.form_invalid(form)
+
         with transaction.atomic():
             form.instance.criado_por = self.request.user
-            tipo = TipoOed.objects.get(pk=self.tipo_id)
-            form.instance.tipo = tipo
+            form.instance.tipo = self.tipo
             self.object = form.save()
 
-            motor = self.object.tipo.motor_de_renderizacao
-
             if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
-                if audio_form and audio_form.is_valid():
-                    audio = audio_form.save(commit=False)
-                    audio.oed = self.object
-                    audio.save()
-                else:
-                    return self.form_invalid(form)
+                audio = audio_form.save(commit=False)
+                audio.oed = self.object
+                audio.save()
 
             else:
-                if pontos and pontos.is_valid():
-                    pontos.instance = self.object
-                    pontos.save()
-                else:
-                    return self.form_invalid(form)
+                pontos.instance = self.object
+                pontos.save()
 
         messages.success(self.request, "OED criado com sucesso.")
 
@@ -185,6 +185,12 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
         if not self.tipo_id:
             return redirect("novo_oed")  # volta para escolher tipo
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        tipo = TipoOed.objects.get(pk=self.tipo_id)
+        kwargs["tipo"] = tipo
+        return kwargs
 
 class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     model = Oed
@@ -192,15 +198,41 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     template_name = 'oeds/form_oed.html'
     success_url = reverse_lazy('listar_oeds')
 
-    def get_context_data(self, **kwargs):
+    def get_context_data_old(self, **kwargs):
         data = super().get_context_data(**kwargs)
         if self.request.POST:
             data['pontos'] = PontoClicavelFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
             data['pontos'] = PontoClicavelFormSet(instance=self.object)
         return data
+    
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["tipo"] = self.object.tipo
+        motor = self.object.tipo.motor_de_renderizacao
 
-    def form_valid(self, form):
+        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+            data["audio_form"] = OedAudioForm(
+                self.request.POST or None,
+                self.request.FILES or None,
+                instance=getattr(self.object, "audio", None)
+            )
+            data["pontos"] = None
+
+        else:
+            if self.request.POST:
+                data["pontos"] = PontoClicavelFormSet(
+                    self.request.POST,
+                    self.request.FILES,
+                    instance=self.object
+                )
+            else:
+                data["pontos"] = PontoClicavelFormSet(instance=self.object)
+
+            data["audio_form"] = None
+        return data
+
+    def form_valid_old(self, form):
         context = self.get_context_data()
         pontos = context['pontos']
 
@@ -220,3 +252,44 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
         else:
             messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
             return self.render_to_response(self.get_context_data(form=form))
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        pontos = context.get("pontos")
+        audio_form = context.get("audio_form")
+
+        motor = self.object.tipo.motor_de_renderizacao
+
+        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+            if audio_form and not audio_form.is_valid():
+                return self.form_invalid(form)
+        else:
+            if pontos and not pontos.is_valid():
+                return self.form_invalid(form)
+
+        with transaction.atomic():
+            self.object = form.save()
+
+            if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+                audio = audio_form.save(commit=False)
+                audio.oed = self.object
+                audio.save()
+
+            else:
+                pontos.instance = self.object
+                pontos.save()
+
+        messages.success(self.request, "OED salvo com sucesso.")
+
+        if "_continue" in self.request.POST:
+            return redirect(reverse('editar_oed', kwargs={'pk': self.object.pk}))
+
+        return redirect(self.success_url)
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.tipo = self.object.tipo
+        return super().dispatch(request, *args, **kwargs)
+
+
+
