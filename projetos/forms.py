@@ -25,4 +25,4 @@ class StatusOedModelForm(forms.ModelForm):
 class TipoOedModelForm(forms.ModelForm):
     class Meta:
         model = TipoOed
-        fields = ['nome', 'instrucao', 'botao_fechar', 'credito_imagem_prefixo']
+        fields = ['nome', 'motor_de_renderizacao', 'instrucao', 'botao_fechar', 'credito_imagem_prefixo']

@@ -44,10 +44,20 @@ class StatusOed(AuditoriaBase):
         return self.nome
 
 class TipoOed(AuditoriaBase):
+    class MotorDeRenderizacao(models.TextChoices):
+        PONTO_CLICAVEL = "PONTO_CLICAVEL", "Ponto clicável"
+        MAPA_CLICAVEL = "MAPA_CLICAVEL", "Mapa clicável"
+        FAIXA_AUDIO = "FAIXA_AUDIO", "Faixa de áudio"
     nome = CKEditor5Field("Tipo", config_name='default')
+    motor_de_renderizacao = models.CharField(
+        "Engine",
+        max_length=20,
+        choices=MotorDeRenderizacao.choices,
+        default=MotorDeRenderizacao.PONTO_CLICAVEL
+    )
     instrucao = CKEditor5Field("Instruções", config_name='default')
-    botao_fechar = models.CharField('Botão fechar', max_length=100)
-    credito_imagem_prefixo = CKEditor5Field("Prefixo do crédito da imagem", config_name='default')
+    botao_fechar = models.CharField('Botão fechar', max_length=100, help_text='Preencher somente para as engines com pop-ups (modais).')
+    credito_imagem_prefixo = CKEditor5Field("Prefixo do crédito da imagem", config_name='default', help_text='Preencher somente para as engines com imagens.')
     class Meta:
         verbose_name = 'Tipo do OED'
         verbose_name_plural = 'Tipos de OED'
