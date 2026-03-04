@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{ oed.retranca }}</title>
+
+<link rel="stylesheet" href="/static/oeds_preview/styles/oed.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+{{ html_titulo }}
+
+{{ html_instrucao }}
+
+<div class="audio-player">
+
+<audio controls>
+<source src="{{ audio_src }}" type="audio/mpeg">
+Seu navegador não suporta áudio.
+</audio>
+
+</div>
+
+{% if html_transcricao %}
+<div class="transcricao">
+{{ html_transcricao|safe }}
+</div>
+{% endif %}
+
+{% if html_creditos_audio %}
+<div class="creditos">
+{{ html_creditos_audio|safe }}
+</div>
+{% endif %}
+
+{{ html_conclusao }}
+
+{{ html_fonte_e_credito }}
+
+</div>
+
+</body>
+</html>

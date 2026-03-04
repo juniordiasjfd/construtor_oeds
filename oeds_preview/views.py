@@ -17,37 +17,44 @@ from usuarios.views import ComumInternoRequiredMixin
 from .latex import html_with_latex_class_2_html_with_mathml
 from xhtml2pdf import pisa
 from django.urls import reverse
+from .renderers.pontos_renderer import render_pontos
+from .renderers.audio_renderer import render_audio
 
 
-def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
-    parents_names = list(x.name for x in tag.parents)
-    return parent_name in parents_names
-def renomeia_tags_and_apply_mathml(
-        soup:bs4.BeautifulSoup, 
-        de_para={
-            'i':'em', 
-            'b':'strong'
-            }):
-    for old_name in de_para:
-        ocorrencias = soup.find_all(old_name)
-        for ocor in ocorrencias:
-            ocor.name = de_para[old_name]
-    ocorrencias = soup.find_all('strong')
-    for ocor in ocorrencias:
-        if has_parent_with(ocor, 'em'):
-            new_em = soup.new_tag('em')
-            ocor.insert_before(new_em)
-            new_em.append(ocor)
-            new_em.name = 'strong'
-            ocor.name = 'em'
-    soup = html_with_latex_class_2_html_with_mathml(soup)
-    return soup
+RENDERERS = {
+    "FAIXA_AUDIO": render_audio,
+    "PONTO_CLICAVEL": render_pontos,
+    "MAPA_CLICAVEL": render_pontos,
+}
+# def has_parent_with(tag:bs4.element.Tag, parent_name='em'):
+#     parents_names = list(x.name for x in tag.parents)
+#     return parent_name in parents_names
+# def renomeia_tags_and_apply_mathml(
+#         soup:bs4.BeautifulSoup, 
+#         de_para={
+#             'i':'em', 
+#             'b':'strong'
+#             }):
+#     for old_name in de_para:
+#         ocorrencias = soup.find_all(old_name)
+#         for ocor in ocorrencias:
+#             ocor.name = de_para[old_name]
+#     ocorrencias = soup.find_all('strong')
+#     for ocor in ocorrencias:
+#         if has_parent_with(ocor, 'em'):
+#             new_em = soup.new_tag('em')
+#             ocor.insert_before(new_em)
+#             new_em.append(ocor)
+#             new_em.name = 'strong'
+#             ocor.name = 'em'
+#     soup = html_with_latex_class_2_html_with_mathml(soup)
+#     return soup
 class OedPreviewDetailView(DetailView):
     model = Oed
     template_name = 'oeds_preview/preview.xhtml' # O caminho do seu template específico
     context_object_name = 'oed'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data_old(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = self.object
         pontos = obj.pontos.all().order_by('id')
@@ -214,6 +221,16 @@ class OedPreviewDetailView(DetailView):
         context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) else ''
 
         return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        motor = self.object.tipo.motor_de_renderizacao
+        context.update(RENDERERS[motor](self.object))
+        return context
+    def get_template_names(self):
+        motor = self.object.tipo.motor_de_renderizacao
+        if motor == "FAIXA_AUDIO":
+            return ["oeds_preview/preview_audio.xhtml"]
+        return ["oeds_preview/preview_pontos.xhtml"]
 class OedDownloadZipView(ComumInternoRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # 1. Obter o objeto e os dados do contexto
@@ -340,3 +357,6 @@ class OedDownloadPDFView(ComumInternoRequiredMixin, View):
             return response
             
         return HttpResponse("Erro técnico ao gerar o PDF.", status=500)
+
+
+
