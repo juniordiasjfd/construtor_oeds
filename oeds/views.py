@@ -32,7 +32,15 @@ class OedTipoSelectView(LoginRequiredMixin, TemplateView):
 
 class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     model = Oed
-    queryset = Oed.objects.select_related('criado_por', 'tipo').prefetch_related('atribuido_a')
+    queryset = Oed.objects.select_related(
+            'criado_por',
+            'tipo'
+        ).prefetch_related(
+            'atribuido_a',
+            'pontos'
+        ).select_related(
+            'audio'
+        )
     template_name = 'oeds/lista_oeds.html' # Template específico para listar OEDs
     context_object_name = 'oeds'
     filterset_class = OedFilter
@@ -73,7 +81,11 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
                 Q(pontos__legenda_da_imagem_do_ponto__icontains=query) |
                 Q(pontos__alt_text_da_imagem_do_ponto__icontains=query) |
                 Q(pontos__retranca_da_imagem_do_ponto__icontains=query) |
-                Q(pontos__credito_da_imagem_do_ponto__nome__icontains=query)
+                Q(pontos__credito_da_imagem_do_ponto__nome__icontains=query) |
+
+                # inclusão para o tipo áudio
+                Q(audio__transcricao_do_audio__icontains=query) |
+                Q(audio__creditos_do_audio__icontains=query)
                 
             ).distinct()
         
