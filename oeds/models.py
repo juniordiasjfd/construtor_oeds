@@ -19,6 +19,13 @@ def renomear_imagem_oed(instance, filename):
     ext = filename.split('.')[-1]
     novo_nome = f"img_{uuid.uuid4()}.{ext}"
     return os.path.join('oeds/images/', novo_nome)
+def renomear_audio_oed(instance, filename):
+    """
+    Função para renomear o arquivo: gera um UUID e mantém a extensão original.
+    """
+    ext = filename.split('.')[-1]
+    novo_nome = f"audio_{uuid.uuid4()}.{ext}"
+    return os.path.join('oeds/audios/', novo_nome)
 class Oed(AuditoriaBase):
     retranca = models.CharField(verbose_name='Retranca', max_length=50, unique=True, help_text='Campo obrigatório. A retranca pode ser alterada posteriormente, se necessário.')
     status = models.ForeignKey(
@@ -209,13 +216,30 @@ class OedAudio(AuditoriaBase):
         on_delete=models.CASCADE,
         related_name='audio'
     )
+    retranca_do_audio = models.CharField(
+        verbose_name='Retranca do áudio', 
+        max_length=255, 
+        blank=True, 
+        null=True,
+        help_text='Esse campo será atualizado ao carregar o arquivo e salvar.'
+    )
     arquivo_do_audio = models.FileField(
-        upload_to='oeds/audios/',
+        upload_to=renomear_audio_oed,
         validators=[FileExtensionValidator(allowed_extensions=['mp3'])],
         help_text="Formato aceito: MP3.",
     )
     transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default', blank=True, null=True)
     creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default', blank=True, null=True)
+    def save(self, *args, **kwargs):
+        if self.arquivo_do_audio and not self.pk:
+            nome_original = os.path.splitext(self.arquivo_do_audio.name)[0]
+            self.retranca_do_audio = nome_original
+        elif self.arquivo_do_audio and self.pk:
+            old_instance = OedAudio.objects.filter(pk=self.pk).first()
+            if old_instance and old_instance.arquivo_do_audio != self.arquivo_do_audio:
+                nome_original = os.path.splitext(self.arquivo_do_audio.name)[0]
+                self.retranca_do_audio = nome_original
+        super().save(*args, **kwargs)
 
 
 

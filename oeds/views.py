@@ -85,7 +85,8 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
 
                 # inclusão para o tipo áudio
                 Q(audio__transcricao_do_audio__icontains=query) |
-                Q(audio__creditos_do_audio__icontains=query)
+                Q(audio__creditos_do_audio__icontains=query) |
+                Q(audio__retranca_do_audio__icontains=query)
                 
             ).distinct()
         
@@ -274,6 +275,11 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
             messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
             return self.render_to_response(self.get_context_data(form=form))
     
+    def form_invalid(self, form):
+        context = self.get_context_data(form=form)
+        messages.error(self.request, "Erro ao salvar. Verifique os campos do formulário.")
+        return self.render_to_response(context)
+
     def form_valid(self, form):
         context = self.get_context_data()
         pontos = context.get("pontos")
@@ -312,5 +318,8 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
         self.tipo = self.object.tipo
         return super().dispatch(request, *args, **kwargs)
 
-
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["tipo"] = self.object.tipo
+        return kwargs
 

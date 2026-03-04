@@ -257,6 +257,17 @@
                     <h4>Faixa de áudio</h4>
                     
                     <div class="mb-3">
+                        {{ audio_form.retranca_do_audio.label_tag }}
+                        {{ audio_form.retranca_do_audio }}
+
+                        {% if audio_form.retranca_do_audio.errors %}
+                            <div class="text-danger small">
+                                {{ audio_form.retranca_do_audio.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
                         {{ audio_form.arquivo_do_audio.label_tag }}
                         {{ audio_form.arquivo_do_audio }}
 

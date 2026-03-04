@@ -174,6 +174,7 @@ class OedAudioForm(forms.ModelForm):
     class Meta:
         model = OedAudio
         fields = [
+            'retranca_do_audio',
             'arquivo_do_audio',
             'transcricao_do_audio',
             'creditos_do_audio',
@@ -181,6 +182,7 @@ class OedAudioForm(forms.ModelForm):
         widgets = {
             "transcricao_do_audio": CKEditor5Widget(config_name="default"),
             "creditos_do_audio": CKEditor5Widget(config_name="default"),
+            "retranca_do_audio": forms.TextInput(attrs={'placeholder': 'Será preenchido automaticamente',}),
         }
 
 
