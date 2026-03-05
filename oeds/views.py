@@ -335,6 +335,7 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
                     request,
                     "Este OED só pode ser editado pelo coordenador."
                 )
+                request.session["show_error_modal"] = True
                 return redirect("listar_oeds")
         return super().dispatch(request, *args, **kwargs)
 

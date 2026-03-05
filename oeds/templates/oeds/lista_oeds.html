@@ -138,13 +138,13 @@
     </div>
 </div>
 
-{% include 'oeds/modal_erros.html' %}
-{% if messages %}
+{% if request.session.show_error_modal %}
+    {% include 'oeds/modal_erros.html' %}
+{% endif %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     var modal = new bootstrap.Modal(document.getElementById('modalErrosFormulario'));
     modal.show();
 });
 </script>
-{% endif %}
 {% endblock %}

@@ -599,7 +599,7 @@
 </script>
 {% endif %}
 
-{% if form.errors or audio_form.errors or pontos.errors or messages %}
+{% if form.errors or audio_form.errors or pontos.errors %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     var modal = new bootstrap.Modal(document.getElementById('modalErrosFormulario'));
