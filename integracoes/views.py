@@ -4,17 +4,16 @@ from django.views import View
 from django.http import HttpResponse
 from django.utils.html import strip_tags
 
-from usuarios.views import ComumInternoRequiredMixin
 from oeds.models import Oed
 
 
-class ExportarOedsCSVView(ComumInternoRequiredMixin, View):
+class ExportarOedsCSVView(View):
 
     def get(self, request, *args, **kwargs):
 
         filename = f"oeds_report.csv"
 
-        response = HttpResponse(content_type="text/csv")
+        response = HttpResponse(content_type="text/csv; charset=utf-8")
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
         response.write("\ufeff")
