@@ -101,7 +101,8 @@ class OedModelForm(forms.ModelForm):
             # 'tipo': forms.Select(attrs={'class': 'form-select select-busca'}),
             'projeto': forms.Select(attrs={'class': 'form-select select-busca'}),
             'componente': forms.Select(attrs={'class': 'form-select select-busca'}),
-            'credito_da_imagem_principal': forms.Select(attrs={'class': 'form-select select-busca'}),
+            # 'credito_da_imagem_principal': forms.Select(attrs={'class': 'form-select select-busca'}),
+            'credito_da_imagem_principal': CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
         }
 
 class CoordenadasWidget(forms.TextInput):
@@ -148,9 +149,9 @@ class PontoClicavelForm(forms.ModelForm):
             "titulo_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "texto_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             "legenda_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
-            # "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
+            "credito_da_imagem_do_ponto": CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
             'coordenadas': CoordenadasWidget(),
-            'credito_da_imagem_do_ponto': forms.Select(attrs={'class': 'form-select select-busca'}),
+            # 'credito_da_imagem_do_ponto': forms.Select(attrs={'class': 'form-select select-busca'}),
         }
 
 # O FormSet que liga o OED aos seus pontos

@@ -93,15 +93,15 @@ class Oed(AuditoriaBase):
     )
     legenda_da_imagem_principal = CKEditor5Field("Legenda da imagem principal", config_name='default', blank=True, null=True)
     alt_text_da_imagem_principal = models.TextField('Descrição para acessibilidade da imagem principal', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
-    # credito_da_imagem_principal = CKEditor5Field("Crédito da imagem principal", config_name='default', blank=True, null=True)
-    credito_da_imagem_principal = models.ForeignKey(
-        Credito,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name='Crédito da imagem principal',
-        related_name='%(class)s_oeds'
-    )
+    credito_da_imagem_principal = CKEditor5Field("Crédito da imagem principal", config_name='default', blank=True, null=True)
+    # credito_da_imagem_principal = models.ForeignKey(
+    #     Credito,
+    #     on_delete=models.SET_NULL,
+    #     blank=True,
+    #     null=True,
+    #     verbose_name='Crédito da imagem principal',
+    #     related_name='%(class)s_oeds'
+    # )
     atribuido_a = models.ManyToManyField(
         Usuario,
         blank=True,
@@ -177,15 +177,15 @@ class PontoClicavel(AuditoriaBase):
     )
     legenda_da_imagem_do_ponto = CKEditor5Field("Legenda da imagem", config_name='default', blank=True, null=True)
     alt_text_da_imagem_do_ponto = models.TextField('Descrição para acessibilidade', max_length=2000, help_text='Máximo 2.000 caracteres.', blank=True, null=True)
-    # credito_da_imagem_do_ponto = CKEditor5Field("Crédito da imagem", config_name='default', blank=True, null=True)
-    credito_da_imagem_do_ponto = models.ForeignKey(
-        Credito,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name='Crédito da imagem',
-        related_name='%(class)s_oeds'
-    )
+    credito_da_imagem_do_ponto = CKEditor5Field("Crédito da imagem", config_name='default', blank=True, null=True)
+    # credito_da_imagem_do_ponto = models.ForeignKey(
+    #     Credito,
+    #     on_delete=models.SET_NULL,
+    #     blank=True,
+    #     null=True,
+    #     verbose_name='Crédito da imagem',
+    #     related_name='%(class)s_oeds'
+    # )
     def clean(self):
         # strip_tags remove as tags HTML para checar se existe texto real
         if not self.titulo_ponto or not strip_tags(self.titulo_ponto).strip():

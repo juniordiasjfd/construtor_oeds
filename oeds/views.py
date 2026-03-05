@@ -73,7 +73,8 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
                 Q(orientacoes_para_producao__icontains=query) |
                 Q(local_insercao__icontains=query) |
                 Q(retranca_da_imagem_principal__icontains=query) |
-                Q(credito_da_imagem_principal__nome__icontains=query) |
+                # Q(credito_da_imagem_principal__nome__icontains=query) |
+                Q(credito_da_imagem_principal__icontains=query) |
                 
                 # pontos clicáveis
                 Q(pontos__titulo_ponto__icontains=query) | 
@@ -81,7 +82,8 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
                 Q(pontos__legenda_da_imagem_do_ponto__icontains=query) |
                 Q(pontos__alt_text_da_imagem_do_ponto__icontains=query) |
                 Q(pontos__retranca_da_imagem_do_ponto__icontains=query) |
-                Q(pontos__credito_da_imagem_do_ponto__nome__icontains=query) |
+                # Q(pontos__credito_da_imagem_do_ponto__nome__icontains=query) |
+                Q(pontos__credito_da_imagem_do_ponto__icontains=query) |
 
                 # inclusão para o tipo áudio
                 Q(audio__transcricao_do_audio__icontains=query) |
