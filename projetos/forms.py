@@ -20,7 +20,7 @@ class ComponenteModelForm(forms.ModelForm):
 class StatusOedModelForm(forms.ModelForm):
     class Meta:
         model = StatusOed
-        fields = ['nome']
+        fields = ['nome', 'only_coordenador_can_edit']
 
 class TipoOedModelForm(forms.ModelForm):
     class Meta:

@@ -36,6 +36,7 @@ class Credito(AuditoriaBase):
 
 class StatusOed(AuditoriaBase):
     nome = models.CharField('Status do OED', max_length=100, unique=True)
+    only_coordenador_can_edit = models.BooleanField('Somente o coordenador pode editar', default=False)
     class Meta:
         verbose_name = 'Status do OED'
         verbose_name_plural = 'Status dos OEDs'

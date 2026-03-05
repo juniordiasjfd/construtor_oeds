@@ -375,7 +375,7 @@
         </div>
     </div>
 </div>
-
+<!-- 
 <div class="modal fade" id="modalErrosFormulario" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content border-danger">
@@ -457,7 +457,8 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
+{% include 'oeds/modal_erros.html' %}
 
 {# Renderização de Matemática #}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -598,7 +599,7 @@
 </script>
 {% endif %}
 
-{% if form.errors or audio_form.errors or pontos.errors %}
+{% if form.errors or audio_form.errors or pontos.errors or messages %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     var modal = new bootstrap.Modal(document.getElementById('modalErrosFormulario'));

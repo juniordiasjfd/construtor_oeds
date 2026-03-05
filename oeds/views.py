@@ -326,6 +326,16 @@ class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.tipo = self.object.tipo
+        if self.object.status.only_coordenador_can_edit:
+            if not (
+                request.user.groups.filter(name="Coordenador").exists() or \
+                self.request.user.is_superuser
+            ):
+                messages.error(
+                    request,
+                    "Este OED só pode ser editado pelo coordenador."
+                )
+                return redirect("listar_oeds")
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):

@@ -137,4 +137,14 @@
         </table>
     </div>
 </div>
+
+{% include 'oeds/modal_erros.html' %}
+{% if messages %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var modal = new bootstrap.Modal(document.getElementById('modalErrosFormulario'));
+    modal.show();
+});
+</script>
+{% endif %}
 {% endblock %}
