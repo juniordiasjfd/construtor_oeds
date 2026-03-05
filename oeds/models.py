@@ -3,6 +3,7 @@ from django.conf import settings
 # from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.exceptions import ValidationError
+from construtor_oeds.settings import MAX_SIZE_AUDIO_MB, MAX_SIZE_IMAGEM_MB
 from django.utils.html import strip_tags
 from projetos.models import Projeto, Componente, StatusOed, Credito, TipoOed
 from core.models import AuditoriaBase, ConfiguracaoOED
@@ -12,6 +13,18 @@ import os
 import uuid
 
 
+def validar_tamanho_audio(value):
+    limite = MAX_SIZE_AUDIO_MB * 1024 * 1024
+    if value.size > limite:
+        raise ValidationError(
+            f"O arquivo de áudio deve ter no máximo {MAX_SIZE_AUDIO_MB} MB."
+        )
+def validar_tamanho_imagem(value):
+    limite = MAX_SIZE_IMAGEM_MB * 1024 * 1024
+    if value.size > limite:
+        raise ValidationError(
+            f"A imagem deve ter no máximo {MAX_SIZE_IMAGEM_MB} MB."
+        )
 def renomear_imagem_oed(instance, filename):
     """
     Função para renomear o arquivo: gera um UUID e mantém a extensão original.
@@ -86,8 +99,8 @@ class Oed(AuditoriaBase):
     imagem_principal = models.ImageField(
         verbose_name="Imagem principal",
         upload_to=renomear_imagem_oed, # Usa a função de renomeação
-        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])],
-        help_text="Formatos aceitos: PNG, JPG ou JPEG. Ao carregar nova imagem, o campo 'Retranca da imagem' será atualizado.",
+        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg']), validar_tamanho_imagem],
+        help_text=f"Formatos aceitos: PNG, JPG ou JPEG. Ao carregar nova imagem, o campo 'Retranca da imagem' será atualizado. Máximo {MAX_SIZE_IMAGEM_MB} MB.",
         blank=True, 
         null=True,
     )
@@ -170,8 +183,8 @@ class PontoClicavel(AuditoriaBase):
     imagem_do_ponto = models.ImageField(
         verbose_name="Imagem do ponto",
         upload_to=renomear_imagem_oed, # Usa a função de renomeação
-        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])],
-        help_text="Formatos aceitos: PNG, JPG ou JPEG. Ao carregar nova imagem, o campo 'Retranca da imagem' será atualizado.",
+        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg']), validar_tamanho_imagem],
+        help_text=f"Formatos aceitos: PNG, JPG ou JPEG. Ao carregar nova imagem, o campo 'Retranca da imagem' será atualizado. Máximo {MAX_SIZE_IMAGEM_MB} MB.",
         blank=True, 
         null=True,
     )
@@ -225,8 +238,8 @@ class OedAudio(AuditoriaBase):
     )
     arquivo_do_audio = models.FileField(
         upload_to=renomear_audio_oed,
-        validators=[FileExtensionValidator(allowed_extensions=['mp3'])],
-        help_text="Formato aceito: MP3.",
+        validators=[FileExtensionValidator(allowed_extensions=['mp3']), validar_tamanho_audio],
+        help_text=f"Formato aceito: MP3. Máximo {MAX_SIZE_AUDIO_MB} MB.",
     )
     transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default', blank=True, null=True)
     creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default', blank=True, null=True)
