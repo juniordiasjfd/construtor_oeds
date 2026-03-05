@@ -49,6 +49,7 @@ def render_audio(oed):
     # css adicional
     context['css_adicional'] = mark_safe('''
     <style>
+    .c3idiomabold{font-style:italic;font-weight:bold}.c3idiomaitalico{font-style:italic}.c3idiomabolditalico{font-style:italic;font-weight:bold}
     .borda_interna {padding: 10px !important;}
     .d3txtranscanto{
         font-style: italic;
