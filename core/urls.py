@@ -23,4 +23,5 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('configuracoes/', ConfiguracoesView.as_view(), name='configuracoes'),
     path('configuracoes/oed/', views.ConfiguracaoOEDUpdateView.as_view(), name='editar_config_oed'),
+    path("backup-media/", views.BackupMediaView.as_view(), name="backup_media"),
 ]

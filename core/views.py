@@ -5,6 +5,11 @@ from usuarios.views import CoordenadorRequiredMixin
 from django.views import View
 from .models import ConfiguracaoOED
 from .forms import ConfiguracaoOEDForm
+import shutil
+import tempfile
+import os
+from django.http import FileResponse
+from django.conf import settings
 
 
 class HomeView(TemplateView):
@@ -38,3 +43,24 @@ class ConfiguracaoOEDUpdateView(CoordenadorRequiredMixin, View):
                 return redirect('configuracoes') # Nome da sua URL de configurações
         
         return render(request, self.template_name, {'form': form})
+
+class BackupMediaView(CoordenadorRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+
+        temp_dir = tempfile.gettempdir()
+        zip_base = os.path.join(temp_dir, "media_backup")
+
+        shutil.make_archive(
+            zip_base,
+            "zip",
+            settings.MEDIA_ROOT
+        )
+
+        zip_path = zip_base + ".zip"
+
+        return FileResponse(
+            open(zip_path, "rb"),
+            as_attachment=True,
+            filename="media_backup.zip"
+        )
