@@ -307,7 +307,8 @@ class OedDownloadPDFView(ComumInternoRequiredMixin, View):
         context = preview_view.get_context_data(object=preview_view.object)
         
         # 2. Renderizar o HTML e limpar com BeautifulSoup
-        html_string = render_to_string('oeds_preview/preview.xhtml', context)
+        template_name = preview_view.get_template_names()[0]
+        html_string = render_to_string(template_name, context)
         soup = bs4.BeautifulSoup(html_string, 'lxml')
         for fig in soup.find_all('figcaption'):
             fig.name = 'p'
