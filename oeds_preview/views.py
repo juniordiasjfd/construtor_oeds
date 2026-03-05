@@ -13,7 +13,8 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views import View
 import datetime
-from usuarios.views import ComumInternoRequiredMixin
+from usuarios.views import ComumInternoRequiredMixin, CoordenadorRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .latex import html_with_latex_class_2_html_with_mathml
 from xhtml2pdf import pisa
 from django.urls import reverse
@@ -241,7 +242,7 @@ class OedPreviewDetailView(DetailView):
         # if motor == "FAIXA_AUDIO":
         #     return ["oeds_preview/preview_audio.xhtml"]
         # return ["oeds_preview/preview_pontos.xhtml"]
-class OedDownloadZipView_old(ComumInternoRequiredMixin, View):
+class OedDownloadZipView_old(CoordenadorRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # 1. Obter o objeto e os dados do contexto
         # Dica: Reutilize a lógica da sua OedPreviewDetailView
@@ -309,7 +310,7 @@ class OedDownloadZipView_old(ComumInternoRequiredMixin, View):
         response['Content-Disposition'] = f'attachment; filename="{preview_view.object.retranca}_export_{hora}.zip"'
         return response
 
-class OedDownloadZipView(ComumInternoRequiredMixin, View):
+class OedDownloadZipView(CoordenadorRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
@@ -329,7 +330,7 @@ class OedDownloadZipView(ComumInternoRequiredMixin, View):
             return zip_pontos(context, template, oed)
         
 
-class OedDownloadPDFView(ComumInternoRequiredMixin, View):
+class OedDownloadPDFView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # 1. Obter o objeto e os dados do contexto (Reutilizando sua lógica existente)
         oed = Oed.objects.get(pk=self.kwargs['pk'])
