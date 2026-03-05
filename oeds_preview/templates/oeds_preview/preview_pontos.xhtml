@@ -66,13 +66,13 @@
       itemtype="https://schema.org/Organization" />
     <!--script vai trocar automaticamente-->
   </div>
+  <a href="{% url 'oeds_preview:oed_download_zip' pk=oed.pk %}" class="btn btn-primary">
+    Baixar pacote ZIP
+  </a>
+  <a href="{% url 'oeds_preview:oed_download_pdf' pk=oed.pk %}" class="btn btn-secondary">
+    Baixar PDF
+  </a>
   <main>
-    <a href="{% url 'oeds_preview:oed_download_zip' pk=oed.pk %}" class="btn btn-primary">
-      Baixar pacote ZIP
-    </a>
-    <a href="{% url 'oeds_preview:oed_download_pdf' pk=oed.pk %}" class="btn btn-secondary">
-      Baixar PDF
-    </a>
     <section class="d3boxoed">
       <div class="d3topooed">
         {{ html_titulo }}
