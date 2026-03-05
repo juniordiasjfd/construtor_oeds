@@ -27,6 +27,7 @@ urlpatterns = [
     path('accounts/', include('usuarios.urls')),
     path('projetos/', include('projetos.urls')),
     path('oeds/', include('oeds.urls')),
+    path('integracoes/', include('integracoes.urls')),
     path('oeds/preview/', include('oeds_preview.urls', namespace='oeds_preview')),
 
     # Rota necessária para o upload de imagens do CKEditor 5

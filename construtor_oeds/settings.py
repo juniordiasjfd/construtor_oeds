@@ -249,6 +249,9 @@ RECIPIENT_LIST = env.list('RECIPIENT_LIST', default=[])
 MAX_SIZE_AUDIO_MB = env('MAX_SIZE_AUDIO_MB', cast=int)
 MAX_SIZE_IMAGEM_MB = env('MAX_SIZE_IMAGEM_MB', cast=int)
 
+RELATORIO_API_CSV = env('RELATORIO_API_CSV')
+
+
 
 print("MEDIA_ROOT:", MEDIA_ROOT)
 print("DEBUG:", DEBUG)

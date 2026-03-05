@@ -11,6 +11,7 @@ from django_filters.views import FilterView
 from .filters import OedFilter
 from django.db.models import Q
 from django.urls import reverse
+from construtor_oeds.settings import RELATORIO_API_CSV
 
 
 # Mixin para compatibilidade com templates genéricos
@@ -47,6 +48,11 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     paginate_by = 20
     ordering = ['-id']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['relatorio_csv'] = RELATORIO_API_CSV
+        return context
+    
     def get_queryset(self):
         # 1. Pega o queryset base
         queryset = super().get_queryset()
