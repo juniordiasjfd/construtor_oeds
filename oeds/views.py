@@ -41,7 +41,7 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
             'pontos'
         ).select_related(
             'audio'
-        )
+        ).filter(projeto__ativo=True)
     template_name = 'oeds/lista_oeds.html' # Template específico para listar OEDs
     context_object_name = 'oeds'
     filterset_class = OedFilter

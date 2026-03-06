@@ -5,7 +5,7 @@ from .models import Projeto, Componente, Credito, StatusOed, TipoOed
 class ProjetoModelForm(forms.ModelForm):
     class Meta:
         model = Projeto
-        fields = ['nome', 'editora', 'ciclo']
+        fields = ['nome', 'editora', 'ciclo', 'ativo']
 
 class CreditoModelForm(forms.ModelForm):
     class Meta:

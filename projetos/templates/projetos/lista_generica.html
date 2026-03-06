@@ -14,13 +14,26 @@
             <thead class="table-dark">
                 <tr>
                     <th>Nome/Título</th>
+                    <th>Ativo</th>
                     <th class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in object_list %}
                 <tr>
-                    <td>{{ item.nome|striptags }}</td>
+                    <td>
+                        {{ item.nome|striptags }}
+                        {% if item.only_coordenador_can_edit %}
+                            <i class="fa-solid fa-lock text-primary" title="Somente o coordenador pode editar."></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.ativo %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-x"></i>
+                        {% endif %}
+                    </td>
                     <td class="text-center">
                         <a href="{% url view.get_update_url_name pk=item.pk %}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit"></i> Editar

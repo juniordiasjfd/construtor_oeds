@@ -125,12 +125,14 @@
                         <small><strong>Atribuído a:</strong> {{ oed.atribuido_a.all|join:", "|default:"-" }}</small>
                     </td>
                     <td class="text-center">
-                        <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary"
-                            title="Editar o OED">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
                         {% if oed.status.only_coordenador_can_edit %}
-                        <i class="fa-solid fa-lock text-primary" title="Bloqueado para edição"></i>
+                            <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary" title="Somente o coordenador pode editar.">
+                                <i class="fas fa-lock text-primary"></i><br>Editar
+                            </a>
+                        {% else %}
+                            <a href="{% url view.get_update_url_name pk=oed.pk %}" class="btn btn-sm btn-outline-primary" title="Todos podem editar.">
+                                <i class="fas fa-edit text-primary"></i><br>Editar
+                            </a>
                         {% endif %}
                     </td>
                 </tr>
