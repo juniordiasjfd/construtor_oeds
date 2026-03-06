@@ -129,6 +129,9 @@
                             title="Editar o OED">
                             <i class="fas fa-edit"></i> Editar
                         </a>
+                        {% if oed.status.only_coordenador_can_edit %}
+                        <i class="fa-solid fa-lock text-primary" title="Bloqueado para edição"></i>
+                        {% endif %}
                     </td>
                 </tr>
                 {% empty %}
