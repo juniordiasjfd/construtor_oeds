@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 700px;">
+
+    <!-- Título -->
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            <i class="fas fa-cog text-primary me-2"></i>
+            Configurações do usuário
+        </h2>
+        <p class="text-muted mb-0">
+            Personalize como os OEDs são exibidos para você.
+        </p>
+    </div>
+
+    <!-- Card -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Registros por página -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        {{ form.registros_por_pagina.label }}
+                    </label>
+                    {{ form.registros_por_pagina }}
+                    <div class="form-text">
+                        Quantidade de OEDs exibidos por página na listagem.
+                    </div>
+                    {% if form.registros_por_pagina.errors %}
+                        <div class="text-danger small">
+                            {{ form.registros_por_pagina.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Ordenação -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        {{ form.ordenar_por.label }}
+                    </label>
+                    {{ form.ordenar_por }}
+                    <div class="form-text">
+                        Define a ordenação padrão da lista de OEDs.
+                    </div>
+                    {% if form.ordenar_por.errors %}
+                        <div class="text-danger small">
+                            {{ form.ordenar_por.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Ações -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{% url 'configuracoes' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Voltar
+                    </a>
+
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-1"></i> Salvar alterações
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

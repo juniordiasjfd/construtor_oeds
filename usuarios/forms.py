@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from .models import ConfiguracoesDoUsuario
 
 User = get_user_model()
 
@@ -26,3 +27,15 @@ class UsuarioActivateDeactivateForm(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'groups': forms.CheckboxSelectMultiple(),
         }
+
+class ConfiguracoesForm(forms.ModelForm):
+    class Meta:
+        model = ConfiguracoesDoUsuario
+        fields = ['registros_por_pagina', 'ordenar_por']
+        widgets = {
+            'registros_por_pagina': forms.NumberInput(attrs={'class': 'form-control'}),
+            'ordenar_por': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+
+

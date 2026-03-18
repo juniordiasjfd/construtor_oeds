@@ -48,9 +48,28 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     paginate_by = 20
     ordering = ['-id']
 
+    def get_paginate_by(self, queryset):
+        return getattr(self.request.user.configuracoes, 'registros_por_pagina', 20)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['relatorio_csv'] = RELATORIO_API_CSV
+
+        # ---------------------------
+        # Query string (paginação)
+        # ---------------------------
+        query_string_params = self.request.GET.copy()
+        query_string_params.pop('page', None)
+        context['query_string'] = query_string_params.urlencode()
+
+        # ---------------------------
+        # Filtros ativos (forma segura)
+        # ---------------------------
+        context["filtros_avancados_ativos"] = any(
+            v for k, v in self.request.GET.items()
+            if k in self.filterset.form.fields and v
+        )
+        
         return context
     
     def get_queryset(self):
@@ -99,6 +118,11 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
             ).distinct()
         
         # Para outros grupos (como Coordenadores), retorna a lista completa
+        try:
+            preferencia_ordem = self.request.user.configuracoes.ordenar_por
+            queryset = queryset.order_by(preferencia_ordem)
+        except:
+            queryset = queryset.order_by('-atualizado_em')
         return queryset
 
     def get_create_url(self):

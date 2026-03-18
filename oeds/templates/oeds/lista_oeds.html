@@ -2,19 +2,19 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Gerenciar {{ verbose_name_plural }}</h2>
         <a href="{{ view.get_create_url }}" class="btn btn-success">
             <i class="fas fa-plus"></i> Novo OED
         </a>
-    </div>
+    </div> -->
 
-    <div class="card mb-4 shadow-sm">
+    <div class="card mb-4 shadow-sm mt-0">
         <div class="card-body">
             <form method="get" class="row g-3">
 
                 <div class="col-12 mt-1">
-                    <label class="form-label fw-bold text-primary">Busca rápida</label>
+                    <!-- <label class="form-label fw-bold text-primary">Busca rápida</label> -->
                     <div class="input-group">
                         <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
                         <input type="text" name="q" class="form-control form-control-lg" placeholder="Pesquise em todos os campos..."
@@ -31,11 +31,11 @@
                                 <button class="accordion-button collapsed p-2 bg-light text-muted small" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseFiltros" aria-expanded="false"
                                     aria-controls="collapseFiltros">
-                                    <i class="fas fa-filter me-2"></i> Filtros avançados
+                                    <i class="fas fa-filter me-2"></i> Filtros avançados {% if filtros_avancados_ativos %}<span class="badge bg-primary">ativos</span>{% endif %}
                                 </button>
                             </h2>
                             <div id="collapseFiltros"
-                                class="accordion-collapse collapse {% if not request.GET.q and request.GET %}show{% endif %}"
+                                class="accordion-collapse collapse"
                                 aria-labelledby="headingFiltros" data-bs-parent="#accordionFiltros">
                                 <div class="accordion-body px-0 py-3">
                                     <div class="row g-3">
@@ -62,6 +62,9 @@
                     <button type="submit" class="btn btn-primary btn-sm px-4">
                         <i class="fas fa-filter me-1"></i> Aplicar filtros
                     </button>
+                    <a href="{{ view.get_create_url }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Novo OED
+                    </a>
                 </div>
             </form>
         </div>
@@ -75,17 +78,17 @@
                     <th>OEDs</th>
                     <th class="text-center" style="width:70px;">Preview</th>
                     <th>Tipo</th>
-                    <th title="Projeto / Componente / Volume">Proj./Comp./Vol.</th>
+                    <th title="Projeto / Componente / Volume">Proj./ <br> Comp./Vol.</th>
                     <th>Status</th>
-                    <th>Criado por / Atribuído a</th>
+                    <th>Criado por / <br> Atribuído a</th>
                     <th class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for oed in object_list %}
                 <tr>
-                    <td title="Título e retranca">
-                        <strong>{{ oed.titulo|striptags }}</strong><br>
+                    <td title="Título e retranca: {{oed.titulo|striptags}}">
+                        <strong>{{ oed.titulo|striptags|truncatechars:30 }}</strong><br>
                         <small class="text-muted">{{ oed.retranca }}</small>
                     </td>
                     <td class="text-center" title="Visualizar OED">
@@ -115,13 +118,14 @@
                         {{ oed.tipo|striptags }}
                     </td>
                     <td title="Projeto / Componente / Volume">
-                        <span class="badge bg-primary">{{ oed.projeto|default:"-" }}</span>
+                        <span class="badge bg-primary">{{ oed.projeto|truncatechars:20|default:"-" }}</span><br>
                         <span class="badge bg-secondary">{{ oed.componente|default:"-" }}</span>
                         <span class="badge bg-secondary">{{ oed.volume|default:"-" }}</span>
                     </td>
-                    <td title="Status">{{ oed.status }}</td>
+                    <td title="Status: {{oed.status}}">{{ oed.status|truncatechars:20 }}</td>
                     <td title="Criado por ou atribuído a">
-                        <small><strong>Criado por:</strong> {{ oed.criado_por }}</small> <br>
+                        <small><strong>Criado por:</strong> {{ oed.criado_por }}</small> 
+                        <br>
                         <small><strong>Atribuído a:</strong> {{ oed.atribuido_a.all|join:", "|default:"-" }}</small>
                     </td>
                     <td class="text-center">
@@ -143,6 +147,36 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <nav class="mt-3">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1&{{ query_string }}">« Primeira</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ query_string }}">Anterior</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ query_string }}">Próxima</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ query_string }}">Última »</a>
+            </li>
+        {% endif %}
+
+    </ul>
+</nav>
     </div>
 </div>
 

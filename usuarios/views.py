@@ -6,11 +6,13 @@ from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import UsuarioModelForm, UsuarioActivateDeactivateForm
+from .forms import UsuarioModelForm, UsuarioActivateDeactivateForm, ConfiguracoesForm
 from django.shortcuts import redirect
 from django.core.mail import send_mail
 from construtor_oeds.settings import DEFAULT_FROM_EMAIL, RECIPIENT_LIST
 from django.urls import reverse
+from .models import ConfiguracoesDoUsuario
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 class CoordenadorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -99,7 +101,17 @@ class UsuarioListarTodosView(ComumInternoRequiredMixin, TemplateView):
 class ConfiguracoesView(LoginRequiredMixin, TemplateView):
     template_name = 'core/configuracoes.html'
 
-
+class UserSettingsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = ConfiguracoesDoUsuario
+    form_class = ConfiguracoesForm
+    template_name = 'settings_form.html'
+    success_url = reverse_lazy('user_settings')
+    success_message = "Suas preferências foram atualizadas com sucesso!"
+    def get_object(self, queryset=None):
+        # Esta lógica garante que se o usuário não tiver o objeto criado, 
+        # o sistema cria um com os padrões do modelo automaticamente.
+        obj, created = ConfiguracoesDoUsuario.objects.get_or_create(usuario=self.request.user)
+        return obj
 
 
 

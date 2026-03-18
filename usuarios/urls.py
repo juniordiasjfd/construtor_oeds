@@ -24,4 +24,6 @@ urlpatterns = [
     # Gerenciamento (Coordenador)
     path('gerenciar/todos/', views.UsuarioListarTodosView.as_view(), name='gerenciar_usuarios_todos'),
     path('gerenciar/aprovar/<int:pk>/', views.UsuarioAprovarView.as_view(), name='aprovar_usuario'),
+
+    path('user-config/', views.UserSettingsUpdateView.as_view(), name='user_settings'),
 ]
