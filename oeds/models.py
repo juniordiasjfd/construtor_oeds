@@ -57,17 +57,13 @@ class Oed(AuditoriaBase):
     # tipo = models.CharField("Tipo de OED", max_length=20, choices=TIPOS_CHOICES, default='infografico')
     tipo = models.ForeignKey(
         TipoOed, 
-        on_delete=models.SET_NULL, 
-        blank=True,
-        null=True,
+        on_delete=models.PROTECT, 
         verbose_name="Tipo do OED",
         related_name="%(class)s_oeds"
     )
     projeto = models.ForeignKey(
         Projeto, 
-        on_delete=models.SET_NULL, 
-        blank=True,
-        null=True,
+        on_delete=models.PROTECT, 
         verbose_name="Projeto",
         related_name="%(class)s_oeds"
     )
