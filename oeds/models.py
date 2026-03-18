@@ -240,6 +240,8 @@ class OedAudio(AuditoriaBase):
         upload_to=renomear_audio_oed,
         validators=[FileExtensionValidator(allowed_extensions=['mp3']), validar_tamanho_audio],
         help_text=f"Formato aceito: MP3. Máximo {MAX_SIZE_AUDIO_MB} MB.",
+        blank=True,
+        null=True
     )
     transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default', blank=True, null=True)
     creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default', blank=True, null=True)
