@@ -32,7 +32,10 @@ def render_audio(oed):
 
     # 3. ARQUIVO DO ÁUDIO
     audio = oed.audio
-    context["audio_src"] = audio.arquivo_do_audio.url
+    if audio.arquivo_do_audio:
+        context["audio_src"] = audio.arquivo_do_audio.url
+    else:
+        context["audio_src"] = 'audio.mp3'
 
     # 4. transcrição
     soup_transcricao = renomeia_tags_and_apply_mathml(
