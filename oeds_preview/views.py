@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views import View
 import datetime
-from usuarios.views import ComumInternoRequiredMixin, CoordenadorRequiredMixin
+from usuarios.views import CoordenadorRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .latex import html_with_latex_class_2_html_with_mathml
 from xhtml2pdf import pisa

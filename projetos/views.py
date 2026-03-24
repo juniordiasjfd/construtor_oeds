@@ -3,10 +3,10 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Projeto, Componente, Credito, StatusOed, TipoOed
 from .forms import ProjetoModelForm, ComponenteModelForm, CreditoModelForm, StatusOedModelForm, TipoOedModelForm
-from usuarios.views import CoordenadorRequiredMixin, ComumInternoRequiredMixin
+from usuarios.views import CoordenadorRequiredMixin, EditorRequiredMixin
 
 
-class ComponenteCreateView(ComumInternoRequiredMixin, CreateView):
+class ComponenteCreateView(EditorRequiredMixin, CreateView):
     model = Componente
     form_class = ComponenteModelForm
     template_name = 'projetos/form_generico.html'
@@ -33,7 +33,7 @@ class ComponenteListView(ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_componente')
     def get_update_url_name(self): return "editar_componente"
-class ComponenteUpdateView(ComumInternoRequiredMixin, UpdateView):
+class ComponenteUpdateView(EditorRequiredMixin, UpdateView):
     model = Componente
     form_class = ComponenteModelForm
     template_name = 'projetos/form_generico.html'
@@ -43,7 +43,7 @@ class ComponenteUpdateView(ComumInternoRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ProjetoCreateView(ComumInternoRequiredMixin, CreateView):
+class ProjetoCreateView(EditorRequiredMixin, CreateView):
     model = Projeto
     form_class = ProjetoModelForm
     template_name = 'projetos/form_generico.html'
@@ -67,7 +67,7 @@ class ProjetoListView(ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_projeto')
     def get_update_url_name(self): return "editar_projeto"
-class ProjetoUpdateView(ComumInternoRequiredMixin, UpdateView):
+class ProjetoUpdateView(EditorRequiredMixin, UpdateView):
     model = Projeto
     form_class = ProjetoModelForm
     template_name = 'projetos/form_generico.html'
@@ -76,7 +76,7 @@ class ProjetoUpdateView(ComumInternoRequiredMixin, UpdateView):
         messages.success(self.request, f'Projeto "{form.instance.nome}" atualizado.')
         return super().form_valid(form)
 
-class CreditoCreateView(ComumInternoRequiredMixin, CreateView):
+class CreditoCreateView(EditorRequiredMixin, CreateView):
     model = Credito
     form_class = CreditoModelForm
     template_name = 'projetos/form_generico.html'
@@ -100,7 +100,7 @@ class CreditoListView(ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_credito')
     def get_update_url_name(self): return "editar_credito"
-class CreditoUpdateView(ComumInternoRequiredMixin, UpdateView):
+class CreditoUpdateView(EditorRequiredMixin, UpdateView):
     model = Credito
     form_class = CreditoModelForm
     template_name = 'projetos/form_generico.html'

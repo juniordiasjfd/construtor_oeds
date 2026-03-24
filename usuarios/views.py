@@ -26,12 +26,12 @@ class CoordenadorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         messages.error(self.request, "Você não tem permissão para acessar esta área.")
         return redirect('home')
     
-class ComumInternoRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
-    """Garante que apenas usuários logados e do grupo Comum interno + Coordenador acessem."""
+class EditorRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """Garante que apenas usuários logados e do grupo Editor + Coordenador acessem."""
     def test_func(self):
         return (
             self.request.user.groups.filter(name='Coordenador').exists() or 
-            self.request.user.groups.filter(name='Comum interno').exists() or 
+            self.request.user.groups.filter(name='Editor').exists() or 
             self.request.user.is_superuser
         )
     def handle_no_permission(self):
@@ -52,7 +52,7 @@ class UsuarioCreate(CreateView):
         with transaction.atomic():
             response = super().form_valid(form)
             # Busca o grupo ou cria se não existir para evitar erro 404
-            grupo, created = Group.objects.get_or_create(name='Comum externo')
+            grupo, created = Group.objects.get_or_create(name='Leitor')
             self.object.groups.add(grupo)
             self.object.is_active = False 
             self.object.save()
@@ -82,7 +82,7 @@ class UsuarioAprovarView(CoordenadorRequiredMixin, UpdateView):
         messages.success(self.request, f"Status do usuário {self.object.username} atualizado.")
         return super().form_valid(form)
 
-class UsuarioListarTodosView(ComumInternoRequiredMixin, TemplateView):
+class UsuarioListarTodosView(EditorRequiredMixin, TemplateView):
     template_name = 'usuario_gerenciamento_todos.html'
 
     def get_context_data(self, **kwargs):

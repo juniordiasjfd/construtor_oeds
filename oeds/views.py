@@ -82,7 +82,7 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
         queryset = super().get_queryset()
         
         # 2. Lógica de Segurança: Restringe por grupo
-        if self.request.user.groups.filter(name="Comum externo").exists():
+        if self.request.user.groups.filter(name="Leitor").exists():
             return queryset.filter(
             Q(criado_por=self.request.user) | Q(atribuido_a=self.request.user)
         ).distinct()
