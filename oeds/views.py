@@ -12,6 +12,7 @@ from .filters import OedFilter
 from django.db.models import Q
 from django.urls import reverse
 from construtor_oeds.settings import RELATORIO_API_CSV
+from usuarios.views import EditorRequiredMixin
 
 
 def get_configuracoes_usuario(user):
@@ -137,7 +138,7 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     def get_update_url_name(self):
         return "editar_oed"
 
-class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
+class OedCreateView(EditorRequiredMixin, VerboseNameMixin, CreateView):
     model = Oed
     form_class = OedModelForm
     template_name = 'oeds/form_oed.html'
@@ -260,7 +261,7 @@ class OedCreateView(LoginRequiredMixin, VerboseNameMixin, CreateView):
         kwargs["tipo"] = self.tipo
         return kwargs
 
-class OedUpdateView(LoginRequiredMixin, VerboseNameMixin, UpdateView):
+class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
     model = Oed
     form_class = OedModelForm
     template_name = 'oeds/form_oed.html'

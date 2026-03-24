@@ -6,7 +6,7 @@ from .forms import ProjetoModelForm, ComponenteModelForm, CreditoModelForm, Stat
 from usuarios.views import CoordenadorRequiredMixin, EditorRequiredMixin
 
 
-class ComponenteCreateView(EditorRequiredMixin, CreateView):
+class ComponenteCreateView(CoordenadorRequiredMixin, CreateView):
     model = Componente
     form_class = ComponenteModelForm
     template_name = 'projetos/form_generico.html'
@@ -33,7 +33,7 @@ class ComponenteListView(ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_componente')
     def get_update_url_name(self): return "editar_componente"
-class ComponenteUpdateView(EditorRequiredMixin, UpdateView):
+class ComponenteUpdateView(CoordenadorRequiredMixin, UpdateView):
     model = Componente
     form_class = ComponenteModelForm
     template_name = 'projetos/form_generico.html'
@@ -43,7 +43,7 @@ class ComponenteUpdateView(EditorRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ProjetoCreateView(EditorRequiredMixin, CreateView):
+class ProjetoCreateView(CoordenadorRequiredMixin, CreateView):
     model = Projeto
     form_class = ProjetoModelForm
     template_name = 'projetos/form_generico.html'
@@ -67,7 +67,7 @@ class ProjetoListView(ListView):
         return context
     def get_create_url(self): return reverse_lazy('novo_projeto')
     def get_update_url_name(self): return "editar_projeto"
-class ProjetoUpdateView(EditorRequiredMixin, UpdateView):
+class ProjetoUpdateView(CoordenadorRequiredMixin, UpdateView):
     model = Projeto
     form_class = ProjetoModelForm
     template_name = 'projetos/form_generico.html'
