@@ -14,6 +14,10 @@ from django.urls import reverse
 from construtor_oeds.settings import RELATORIO_API_CSV
 
 
+def get_configuracoes_usuario(user):
+    from usuarios.models import ConfiguracoesDoUsuario
+    config, _ = ConfiguracoesDoUsuario.objects.get_or_create(usuario=user)
+    return config
 # Mixin para compatibilidade com templates genéricos
 class VerboseNameMixin:
     def get_context_data(self, **kwargs):
@@ -49,7 +53,8 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
     ordering = ['-id']
 
     def get_paginate_by(self, queryset):
-        return getattr(self.request.user.configuracoes, 'registros_por_pagina', 20)
+        config = get_configuracoes_usuario(self.request.user)
+        return getattr(config, 'registros_por_pagina', 20)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -119,7 +124,8 @@ class OedListView(LoginRequiredMixin, VerboseNameMixin, FilterView):
         
         # Para outros grupos (como Coordenadores), retorna a lista completa
         try:
-            preferencia_ordem = self.request.user.configuracoes.ordenar_por
+            config = get_configuracoes_usuario(self.request.user)
+            preferencia_ordem = config.ordenar_por
             queryset = queryset.order_by(preferencia_ordem)
         except:
             queryset = queryset.order_by('-atualizado_em')
