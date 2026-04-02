@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from usuarios.views import CoordenadorRequiredMixin
+from projetos.models import Dashboard
 from django.views import View
 from .models import ConfiguracaoOED
 from .forms import ConfiguracaoOEDForm
@@ -18,6 +19,8 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_projeto'] = 'Em desenvolvimento'
+        dashboards = Dashboard.objects.filter(ativo=True)
+        context['dashboards'] = dashboards
         return context
 
 class ConfiguracaoOEDUpdateView(CoordenadorRequiredMixin, View):

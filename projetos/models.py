@@ -65,3 +65,26 @@ class TipoOed(AuditoriaBase):
         ordering = ['nome']
     def __str__(self):
         return self.nome
+
+class Dashboard(AuditoriaBase):
+    nome = models.CharField(max_length=150)
+
+    texto_intro = CKEditor5Field(
+        "Texto de introdutório",
+        config_name="default",
+        blank=True,
+        null=True
+    )
+
+    embed_url = models.URLField("URL do painel")
+
+    ativo = models.BooleanField(default=True)
+
+    ordem = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["ordem", "nome"]
+
+    def __str__(self):
+        return self.nome
+

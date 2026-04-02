@@ -97,6 +97,29 @@
             </div>
         </div>
     </div>
+
+    {% for dashboard in dashboards %}
+    <hr>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title">{{ dashboard.nome }}</h3>
+
+            {% if dashboard.texto_intro %}
+                <div class="mb-3">
+                    {{ dashboard.texto_intro|safe }}
+                </div>
+            {% endif %}
+
+            <div class="ratio ratio-16x9">
+                <iframe 
+                    src="{{ dashboard.embed_url }}"
+                    title="{{ dashboard.nome }}"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 </div>
 {% endblock %}
