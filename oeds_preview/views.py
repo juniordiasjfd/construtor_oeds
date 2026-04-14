@@ -374,7 +374,7 @@ class OedDownloadPDFView(LoginRequiredMixin, View):
             h1, h2, h3 { color: #333; margin-top: 15pt; }
             img { max-width: 100%; height: auto; }
             .mapa-popup { border: 0.5pt solid #aaa; padding: 10px; margin-bottom: 20px; }
-            .c3idiomabold{font-style:italic;font-weight:bold}.c3idiomaitalico{font-style:italic}.c3idiomabolditalico{font-style:italic;font-weight:bold}.latex{font-family:Courier,monospace}.d3vinheta,.d3vinhetaabertura{font-style:italic;margin:0.5em 0}.d3vinhetaabertura{margin-top:1em}.d3rubricatranscricao,.d3rubricatxad{font-weight:bold}.d3rubricatxad{margin:1em 0 0.4em}.d3txtranscricao{margin:0.4em 0}.d3txtranscanto{font-style:italic;margin:0.5em 0}.d3txad{margin:0.5em 0;font-family:Helvetica,Arial,sans-serif}.d3creditosoed{margin-top:1em}
+            .c3idiomabold{font-style:italic;font-weight:bold}.c3idiomaitalico{font-style:italic}.c3idiomabolditalico{font-style:italic;font-weight:bold}.latex{font-family:Courier,monospace}.d3vinheta,.d3vinhetaabertura{font-style:italic;margin:0.5em 0}.d3vinhetaabertura{margin-top:1em}.d3rubricatranscricao,.d3rubricatxad{font-weight:bold}.d3rubricatxad{margin:1em 0 0.4em}.d3txtranscricao{margin:0.4em 0}.d3txtranscanto{font-style:italic;margin:0.5em 0}.d3txad{margin:0.5em 0;font-family:Helvetica,Arial,sans-serif}.d3creditosoed{margin-top:1em}.url_para_encurtar{background-color: lightgreen}
         """
         soup.head.append(estilo_pdf)
 

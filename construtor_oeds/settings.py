@@ -202,6 +202,7 @@ CKEDITOR_5_CONFIGS = {
                 {'name': 'c3idiomaitalico', 'element': 'span', 'classes': ['c3idiomaitalico']},
                 {'name': 'c3idiomabolditalico', 'element': 'span', 'classes': ['c3idiomabolditalico']},
                 {'name': 'equacao_latex', 'element': 'span', 'classes': ['latex']},
+                {'name': 'url_para_encurtar', 'element': 'span', 'classes': ['url_para_encurtar']},
 
                 {'name': 'd3vinheta', 'element': 'p', 'classes': ['d3vinheta']},
                 {'name': 'd3rubricatranscricao', 'element': 'p', 'classes': ['d3rubricatranscricao']},
