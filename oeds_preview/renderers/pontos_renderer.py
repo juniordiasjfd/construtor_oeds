@@ -13,7 +13,7 @@ def render_pontos(oed):
     
     # 1. TIPO + TITULO (Processamento com BeautifulSoup)
     soup_titulo = bs4.BeautifulSoup(f'<div class="d3tit1oed">{oed.titulo}</div>', 'html.parser')
-    nivel_h = 1
+    nivel_h = 2
     for p in soup_titulo.find_all(re.compile(r'^p$|h\d')):
         p.name = f'h{nivel_h}'
         nivel_h = (nivel_h + 1 if nivel_h <= 6 else nivel_h)
@@ -23,8 +23,8 @@ def render_pontos(oed):
         soup_tipo.name = 'span'
         soup_tipo['class'] = ['unwrap']
     soup_tipo = bs4.BeautifulSoup(f'<span class="d3titdestaque">{soup_tipo}:</span>', 'html.parser')
-    soup_titulo.find('h1').insert(0, ' ')
-    soup_titulo.find('h1').insert(0, copy.copy(soup_tipo))
+    soup_titulo.find('h2').insert(0, ' ')
+    soup_titulo.find('h2').insert(0, copy.copy(soup_tipo))
     for un in soup_titulo.find_all(attrs={'class':'unwrap'}):
         un.unwrap()
     soup_titulo = renomeia_tags_and_apply_mathml(soup_titulo)
