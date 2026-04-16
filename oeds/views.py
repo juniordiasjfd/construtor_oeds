@@ -144,14 +144,6 @@ class OedCreateView(EditorRequiredMixin, VerboseNameMixin, CreateView):
     template_name = 'oeds/form_oed.html'
     success_url = reverse_lazy('listar_oeds')
 
-    def get_context_data_old(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data['pontos'] = PontoClicavelFormSet(self.request.POST, self.request.FILES)
-        else:
-            data['pontos'] = PontoClicavelFormSet()
-        return data
-    
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
@@ -175,28 +167,6 @@ class OedCreateView(EditorRequiredMixin, VerboseNameMixin, CreateView):
             data["audio_form"] = None
 
         return data
-    
-    def form_valid_old(self, form):
-        context = self.get_context_data()
-        pontos = context['pontos']
-        if form.is_valid() and pontos.is_valid():
-            with transaction.atomic():
-                form.instance.criado_por = self.request.user #
-                self.object = form.save()
-                if pontos.is_valid():
-                    pontos.instance = self.object
-                    pontos.save()
-            messages.success(self.request, "OED e pontos criados com sucesso.")
-            # VERIFICAÇÃO DO BOTÃO FLUTUANTE
-            if "_continue" in self.request.POST:
-                # Redireciona para a mesma página de edição usando o ID do objeto salvo
-                # Certifique-se de que o nome da URL de edição é 'editar_oed'
-                return redirect(reverse('editar_oed', kwargs={'pk': self.object.pk}))
-            return super().form_valid(form)
-        else:
-            # Se o formset for inválido, renderiza a página novamente com os erros
-            messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
-            return self.render_to_response(self.get_context_data(form=form, pontos=pontos))
     
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
@@ -267,14 +237,6 @@ class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
     template_name = 'oeds/form_oed.html'
     success_url = reverse_lazy('listar_oeds')
 
-    def get_context_data_old(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data['pontos'] = PontoClicavelFormSet(self.request.POST, self.request.FILES, instance=self.object)
-        else:
-            data['pontos'] = PontoClicavelFormSet(instance=self.object)
-        return data
-    
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data["tipo"] = self.object.tipo
@@ -301,27 +263,6 @@ class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
             data["audio_form"] = None
         return data
 
-    def form_valid_old(self, form):
-        context = self.get_context_data()
-        pontos = context['pontos']
-
-        if pontos.is_valid():
-            with transaction.atomic():
-                self.object = form.save()
-                pontos.instance = self.object
-                pontos.save()
-
-            messages.success(self.request, "OED salvo com sucesso.")
-            # VERIFICAÇÃO DO BOTÃO FLUTUANTE
-            if "_continue" in self.request.POST:
-                # Redireciona para a mesma página de edição usando o ID do objeto salvo
-                # Certifique-se de que o nome da URL de edição é 'editar_oed'
-                return redirect(reverse('editar_oed', kwargs={'pk': self.object.pk}))
-            return redirect(self.success_url)
-        else:
-            messages.error(self.request, "Erro ao salvar: verifique os campos dos Pontos Clicáveis.")
-            return self.render_to_response(self.get_context_data(form=form))
-    
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
         messages.error(self.request, "Erro ao salvar. Verifique os campos do formulário.")
