@@ -33,7 +33,7 @@ RENDERERS = {
         },
     'templates': {
             "FAIXA_AUDIO": 'oeds_preview/preview_audio.xhtml',
-            "PODCAST": 'oeds_preview/preview_audio.xhtml',
+            "PODCAST": 'oeds_preview/preview_podcast.xhtml',
             "PONTO_CLICAVEL": 'oeds_preview/preview_pontos.xhtml',
             "MAPA_CLICAVEL": 'oeds_preview/preview_pontos.xhtml',
     }
@@ -66,7 +66,7 @@ class OedDownloadZipView(CoordenadorRequiredMixin, View):
         context = {"oed": oed}
         context.update(renderer(oed))
 
-        if motor == "FAIXA_AUDIO":
+        if motor in ["FAIXA_AUDIO", "PODCAST"]:
             return zip_audio(context, template, oed)
 
         if motor in ["PONTO_CLICAVEL", "MAPA_CLICAVEL"]:
