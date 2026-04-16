@@ -153,7 +153,7 @@ class OedCreateView(EditorRequiredMixin, VerboseNameMixin, CreateView):
         audio_form = kwargs.get("audio_form")
         pontos = kwargs.get("pontos")
 
-        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+        if motor in [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
             data["audio_form"] = OedAudioForm(
                 self.request.POST or None,
                 self.request.FILES or None
@@ -180,7 +180,7 @@ class OedCreateView(EditorRequiredMixin, VerboseNameMixin, CreateView):
 
         motor = self.tipo.motor_de_renderizacao
 
-        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+        if motor in [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
             if audio_form and not audio_form.is_valid():
                 print("ERRO AUDIO_FORM:", audio_form.errors)
                 context = self.get_context_data(
@@ -199,7 +199,7 @@ class OedCreateView(EditorRequiredMixin, VerboseNameMixin, CreateView):
             form.instance.tipo = self.tipo
             self.object = form.save()
 
-            if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+            if motor in [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
                 if audio_form:
                     audio = audio_form.save(commit=False)
                     audio.oed = self.object
@@ -242,7 +242,7 @@ class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
         data["tipo"] = self.object.tipo
         motor = self.object.tipo.motor_de_renderizacao
 
-        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+        if motor in [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
             data["audio_form"] = OedAudioForm(
                 self.request.POST or None,
                 self.request.FILES or None,
@@ -275,7 +275,7 @@ class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
 
         motor = self.object.tipo.motor_de_renderizacao
 
-        if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+        if motor in [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
             if audio_form and not audio_form.is_valid():
                 return self.form_invalid(form)
         else:
@@ -285,7 +285,7 @@ class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
         with transaction.atomic():
             self.object = form.save()
 
-            if motor == TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+            if motor in [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
                 audio = audio_form.save(commit=False)
                 audio.oed = self.object
                 audio.save()

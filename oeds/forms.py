@@ -51,8 +51,8 @@ class OedModelForm(forms.ModelForm):
                 # Limpa o HTML das opções
                 field.label_from_instance = lambda obj: strip_tags(str(obj))
         
-        if tipo and tipo.motor_de_renderizacao == \
-           TipoOed.MotorDeRenderizacao.FAIXA_AUDIO:
+        if tipo and tipo.motor_de_renderizacao in \
+           [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
 
             campos_para_remover = [
                 "introducao",

@@ -49,6 +49,7 @@ class TipoOed(AuditoriaBase):
         PONTO_CLICAVEL = "PONTO_CLICAVEL", "Ponto clicável"
         MAPA_CLICAVEL = "MAPA_CLICAVEL", "Mapa clicável"
         FAIXA_AUDIO = "FAIXA_AUDIO", "Faixa de áudio"
+        PODCAST = "PODCAST", "Podcast"
     nome = CKEditor5Field("Tipo", config_name='default')
     motor_de_renderizacao = models.CharField(
         "Engine",

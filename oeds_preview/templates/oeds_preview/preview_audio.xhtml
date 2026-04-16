@@ -20,9 +20,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <!-- Scripts JS -->
     <!-- Link CSS -->
-    <link href="{% static 'oeds_preview/styles/styles_midias.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'oeds_preview/styles/podcast_styles.css' %}" rel="stylesheet" type="text/css" />
 
-    {{ css_adicional }}
 </head>
 
 <body lang="pt-BR" xml:lang="pt-BR">
@@ -80,18 +79,21 @@
                 </div>
                 <!--fim audio-->
                 <!-- Transcrição -->
-                <div class="d3descricaolongaoed">
-                    <p class="c1bold"><strong>TRANSCRIÇÃO</strong></p>
-                    <div class="borda_interna">
+                <details class="d3descricaolongaoed">
+                    <summary>Transcrição do áudio para acessibilidade</summary>
+                    <div>
                         {{ html_transcricao }}
                     </div>
-                </div>
+                </details>
                 <!-- Fim da transcrição-->
                 <!--Créditos-->
                 <div class="d3credito">
-                    {% if "crédito" not in html_creditos_audio|lower %}
+                    {% if "crédito" in html_creditos_audio|lower or "fonte" in html_creditos_audio|lower %}
+
+                    {% else %}
                         <p class="c1bold"><strong>CRÉDITO(S):</strong></p>
                     {% endif %}
+                    
                     {{ html_creditos_audio }}
                     
                 </div>

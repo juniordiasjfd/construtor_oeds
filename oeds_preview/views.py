@@ -27,11 +27,13 @@ from .renderers_zip.audio_renderer_zip import zip_audio
 RENDERERS = {
     'renderers': {
             "FAIXA_AUDIO": render_audio,
+            "PODCAST": render_audio,
             "PONTO_CLICAVEL": render_pontos,
             "MAPA_CLICAVEL": render_pontos,
         },
     'templates': {
             "FAIXA_AUDIO": 'oeds_preview/preview_audio.xhtml',
+            "PODCAST": 'oeds_preview/preview_audio.xhtml',
             "PONTO_CLICAVEL": 'oeds_preview/preview_pontos.xhtml',
             "MAPA_CLICAVEL": 'oeds_preview/preview_pontos.xhtml',
     }

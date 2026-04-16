@@ -12,9 +12,15 @@ def render_audio(oed):
 
     print(oed.titulo)
     # 1. TIPO + TITULO (Processamento com BeautifulSoup)
-    soup_titulo = bs4.BeautifulSoup(f'<div class="d3tit1oed">{oed.titulo}</div>', 'html.parser')
+    soup_tipo = bs4.BeautifulSoup(str(oed.tipo), 'html.parser')
+    for p in soup_tipo.find_all(re.compile(r'^p$|h\d')):
+        p.name = 'span'
+    soup_tit = bs4.BeautifulSoup(str(oed.titulo), 'html.parser')
+    for p in soup_tit.find_all(re.compile(r'^p$|h\d')):
+        p.name = 'span'
+    soup_titulo = bs4.BeautifulSoup(f'<div class="d3tit1oed"><h2>{soup_tipo}: {soup_tit}</h2></div>', 'html.parser')
     print(soup_titulo)
-    nivel_h = 1
+    nivel_h = 2
     for p in soup_titulo.find_all(re.compile(r'^p$|h\d')):
         p.name = f'h{nivel_h}'
         nivel_h = (nivel_h + 1 if nivel_h <= 6 else nivel_h)
@@ -48,93 +54,5 @@ def render_audio(oed):
         bs4.BeautifulSoup(str(audio.creditos_do_audio), "html.parser")
     )
     context["html_creditos_audio"] = mark_safe(str(soup_creditos))
-
-    # css adicional
-    context['css_adicional'] = mark_safe('''
-    <style>
-    .c3idiomabold{font-style:italic;font-weight:bold}.c3idiomaitalico{font-style:italic}.c3idiomabolditalico{font-style:italic;font-weight:bold}.url_para_encurtar{background-color: lightgreen}
-    .borda_interna {padding: 10px !important;}
-    .d3txtranscanto{
-        font-style: italic;
-        margin:0.5em 0 0.5em  0;
-        }
-        .d3rubricatxad{
-        font-weight: bold;
-        margin: 1em 0 0.4em 0;
-        }
-        .d3rubricatranscricao {
-        font-weight: bold;
-                                         }
-        .d3vinhetaabertura {
-        margin:1em 0 0  0;
-        font-style: italic;
-        }
-
-        .d3txad{
-        margin: 0.5em 0;
-        font-family: var(--texto);}
-
-        .d3creditosoed {
-        margin: 1em 0 0 0;
-        }
-
-
-
-        .d3txtranscanto{
-        font-style: italic;
-        margin:0.5em 0 0.5em  0;
-        }
-        .d3rubricatxad{
-        font-weight: bold;
-        margin: 1em 0 0.4em 0;
-        }
-        .d3vinheta {
-        margin:1em 0 0  0;
-        font-style: italic;
-        }
-
-        .d3txad{
-        margin: 0.5em 0;
-        font-family: var(--texto);}
-
-        .d3creditosoed {
-        margin: 1em 0 0 0;
-        }
-                                         /* Botões de download no preview */
-body > a.btn {
-    display: inline-block;
-    font-family: var(--texto);
-    font-size: var(--pesoIntermediario);
-    text-decoration: none;
-    padding: 0.45em 1em;
-    margin: 0.8em 0.4em 1em 0;
-    border-radius: 6px;
-    border: 1px solid var(--azul1b);
-    transition: all 0.2s ease-in-out;
-}
-
-/* botão principal (ZIP) */
-body > a.btn-primary {
-    background: var(--azul1);
-    color: var(--branco);
-}
-
-body > a.btn-primary:hover {
-    background: var(--azul1b);
-    border-color: var(--azul1b);
-}
-
-/* botão secundário (PDF) */
-body > a.btn-secondary {
-    background: transparent;
-    color: var(--azul1b);
-}
-
-body > a.btn-secondary:hover {
-    background: var(--azul2);
-}
-
-    </style>
-    ''')
 
     return context
