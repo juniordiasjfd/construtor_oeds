@@ -41,7 +41,6 @@ RENDERERS = {
 
 class OedPreviewDetailView(DetailView):
     model = Oed
-    # template_name = 'oeds_preview/preview.xhtml' # O caminho do seu template específico
     context_object_name = 'oed'
 
     def get_context_data(self, **kwargs):

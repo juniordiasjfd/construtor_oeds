@@ -66,23 +66,29 @@ def render_pontos(oed):
             <figure>
                 <!--Retranca original: {oed.retranca_da_imagem_principal}-->
                 <img alt="{oed.alt_text_da_imagem_principal}" height="{new_height}" src="{oed.imagem_principal.url}" width="{new_width}" />
-                <figcaption>{legenda_da_imagem_principal}</figcaption>
+                {legenda_da_imagem_principal}
             </figure>
             </div>
             ''')
 
     # 5. PONTOS CLICÁVEIS (Loop e construção de lista)
     pontos_renderizados = []
-    marcador_css = {}
+    marcador_css_desktop = {}
+    marcador_css_mobile = {}
     
     for i, ponto in enumerate(pontos, 1):
         # Coordenadas para o CSS
         if ponto.coordenadas:
-            temporario = ponto.coordenadas.split(',')
-            temporario[1] = str(0.8643356643356643 * float(temporario[1]) + 3.361454545454545)
-            marcador_css[f'marcador{i}'] = temporario
+            temporario_desktop = ponto.coordenadas.split(',')
+            temporario_mobile = ponto.coordenadas.split(',')
+
+            temporario_desktop[1] = str(0.8643356643356643 * float(temporario_desktop[1]) + 3.361454545454545)
+            temporario_mobile[1] = str(    (0.8643356643356643 * float(temporario_mobile[1]) + 3.361454545454545)    *    0.80066808526)
+            marcador_css_desktop[f'marcador{i}'] = temporario_desktop
+            marcador_css_mobile[f'marcador{i}'] = temporario_mobile
         else:
-            marcador_css[f'marcador{i}'] = ['0','0']
+            marcador_css_desktop[f'marcador{i}'] = ['0','0']
+            marcador_css_mobile[f'marcador{i}'] = ['0','0']
         
         # Título do ponto
         soup_pt_titulo = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(ponto.titulo_ponto), 'html.parser'))
@@ -140,7 +146,8 @@ def render_pontos(oed):
         pontos_renderizados.append(mark_safe(html_ponto))
 
     context['pontos_html'] = mark_safe('\n'.join(pontos_renderizados))
-    context['marcador_css'] = marcador_css
+    context['marcador_css_desktop'] = marcador_css_desktop
+    context['marcador_css_mobile'] = marcador_css_mobile
 
     # 6. FONTE E CRÉDITOS FINAIS
     fonte_soup = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.fonte_de_pesquisa), 'html.parser'))

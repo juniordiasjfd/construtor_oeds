@@ -19,18 +19,26 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <!-- Scripts JS -->
   <!-- Link CSS -->
-  <link href="{% static 'oeds_preview/styles/styles_oed_0.css' %}" rel="stylesheet" type="text/css" />
-  <!--a folha de CSS do infografico deve ter o nome da retranca do OED-->
-  <link href="{% static 'oeds_preview/styles/styles_oed.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'oeds_preview/styles/infografico_styles.css' %}" rel="stylesheet" type="text/css" />
 
   <style>
     /* Injeção das coordenadas calculadas na View */
-    {% for id, coords in marcador_css.items %}
-    .{{ id }} { 
-        left: {{ coords.0 }}%; 
-        top: {{ coords.1 }}%; 
-    }
+    {% for id, coords in marcador_css_desktop.items %}
+      .{{ id }} { 
+          left: {{ coords.0 }}%; 
+          top: {{ coords.1 }}%; 
+      }
     {% endfor %}
+
+    /* Coordenadas versão mobile marcadores */
+    @media screen and (max-width: 450px) {
+      {% for id, coords in marcador_css_mobile.items %}
+        .{{ id }} { 
+            left: {{ coords.0 }}%; 
+            top: {{ coords.1 }}%; 
+        }
+      {% endfor %}
+    }
   </style>
 </head>
 
