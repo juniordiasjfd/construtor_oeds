@@ -71,7 +71,9 @@
             </div>
             <div class="d3conteudooed">
                 <!-- texto de introdução -->
-                {{ html_introducao }}
+                {% if html_introducao %}
+                    {{ html_introducao }}
+                {% endif %}
 
                 <!--audio-->
                 <div class="col2c d3oedaudio">
@@ -91,10 +93,14 @@
                 <!-- Fim da transcrição-->
 
                 <!-- Fonte de pesquisa -->
-                {{ fonte_html }}
+                {% if fonte_html %}
+                    {{ fonte_html }}
+                {% endif %}
 
                 <!-- Texto de conclusão -->
-                {{ html_conclusao }}
+                {% if html_conclusao %}
+                    {{ html_conclusao }}
+                {% endif %}
 
                 <!--Créditos-->
                 <div class="d3credito">

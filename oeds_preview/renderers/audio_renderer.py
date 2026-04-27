@@ -46,21 +46,19 @@ def render_audio(oed):
     soup_intro = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.introducao), 'html.parser'))
     for p in soup_intro.find_all('p'):
         p['class'] = ['d3txtoed']
-    if soup_intro.get_text(strip=True):
-        context['html_introducao'] = mark_safe(f'<div class="d3txinstrucaooed">{soup_intro}</div>')
-    else:
-        context['html_introducao'] = ''
+    context['html_introducao'] = mark_safe(f'<div class="d3txinstrucaooed">{soup_intro}</div>') if soup_intro.get_text(strip=True) not in ['', 'None'] else ''
+    
 
     fonte_soup = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.fonte_de_pesquisa), 'html.parser'))
     for p in fonte_soup.find_all('p'):
         p['class'] = ['d3fontepesquisa']
-    fonte_html = f'<div class="d3fontepesquisa">{fonte_soup}</div>' if fonte_soup.get_text(strip=True) else ''
-    context['fonte_html'] = mark_safe(f'<div class="d3conclusaooed">{fonte_html}</div>')
+    fonte_html = f'<div class="d3fontepesquisa">{fonte_soup}</div>' if fonte_soup.get_text(strip=True) not in ['', 'None'] else ''
+    context['fonte_html'] = mark_safe(fonte_html)
 
     concl_soup = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.conclusao), 'html.parser'))
     for p in concl_soup.find_all('p'):
         p['class'] = ['d3txtoed']
-    context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) else ''
+    context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) not in ['', 'None'] else ''
 
 
 
