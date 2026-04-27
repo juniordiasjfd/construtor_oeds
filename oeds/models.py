@@ -240,7 +240,7 @@ class OedAudio(AuditoriaBase):
         null=True
     )
     transcricao_do_audio = CKEditor5Field("Transcrição do áudio", config_name='default', blank=True, null=True)
-    creditos_do_audio = CKEditor5Field("Créditos do áudio", config_name='default', blank=True, null=True)
+    creditos_do_audio = CKEditor5Field("Créditos dos áudios utilizados", config_name='default', blank=True, null=True)
     def save(self, *args, **kwargs):
         if self.arquivo_do_audio and not self.pk:
             nome_original = os.path.splitext(self.arquivo_do_audio.name)[0]

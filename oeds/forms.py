@@ -103,6 +103,13 @@ class OedModelForm(forms.ModelForm):
             'componente': forms.Select(attrs={'class': 'form-select select-busca'}),
             # 'credito_da_imagem_principal': forms.Select(attrs={'class': 'form-select select-busca'}),
             'credito_da_imagem_principal': CKEditor5Widget(attrs={"class": "django_ckeditor_5"}, config_name="default"),
+            'local_insercao': forms.TextInput(attrs={'placeholder': 'Preenchimento opcional',}),
+        }
+
+        help_texts = {
+            "introducao": "Não utilizar para faixas de áudio. Somente para infográficos/mapas clicáveis e podcasts.",
+            "conclusao": "Não utilizar para faixas de áudio. Somente para infográficos/mapas clicáveis e podcasts.",
+
         }
 
 class CoordenadasWidget(forms.TextInput):
