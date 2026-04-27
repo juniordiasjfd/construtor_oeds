@@ -113,4 +113,42 @@
 </script>
 
 
+<!-- script para esconder campos -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function toggleCamposTipoOed() {
+        const motorField = document.querySelector('[name="motor_de_renderizacao"]');
+        if (!motorField) return;
+
+        const valor = motorField.value;
+
+        // campos que queremos esconder
+        const campos = ['botao_fechar', 'credito_imagem_prefixo'];
+
+        campos.forEach(nome => {
+            const input = document.querySelector(`[name="${nome}"]`);
+            if (!input) return;
+
+            // pega o container (bootstrap geralmente usa .mb-3)
+            const container = input.closest('.mb-3');
+
+            if (!container) return;
+
+            if (valor === 'FAIXA_AUDIO' || valor === 'PODCAST') {
+                container.style.display = 'none';
+            } else {
+                container.style.display = '';
+            }
+        });
+    }
+
+    const motorField = document.querySelector('[name="motor_de_renderizacao"]');
+    if (motorField) {
+        motorField.addEventListener('change', toggleCamposTipoOed);
+        toggleCamposTipoOed(); // executa ao carregar
+    }
+});
+</script>
+
 {% endblock %}
