@@ -11,6 +11,7 @@ def render_audio(oed):
     context = {}
 
     print(oed.titulo)
+
     # 1. TIPO + TITULO (Processamento com BeautifulSoup)
     soup_tipo = bs4.BeautifulSoup(str(oed.tipo), 'html.parser')
     for p in soup_tipo.find_all(re.compile(r'^p$|h\d')):
@@ -28,6 +29,8 @@ def render_audio(oed):
     soup_titulo = renomeia_tags_and_apply_mathml(soup_titulo)
     context['html_titulo'] = mark_safe(str(soup_titulo))
 
+
+
     # 2. INSTRUÇÃO
     tipo_oed = TipoOed.objects.filter(pk=oed.tipo.pk).first()
     soup_instrucao = bs4.BeautifulSoup(tipo_oed.instrucao, 'html.parser')
@@ -36,6 +39,31 @@ def render_audio(oed):
     soup_instrucao = renomeia_tags_and_apply_mathml(soup_instrucao)
     context['html_instrucao'] = mark_safe(f'<div>{soup_instrucao}</div>')
 
+
+
+
+    # 2.5 TEXTO INTRODUÇÃO, CONCLUSÃO E FONTE DE PESQUISA
+    soup_intro = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.introducao), 'html.parser'))
+    for p in soup_intro.find_all('p'):
+        p['class'] = ['d3txtoed']
+    if soup_intro.get_text(strip=True):
+        context['html_introducao'] = mark_safe(f'<div class="d3txinstrucaooed">{soup_intro}</div>')
+    else:
+        context['html_introducao'] = ''
+
+    fonte_soup = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.fonte_de_pesquisa), 'html.parser'))
+    for p in fonte_soup.find_all('p'):
+        p['class'] = ['d3fontepesquisa']
+    fonte_html = f'<div class="d3fontepesquisa">{fonte_soup}</div>' if fonte_soup.get_text(strip=True) else ''
+    context['fonte_html'] = mark_safe(f'<div class="d3conclusaooed">{fonte_html}</div>')
+
+    concl_soup = renomeia_tags_and_apply_mathml(bs4.BeautifulSoup(str(oed.conclusao), 'html.parser'))
+    for p in concl_soup.find_all('p'):
+        p['class'] = ['d3txtoed']
+    context['html_conclusao'] = mark_safe(f'<div class="d3conclusaooed">{concl_soup}</div>') if concl_soup.get_text(strip=True) else ''
+
+
+
     # 3. ARQUIVO DO ÁUDIO
     audio = oed.audio
     if audio.arquivo_do_audio:
@@ -43,11 +71,15 @@ def render_audio(oed):
     else:
         context["audio_src"] = 'audio.mp3'
 
+
+
     # 4. transcrição
     soup_transcricao = renomeia_tags_and_apply_mathml(
         bs4.BeautifulSoup(str(audio.transcricao_do_audio), "html.parser")
     )
     context["html_transcricao"] = mark_safe(str(soup_transcricao))
+
+
 
     # créditos
     soup_creditos = renomeia_tags_and_apply_mathml(

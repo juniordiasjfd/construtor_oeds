@@ -70,6 +70,9 @@
                 {{ html_instrucao }}
             </div>
             <div class="d3conteudooed">
+                <!-- texto de introdução -->
+                {{ html_introducao }}
+
                 <!--audio-->
                 <div class="col2c d3oedaudio">
                     <audio controls="controls">
@@ -86,6 +89,13 @@
                     </div>
                 </details>
                 <!-- Fim da transcrição-->
+
+                <!-- Fonte de pesquisa -->
+                {{ fonte_html }}
+
+                <!-- Texto de conclusão -->
+                {{ html_conclusao }}
+
                 <!--Créditos-->
                 <div class="d3credito">
                     {% if "crédito" in html_creditos_audio|lower or "fonte" in html_creditos_audio|lower %}
@@ -97,7 +107,7 @@
                     {{ html_creditos_audio }}
                     
                 </div>
-                <!-- Fim da Créditos-->
+                <!-- Fim de Créditos-->
             </div>
 
         </section>

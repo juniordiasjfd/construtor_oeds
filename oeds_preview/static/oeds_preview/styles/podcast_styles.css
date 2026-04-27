@@ -533,7 +533,9 @@ p.d3instrucaooed {
 }
 
 .d3credito>p {
+    font-size: var(--pesoIntermediario);
     text-align: right;
+    margin: 0.5em 0;
 }
 
 .d3btnvoltaroed {

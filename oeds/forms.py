@@ -55,9 +55,9 @@ class OedModelForm(forms.ModelForm):
            [TipoOed.MotorDeRenderizacao.FAIXA_AUDIO, TipoOed.MotorDeRenderizacao.PODCAST]:
 
             campos_para_remover = [
-                "introducao",
-                "conclusao",
-                'fonte_de_pesquisa',
+                # "introducao",
+                # "conclusao",
+                # 'fonte_de_pesquisa',
                 "retranca_da_imagem_principal",
                 "imagem_principal",
                 "legenda_da_imagem_principal",
