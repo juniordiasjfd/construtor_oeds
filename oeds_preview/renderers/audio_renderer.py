@@ -19,7 +19,13 @@ def render_audio(oed):
     soup_tit = bs4.BeautifulSoup(str(oed.titulo), 'html.parser')
     for p in soup_tit.find_all(re.compile(r'^p$|h\d')):
         p.name = 'span'
-    soup_titulo = bs4.BeautifulSoup(f'<div class="d3tit1oed"><h2>{soup_tipo}: {soup_tit}</h2></div>', 'html.parser')
+    if 'podcast' in soup_tipo.get_text(strip=True).lower():
+        soup_tipo_before = '<em>'
+        soup_tipo_after = '</em>'
+    else:
+        soup_tipo_before = ''
+        soup_tipo_after = ''
+    soup_titulo = bs4.BeautifulSoup(f'<div class="d3tit1oed"><h2><strong>{soup_tipo_before}{soup_tipo}{soup_tipo_after}</strong>: {soup_tit}</h2></div>', 'html.parser')
     print(soup_titulo)
     nivel_h = 2
     for p in soup_titulo.find_all(re.compile(r'^p$|h\d')):

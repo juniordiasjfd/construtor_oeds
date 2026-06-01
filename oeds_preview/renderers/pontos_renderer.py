@@ -82,8 +82,8 @@ def render_pontos(oed):
             temporario_desktop = ponto.coordenadas.split(',')
             temporario_mobile = ponto.coordenadas.split(',')
 
-            temporario_desktop[1] = str(0.8643356643356643 * float(temporario_desktop[1]) + 3.361454545454545)
-            temporario_mobile[1] = str(    (0.8643356643356643 * float(temporario_mobile[1]) + 3.361454545454545)    *    0.80066808526)
+            temporario_desktop[1] = str(0.8980 * float(temporario_desktop[1]) + 2.99)
+            temporario_mobile[1] = str(    (0.8980 * float(temporario_mobile[1]) + 2.99)    *    0.80066808526)
             marcador_css_desktop[f'marcador{i}'] = temporario_desktop
             marcador_css_mobile[f'marcador{i}'] = temporario_mobile
         else:
