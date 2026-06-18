@@ -16,10 +16,12 @@
                 <ul class="mb-0">
                     {% if messages %}
                         {% for message in messages %}
+                            {% if 'error' in message.tags or 'warning' in message.tags %}
                             <li>
                                 <strong>{{ message.tags|capfirst }}:</strong>
                                 {{ message }}
                             </li>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
 

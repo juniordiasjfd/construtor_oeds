@@ -604,7 +604,8 @@
 
 {% if form.errors or audio_form.errors or pontos.errors %}
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) return;
     var modal = new bootstrap.Modal(document.getElementById('modalErrosFormulario'));
     modal.show();
 });
