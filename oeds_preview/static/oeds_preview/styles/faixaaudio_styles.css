@@ -357,7 +357,7 @@ p.d3instrucaooed {
     font-family: var(--texto);
     font-size: var(--peso3);
     color: var(--preto);
-    line-height: 2em;
+    line-height: 1.6em;
     font-weight: normal;
     text-align: center;
     font-weight: bold;

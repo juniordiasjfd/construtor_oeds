@@ -464,6 +464,7 @@ p.d3instrucaooed {
     padding-left: 1em;
 }
 
+
 .d3tit1oed {
     font-family: var(--texto);
     font-size: var(--peso3);
@@ -493,6 +494,20 @@ p.d3instrucaooed {
     text-align: center;
 }
 
+.d3recadoimagemoed{
+    background: #f3f2f2;
+    border-radius: 0.5em ;
+    padding: 0.2em 0.5em ;
+    width: fit-content;
+    margin: 0.2em 0;
+    font-size: 0.9em;
+    max-width: 100%;
+    line-height: 1.4em;
+}
+.d3txtoed:has(.d3recadoimagemoed){
+margin: 0;
+text-indent: 0em;
+}
 .d3txtoed {
     margin: 1em 0;
     font-family: var(--texto);
