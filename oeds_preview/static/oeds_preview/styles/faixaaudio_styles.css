@@ -322,6 +322,37 @@ a.d3hyperlinkoed:hover {
     align-items: flex-end;
 }
 
+
+
+/* stylos de transcrição */
+.c3idiomabold {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.c3idiomaitalico {
+    font-style: italic
+}
+
+.c3idiomabolditalico {
+    font-style: italic;
+    font-weight: bold
+}
+
+.c3bold {
+
+    font-weight: bold;
+}
+
+.c3italico {
+    font-style: italic
+}
+
+.c3bolditalico {
+    font-style: italic;
+    font-weight: bold
+}
+
 /*👉Elementos gerais do OED👈*/
 
 .d3boxoed {
