@@ -304,7 +304,7 @@ class OedUpdateView(EditorRequiredMixin, VerboseNameMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.tipo = self.object.tipo
-        if self.object.status.only_coordenador_can_edit:
+        if self.object.status and self.object.status.only_coordenador_can_edit:
             if not (
                 request.user.groups.filter(name="Coordenador").exists() or \
                 self.request.user.is_superuser
