@@ -197,6 +197,12 @@ CKEDITOR_5_CONFIGS = {
         ],
         'style': {
             'definitions': [
+                
+                {'name': 'c1bold', 'element': 'span', 'classes': ['c1bold']},
+                {'name': 'c1italico', 'element': 'span', 'classes': ['c1italico']},
+                {'name': 'c1bolditalico', 'element': 'span', 'classes': ['c1bolditalico']},
+
+
                 {'name': 'c3idioma', 'element': 'span', 'classes': ['c3idioma']},
                 {'name': 'c3idiomabold', 'element': 'span', 'classes': ['c3idiomabold']},
                 {'name': 'c3idiomaitalico', 'element': 'span', 'classes': ['c3idiomaitalico']},

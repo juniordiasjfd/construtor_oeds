@@ -1,4 +1,17 @@
 /* Classes para o CKEditor 5 */
+.c1bold {
+
+    font-weight: bold;
+}
+
+.c1italico {
+    font-style: italic
+}
+
+.c1bolditalico {
+    font-style: italic;
+    font-weight: bold
+}
 .destaqueamarelo {
     background-color: #fff176;
     font-weight: bold;
